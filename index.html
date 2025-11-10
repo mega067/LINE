@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Línea del Tiempo: Ingeniería en Sistemas</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuente Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Estilos para la fuente Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* --- Estilos de la Línea del Tiempo --- */
+
+        /* El contenedor principal de la línea del tiempo */
+        .timeline-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* La línea vertical central */
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            width: 3px;
+            background-color: #cbd5e1; /* slate-300 */
+            top: 0;
+            bottom: 0;
+            left: 20px; /* Posición en móvil */
+        }
+
+        /* Contenedor de cada evento */
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            padding-left: 50px; /* Espacio para el contenido en móvil */
+        }
+
+        /* El punto (círculo) en la línea del tiempo */
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 4px solid #4f46e5; /* indigo-600 */
+            border-radius: 50%;
+            top: 5px; /* Alineación vertical del punto */
+            left: 10.5px; /* Centrado sobre la línea (20px - 20px/2 + 0.5px) */
+            z-index: 1;
+        }
+
+        /* Tarjeta de contenido del evento */
+        .timeline-content {
+            position: relative;
+            background-color: white;
+            border-radius: 0.5rem; /* rounded-lg */
+            padding: 1.5rem; /* p-6 */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+            transition: transform 0.3s ease;
+        }
+        
+        .timeline-content:hover {
+             transform: translateY(-5px);
+        }
+
+        /* Estilo para las imágenes dentro de las tarjetas */
+        .timeline-image {
+            width: 100%;
+            height: 200px; /* Altura fija para consistencia */
+            object-fit: cover; /* Asegura que la imagen cubra el espacio */
+            border-radius: 0.375rem; /* rounded-md */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+
+        /* --- Estilos para pantallas grandes (Desktop) --- */
+        @media (min-width: 768px) { /* 'md' breakpoint de Tailwind */
+            
+            /* Centrar la línea vertical */
+            .timeline-container::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            /* Alternar lados */
+            .timeline-item {
+                padding-left: 0;
+                width: 50%;
+            }
+
+            /* Eventos del lado izquierdo */
+            .timeline-item:nth-child(odd) {
+                left: 0;
+                padding-right: 40px; /* Espacio desde la línea central */
+                text-align: right;
+            }
+
+            /* Eventos del lado derecho */
+            .timeline-item:nth-child(even) {
+                left: 50%;
+                padding-left: 40px; /* Espacio desde la línea central */
+            }
+
+            /* Posicionar los puntos en el centro para desktop */
+            .timeline-item::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            /* Alinear texto a la izquierda en tarjetas derechas */
+             .timeline-item:nth-child(even) .timeline-content {
+                text-align: left;
+             }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-12">
+        
+        <!-- Encabezado -->
+        <header class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-indigo-600 mb-4">
+                Línea del Tiempo
+            </h1>
+            <p class="text-xl text-slate-600">
+                Historia y Evolución de la Ingeniería en Sistemas Computacionales
+            </p>
+        </header>
+
+        <!-- Contenedor de la Línea del Tiempo -->
+        <div class="timeline-container">
+
+            <!-- Evento 1: Raíces Antiguas -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <time class="font-bold text-sm text-indigo-600">CIVILIZACIONES ANTIGUAS</time>
+                    <h3 class="text-xl font-semibold my-2">Raíces del Pensamiento Sistemático</h3>
+                    <!-- IMAGEN AÑADIDA -->
+                    <img 
+                        src="https://placehold.co/600x200/a78bfa/ffffff?text=Civilizaciones+Antiguas" 
+                        alt="Ilustración de civilizaciones antiguas" 
+                        class="timeline-image"
+                        onerror="this.src='https://placehold.co/600x200/a78bfa/ffffff?text=Error+al+cargar+imagen'"
+                    >
+                    <!-- REEMPLAZA 'src' CON TU URL PÚBLICA -->
+                    <p class="text-slate-700 text-sm">
+                        Civilizaciones como la egipcia, romana, maya y olmeca desarrollan números, escritura, comunicación y ciencias (física, astronomía), sentando las bases del pensamiento organizado.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Evento 2: Revolución Industrial -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <time class="font-bold text-sm text-indigo-600">1760 - 1840</time>
+                    <h3 class="text-xl font-semibold my-2">Revolución Industrial</h3>
+                    <!-- IMAGEN AÑADIDA (Relacionada con globalización) -->
+                    <img 
+                        src="https://placehold.co/600x200/38bdf8/ffffff?text=Globalizaci%C3%B3n+y+Tecnolog%C3%ADa" 
+                        alt="Ilustración de globalización y tecnología" 
+                        class="timeline-image"
+                        onerror="this.src='https://placehold.co/600x200/38bdf8/ffffff?text=Error+al+cargar+imagen'"
+                    >
+                    <!-- REEMPLAZA 'src' CON TU URL PÚBLICA (1000048715.jpg) -->
+                    <p class="text-slate-700 text-sm">
+                        La transformación productiva en Inglaterra, que luego se expandió al mundo, marcó el inicio de la globalización y la necesidad de gestionar sistemas productivos complejos.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Evento 3: Invenciones Clave -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <time class="font-bold text-sm text-indigo-600">SIGLO XIX</time>
+                    <h3 class="text-xl font-semibold my-2">Era de las Invenciones</h3>
+                    <!-- IMAGEN AÑADIDA (Invenciones) -->
+                    <img 
+                        src="https://placehold.co/600x200/a3a3a3/ffffff?text=%C2%BFCInvenciones%3F" 
+                        alt="Ilustración de invenciones" 
+                        class="timeline-image"
+                        onerror="this.src='https://placehold.co/600x200/a3a3a3/ffffff?text=Error+al+cargar+imagen'"
+                    >
+                    <!-- REEMPLAZA 'src' CON TU URL PÚBLICA (1000048717.jpg) -->
+                    <p class="text-slate-700 text-sm">
+                        Invenciones clave como la locomotora (1804), el teléfono (1859), la dinamo (1866) y el automóvil (1885) sientan las bases tecnológicas para futuras innovaciones.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Evento 4: Guerras Mundiales -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <time class="font-bold text-sm text-indigo-600">1914 - 1945</time>
+                    <h3 class="text-xl font-semibold my-2">Innovación Impulsada por Conflictos</h3>
+                    <!-- IMAGEN AÑADIDA -->
+                    <img 
+                        src="https://placehold.co/600x200/ef4444/ffffff?text=Innovaci%C3%B3n+Tecnol%C3%B3gica+(Guerra)" 
+                        alt="Innovación tecnológica durante las guerras mundiales" 
+                        class="timeline-image"
+                        onerror="this.src='https://placehold.co/600x200/ef4444/ffffff?text=Error+al+cargar+imagen'"
+                    >
+                    <!-- REEMPLAZA 'src' CON TU URL PÚBLICA -->
+                    <p class="text-slate-700 text-sm">
+                        La Primera y Segunda Guerra Mundial impulsan avances tecnológicos aplicados a la guerra, acelerando la innovación global y la necesidad de gestionar sistemas a gran escala.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Evento 5: Concepto Formal -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <time class="font-bold text-sm text-indigo-600">1950</time>
+                    <h3 class="text-xl font-semibold my-2">Nace la "Ingeniería en Sistemas"</h3>
+                    <!-- IMAGEN AÑADIDA -->
+                    <img 
+                        src="https://placehold.co/600x200/f59e0b/ffffff?text=Laboratorios+Bell+(1950)" 
+                        alt="Logo histórico o foto de Laboratorios Bell" 
+                        class="timeline-image"
+                        onerror="this.src='https://placehold.co/600x200/f59e0b/ffffff?text=Error+al+cargar+imagen'"
+                    >
+                    <!-- REEMPLAZA 'src' CON TU URL PÚBLICA -->
+                    <p class="text-slate-700 text-sm">
+                        Melvin J. Kelly publica formalmente el concepto de Ingeniería en Sistemas Computacionales en los Laboratorios Bell (Bell Telephone).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Evento 6: Fundación en la UNI -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <time class="font-bold text-sm text-indigo-600">DÉCADA DE 1960-70</time>
+                    <h3 class="text-xl font-semibold my-2">Auge de la Computación Digital</h3>
+                    <!-- IMAGEN AÑADIDA -->
+                    <img 
+                        src="https://placehold.co/600x200/10b981/ffffff?text=Computadora+Digital+(A%C3%B1os+60)" 
+                        alt="Computadora antigua de los años 60 o 70" 
+                        class="timeline-image"
+                        onerror="this.src='https://placehold.co/600x200/10b981/ffffff?text=Error+al+cargar+imagen'"
+                    >
+                    <!-- REEMPLAZA 'src' CON TU URL PÚBLICA -->
+                    <p class="text-slate-700 text-sm">
+                        Se funda la carrera de Ingeniería en Sistemas en la UNI (Universidad Nacional de Ingeniería), impulsada por el auge de las computadoras digitales y la decadencia de las analógicas.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Evento 7: Lenguajes de Programación -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <time class="font-bold text-sm text-indigo-600">FINALES DEL SIGLO XX</time>
+                    <h3 class="text-xl font-semibold my-2">Eclosión del Software</h3>
+                     <!-- IMAGEN AÑADIDA (Cerebro IA) -->
+                    <img 
+                        src="https://placehold.co/600x200/f97316/ffffff?text=Innovaci%C3%B3n+y+Software" 
+                        alt="Ilustración de código y software" 
+                        class="timeline-image"
+                        onerror="this.src='https://placehold.co/600x200/f97316/ffffff?text=Error+al+cargar+imagen'"
+                    >
+                    <!-- REEMPLAZA 'src' CON TU URL PÚBLICA (1000048713.jpg) -->
+                    <p class="text-slate-700 text-sm">
+                        Emergen lenguajes de programación clave que definen el desarrollo de software moderno: Java, C, C++, Python, Visual Basic, JavaScript, junto con el sistema operativo Linux y HTML.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Evento 8: TIC en México -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <time class="font-bold text-sm text-indigo-600">2010 - 2015</time>
+                    <h3 class="text-xl font-semibold my-2">Índice de Desarrollo de TIC en México</h3>
+                    <!-- IMAGEN AÑADIDA (Mapa México) -->
+                    <img 
+                        src="https://placehold.co/600x200/22d3ee/ffffff?text=Mapa+Digital+de+M%C3%A9xico" 
+                        alt="Mapa de México con conexiones digitales" 
+                        class="timeline-image"
+                        onerror="this.src='https://placehold.co/600x200/22d3ee/ffffff?text=Error+al+cargar+imagen'"
+                    >
+                    <!-- REEMPLAZA 'src' CON TU URL PÚBLICA (1000048711.jpg) -->
+                    <p class="text-slate-700 text-sm">
+                        Según la UIT, México experimenta cambios en su clasificación en el índice de Desarrollo de Tecnologías de la Información y Comunicación, pasando del lugar 86 al 95.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Evento 9: Crecimiento de Acceso -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <time class="font-bold text-sm text-indigo-600">2011 - 2013</time>
+                    <h3 class="text-xl font-semibold my-2">Crecimiento de Acceso en México</h3>
+                    <!-- IMAGEN AÑADIDA -->
+                    <img 
+                        src="https://placehold.co/600x200/84cc16/ffffff?text=Hogares+con+Internet+(M%C3%A9xico)" 
+                        alt="Gráfica de crecimiento de internet en México" 
+                        class="timeline-image"
+                        onerror="this.src='https://placehold.co/600x200/84cc16/ffffff?text=Error+al+cargar+imagen'"
+                    >
+                    <!-- REEMPLAZA 'src' CON TU URL PÚBLICA -->
+                    <p class="text-slate-700 text-sm">
+                        Se registra un aumento en el acceso a computadoras e internet en hogares mexicanos. Los hogares con internet pasaron de 26.7% (2011) a 30.7% (2013).
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Evento 10: Brecha Digital -->
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <time class="font-bold text-sm text-indigo-600">2013</time>
+                    <h3 class="text-xl font-semibold my-2">Persiste la Brecha Digital</h3>
+                    <!-- IMAGEN AÑADIDA -->
+                    <img 
+                        src="https://placehold.co/600x200/78716c/ffffff?text=Brecha+Digital+(M%C3%A9xico+2013)" 
+                        alt="Ilustración sobre la brecha digital" 
+                        class="timeline-image"
+                        onerror="this.src='https://placehold.co/600x200/78716c/ffffff?text=Error+al+cargar+imagen'"
+                    >
+                    <!-- REEMPLAZA 'src' CON TU URL PÚBLICA -->
+                    <p class="text-slate-700 text-sm">
+                        El INEGI reporta que 46.3 millones de mexicanos no tienen acceso a internet, destacando la persistencia de la brecha digital debido a factores geográficos y de desigualdad.
+                    </p>
+                </div>
+            </div>
+
+        </div> <!-- Fin de .timeline-container -->
+
+    </div> <!-- Fin de .container -->
+
+</body>
+</html>

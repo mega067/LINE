@@ -3,255 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizador de Árbol Binario</title>
-    <!-- Incluimos Tailwind CSS para estilos rápidos -->
+    <title>Diagrama del Proceso de Toma de Decisiones</title>
+    <!-- Carga de Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Carga de la fuente Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Estilos personalizados para el árbol */
+        /* Estilos personalizados para la fuente y las formas del diagrama */
         body {
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden; /* Evitar scroll horizontal */
         }
-        
-        /* Hemos eliminado todo el CSS anterior para .tree, .node, .node-line 
-           y todas las clases de posicionamiento (.node-a, .line-ab, etc.) 
-           porque el SVG ahora maneja toda la visualización.
-        */
 
-        /* Estilos para los elementos dentro del SVG */
-        .svg-line {
-            stroke: #6B7280; /* Gris (Tailwind gray-500) */
-            stroke-width: 3;
+        /* Contenedor para la forma de rombo (Decisión) */
+        .shape-diamond-wrapper {
+            width: 208px; /* 52 * 4 */
+            height: 208px; /* 52 * 4 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .svg-node {
-            fill: #10B981; /* Verde (Tailwind green-500) */
-            stroke: #047857; /* Verde oscuro (green-700) */
-            stroke-width: 3;
-        }
-        .svg-text {
-            /* Usamos la fuente del body */
-            font-family: inherit; 
-            font-size: 24px;
+        .shape-diamond {
+            width: 148px; /* ~w-36 */
+            height: 148px; /* ~h-36 */
+            background-color: #facc15; /* bg-amber-400 */
+            color: #1f2937; /* text-gray-800 */
             font-weight: 600;
-            fill: white;
-            text-anchor: middle; /* Centra el texto horizontalmente */
-            dominant-baseline: central; /* Centra el texto verticalmente */
-            pointer-events: none; /* Evita que el texto interfiera con clics */
+            border-radius: 0.5rem; /* rounded-lg */
+            transform: rotate(45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        /* Contenedor de texto dentro del rombo para anular la rotación */
+        .shape-diamond-text {
+            transform: rotate(-45deg);
+            text-align: center;
+            max-width: 140px;
         }
 
-        /* ESTILO NUEVO PARA LOS PESOS */
-        .svg-weight {
-            font-family: inherit;
-            font-size: 20px;
+        /* Forma de óvalo (Terminador) */
+        .shape-oval {
+            width: 200px;
+            height: 60px;
+            border-radius: 9999px; /* rounded-full */
+            background-color: #4f46e5; /* bg-indigo-600 */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: 600;
-            fill: #1D4ED8; /* Azul (Tailwind blue-700) */
-            text-anchor: middle;
-            dominant-baseline: central;
-            /* Fondo sutil para que sea legible sobre la línea */
-            paint-order: stroke;
-            stroke: white;
-            stroke-width: 4px;
-            stroke-linejoin: round;
         }
 
+        /* Forma de rectángulo (Proceso) */
+        .shape-rect {
+            width: 288px; /* w-72 */
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            background-color: #2563eb; /* bg-blue-600 */
+            color: white;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Forma de paralelogramo (Datos) */
+        .shape-data {
+            width: 288px; /* w-72 */
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            background-color: #a855f7; /* bg-purple-500 */
+            color: white;
+            text-align: center;
+            font-weight: 500;
+            transform: skew(-15deg);
+        }
+
+        /* Forma de proceso predefinido */
+        .shape-predefined {
+            width: 288px; /* w-72 */
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            background-color: #1d4ed8; /* bg-blue-800 */
+            color: white;
+            text-align: center;
+            font-weight: 500;
+            border-left: 10px solid #60a5fa; /* border-blue-400 */
+            border-right: 10px solid #60a5fa; /* border-blue-400 */
+        }
+
+        /* Flecha simple apuntando hacia abajo */
+        .arrow-down {
+            width: 2px;
+            height: 48px; /* h-12 */
+            background-color: #6b7281; /* bg-gray-500 */
+            position: relative;
+        }
+        .arrow-down::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #6b7281; /* bg-gray-500 */
+        }
+
+        /* Línea de flujo horizontal (para bucles de 'No') */
+        .feedback-line {
+            /* width: 100%; */ /* Eliminado */
+            flex-grow: 1; /* Añadido */
+            height: 2px;
+            background-color: #6b7281; /* bg-gray-500 */
+            position: relative;
+        }
+        .feedback-line.left-arrow::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-right: 8px solid #6b7281;
+        }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800 p-4 md:p-8">
-
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-6 md:p-10">
+<body class="bg-gray-100 min-h-screen py-12 px-4">
+    <div class="max-w-4xl mx-auto flex flex-col items-center space-y-4">
         
-        <h1 class="text-3xl font-bold text-center text-gray-900 mb-4">
-            🌳 Representación de Árbol Binario (7 Nodos)
-        </h1>
-        <p class="text-center text-gray-600 mb-8">
-            Visualización de un árbol binario completo y sus componentes clave.
-        </p>
+        <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">Diagrama de Flujo: Proceso Racional de Toma de Decisiones</h1>
 
-        <!-- 
-          Contenedor del Árbol (Reemplazado con SVG) 
-          
-          - viewBox define nuestro "lienzo" (0 0 800 400).
-          - preserveAspectRatio="xMidYMid meet" asegura que escale correctamente.
-          - width="100%" y max-w-xl lo hacen responsivo.
-        -->
-        <svg 
-             id="binary-tree-svg" 
-             viewBox="0 0 800 400" 
-             preserveAspectRatio="xMidYMid meet"
-             class="w-full max-w-xl mx-auto"
-             style="height: 350px;">
-            
-            <!-- Grupo de Líneas (dibujadas primero para quedar detrás) -->
-            <g id="lines">
-                <!-- A -> B -->
-                <line class="svg-line" x1="400" y1="50" x2="200" y2="175"></line>
-                <!-- A -> C -->
-                <line class="svg-line" x1="400" y1="50" x2="600" y2="175"></line>
-                <!-- B -> D -->
-                <line class="svg-line" x1="200" y1="175" x2="100" y2="300"></line>
-                <!-- B -> E -->
-                <line class="svg-line" x1="200" y1="175" x2="300" y2="300"></line>
-                <!-- C -> F -->
-                <line class="svg-line" x1="600" y1="175" x2="500" y2="300"></line>
-                <!-- C -> G -->
-                <line class="svg-line" x1="600" y1="175" x2="700" y2="300"></line>
-            </g>
-            
-            <!-- Grupo de Nodos (círculos + texto) -->
-            <g id="nodes">
-                <!-- Nivel 0: A -->
-                <g transform="translate(400, 50)">
-                    <circle class="svg-node" r="25"></circle>
-                    <text class="svg-text">A</text>
-                </g>
-                <!-- Nivel 1: B, C -->
-                <g transform="translate(200, 175)">
-                    <circle class="svg-node" r="25"></circle>
-                    <text class="svg-text">B</text>
-                </g>
-                <g transform="translate(600, 175)">
-                    <circle class="svg-node" r="25"></circle>
-                    <text class="svg-text">C</text>
-                </g>
-                <!-- Nivel 2: D, E, F, G -->
-                <g transform="translate(100, 300)">
-                    <circle class="svg-node" r="25"></circle>
-                    <text class="svg-text">D</text>
-                </g>
-                <g transform="translate(300, 300)">
-                    <circle class="svg-node" r="25"></circle>
-                    <text class="svg-text">E</text>
-                </g>
-                <g transform="translate(500, 300)">
-                    <circle class="svg-node" r="25"></circle>
-                    <text class="svg-text">F</text>
-                </g>
-                <g transform="translate(700, 300)">
-                    <circle class="svg-node" r="25"></circle>
-                    <text class="svg-text">G</text>
-                </g>
-            </g>
-        </svg>
+        <!-- Inicio -->
+        <div class="shape-oval">Inicio</div>
+        <div class="arrow-down"></div>
 
-        <!-- Sección de Identificación (Sin cambios) -->
-        <div class="mt-8 pt-6 border-t border-gray-200">
-            <h2 class="text-2xl font-semibold text-center mb-6">
-                📊 Identificación de Componentes
-            </h2>
-            
-            <div class="grid md:grid-cols-3 gap-6 text-center">
-                
-                <!-- Raíz -->
-                <div class="bg-blue-50 p-5 rounded-lg shadow-sm border border-blue-200">
-                    <h3 class="text-lg font-semibold text-blue-800 mb-2">Raíz</h3>
-                    <p class="text-3xl font-bold text-blue-600">A</p>
-                    <p class="text-sm text-gray-600 mt-2">El nodo superior del árbol.</p>
-                </div>
-                
-                <!-- Hojas -->
-                <div class="bg-green-50 p-5 rounded-lg shadow-sm border border-green-200">
-                    <h3 class="text-lg font-semibold text-green-800 mb-2">Hojas</h3>
-                    <p class="text-3xl font-bold text-green-600">D, E, F, G</p>
-                    <p class="text-sm text-gray-600 mt-2">Nodos terminales (sin hijos).</p>
-                </div>
-                
-                <!-- Altura -->
-                <div class="bg-indigo-50 p-5 rounded-lg shadow-sm border border-indigo-200">
-                    <h3 class="text-lg font-semibold text-indigo-800 mb-2">Altura</h3>
-                    <p class="text-3xl font-bold text-indigo-600">3</p>
-                    <p class="text-sm text-gray-600 mt-2">(Medida en niveles, iniciando en 1)</p>
-                </div>
-                
+        <!-- Fase 1: Identificar Decisión -->
+        <div class="shape-rect" id="fase1">
+            <span class="font-bold">Fase 1: Identificar Decisión</span>
+            <p class="text-sm text-blue-100">(Definir problema, objetivos, métricas)</p>
+        </div>
+        <div class="arrow-down"></div>
+
+        <!-- Fase 2: Reunir Información -->
+        <div class="shape-rect" id="fase2">
+            <span class="font-bold">Fase 2: Reunir Información</span>
+            <p class="text-sm text-blue-100">(Recopilar datos internos y externos)</p>
+        </div>
+        <div class="arrow-down"></div>
+
+        <!-- Datos (Salida de Fase 2) -->
+        <div class="shape-data">
+            <span>Datos/Informes Recopilados</span>
+        </div>
+        <div class="arrow-down"></div>
+
+        <!-- Decisión 1: ¿Información Suficiente? -->
+        <div class="shape-diamond-wrapper" id="decision1">
+            <div class="shape-diamond">
+                <span class="shape-diamond-text">¿Información Suficiente y Relevante?</span>
             </div>
         </div>
 
-    </div>
-
-    <!-- ============================================= -->
-    <!-- == NUEVA SECCIÓN: ÁRBOL PONDERADO           == -->
-    <!-- ============================================= -->
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-6 md:p-10 mt-8">
-        
-        <h1 class="text-3xl font-bold text-center text-gray-900 mb-4">
-            ⚖️ Árbol Ponderado y Camino Mínimo
-        </h1>
-        <p class="text-center text-gray-600 mb-8">
-            Visualización de un árbol con pesos (costos) en sus aristas.
-        </p>
-
-        <!-- Contenedor del Árbol Ponderado (SVG) -->
-        <svg 
-             id="weighted-tree-svg" 
-             viewBox="0 0 800 400" 
-             preserveAspectRatio="xMidYMid meet"
-             class="w-full max-w-xl mx-auto"
-             style="height: 350px;">
-            
-            <!-- Grupo de Líneas -->
-            <g id="weighted-lines">
-                <line class="svg-line" x1="400" y1="50" x2="200" y2="175"></line> <!-- A-B -->
-                <line class="svg-line" x1="400" y1="50" x2="600" y2="175"></line> <!-- A-C -->
-                <line class="svg-line" x1="200" y1="175" x2="100" y2="300"></line> <!-- B-D -->
-                <line class="svg-line" x1="200" y1="175" x2="300" y2="300"></line> <!-- B-E -->
-                <line class="svg-line" x1="600" y1="175" x2="700" y2="300"></line> <!-- C-F -->
-            </g>
-            
-            <!-- Grupo de Nodos (Círculos + Letras) -->
-            <g id="weighted-nodes">
-                <!-- Nodos -->
-                <g transform="translate(400, 50)"><circle class="svg-node" r="25"></circle><text class="svg-text">A</text></g>
-                <g transform="translate(200, 175)"><circle class="svg-node" r="25"></circle><text class="svg-text">B</text></g>
-                <g transform="translate(600, 175)"><circle class="svg-node" r="25"></circle><text class="svg-text">C</text></g>
-                <g transform="translate(100, 300)"><circle class="svg-node" r="25"></circle><text class="svg-text">D</text></g>
-                <g transform="translate(300, 300)"><circle class="svg-node" r="25"></circle><text class="svg-text">E</text></g>
-                <g transform="translate(700, 300)"><circle class="svg-node" r="25"></circle><text class="svg-text">F</text></g>
-            </g>
-
-            <!-- Grupo de Pesos (Texto sobre líneas) -->
-            <g id="weights">
-                <text class="svg-weight" x="300" y="112.5">4</text> <!-- A-B -->
-                <text class="svg-weight" x="500" y="112.5">2</text> <!-- A-C -->
-                <text class="svg-weight" x="150" y="237.5">7</text> <!-- B-D -->
-                <text class="svg-weight" x="250" y="237.5">1</text> <!-- B-E -->
-                <text class="svg-weight" x="650" y="237.5">5</text> <!-- C-F -->
-            </g>
-        </svg>
-
-        <!-- Sección de Cálculo de Camino Mínimo -->
-        <div class="mt-8 pt-6 border-t border-gray-200">
-            <h2 class="text-2xl font-semibold text-center mb-6">
-                🧮 Cálculo de Camino de Peso Mínimo
-            </h2>
-            
-            <div class="max-w-2xl mx-auto text-center">
-                <p class="text-gray-700 mb-4">
-                    En un <strong class="font-semibold">árbol</strong>, solo existe un camino único entre dos nodos cualesquiera (no hay ciclos). Por lo tanto, el "camino de peso mínimo" es simplemente el peso total de ese único camino.
-                </p>
-                <p class="text-gray-700 mb-6">
-                    Calcularemos el peso del camino entre el nodo <strong class="font-semibold text-green-600">E</strong> y el nodo <strong class="font-semibold text-green-600">F</strong>.
-                </p>
-
-                <div class="bg-gray-50 p-6 rounded-lg shadow-inner border">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Camino: E → B → A → C → F</h3>
-                    <div class="flex flex-wrap justify-center items-center text-xl md:text-2xl font-semibold text-gray-700">
-                        <span class="text-blue-600 mx-1">(E→B: 1)</span>
-                        <span class="mx-1">+</span>
-                        <span class="text-blue-600 mx-1">(B→A: 4)</span>
-                        <span class="mx-1">+</span>
-                        <span class="text-blue-600 mx-1">(A→C: 2)</span>
-                        <span class="mx-1">+</span>
-                        <span class="text-blue-600 mx-1">(C→F: 5)</span>
-                    </div>
-                    <hr class="my-4 border-gray-300">
-                    <div class="text-xl font-bold text-gray-800">
-                        Peso Total: <span class="text-3xl text-indigo-600 ml-2">12</span>
-                    </div>
+        <!-- Divisor de Flujo -->
+        <div class="flex w-full max-w-lg justify-center">
+            <!-- Rama SÍ -->
+            <div class="flex flex-col items-center px-4 w-1/2">
+                <span class="font-bold text-gray-700 mb-2">Sí</span>
+                <div class="arrow-down"></div>
+            </div>
+            <!-- Rama NO -->
+            <div class="flex flex-col items-center px-4 w-1/2">
+                <span class="font-bold text-gray-700 mb-2">No</span>
+                <div class="w-full flex items-center min-h-12">
+                    <span class="mr-2 text-sm font-medium text-gray-700 whitespace-normal text-right flex-shrink">Volver a Fase 2: Reunir Información</span>
+                    <div class="feedback-line left-arrow"></div>
                 </div>
             </div>
-
         </div>
-    </div>
 
+        <!-- Fase 3: Identificar Alternativas -->
+        <div class="shape-rect" id="fase3">
+            <span class="font-bold">Fase 3: Identificar Alternativas</span>
+            <p class="text-sm text-blue-100">(Brainstorming, generar múltiples opciones)</p>
+        </div>
+        <div class="arrow-down"></div>
+
+        <!-- Fase 4: Ponderar Alternativas (Proceso Predefinido) -->
+        <div class="shape-predefined" id="fase4">
+            <span class="font-bold">Fase 4: Ponderar Alternativas</span>
+            <p class="text-sm text-blue-200">(SWOT, Matriz de Decisión, Costo-Beneficio)</p>
+        </div>
+        <div class="arrow-down"></div>
+
+        <!-- Datos (Salida de Fase 4) -->
+        <div class="shape-data">
+            <span>Informe de Evaluación de Alternativas</span>
+        </div>
+        <div class="arrow-down"></div>
+
+        <!-- Decisión 2: ¿Alternativa Óptima? -->
+        <div class="shape-diamond-wrapper" id="decision2">
+            <div class="shape-diamond">
+                <span class="shape-diamond-text">¿Alternativa Óptima Identificada?</span>
+            </div>
+        </div>
+
+        <!-- Divisor de Flujo -->
+        <div class="flex w-full max-w-lg justify-center">
+            <!-- Rama SÍ -->
+            <div class="flex flex-col items-center px-4 w-1/2">
+                <span class="font-bold text-gray-700 mb-2">Sí</span>
+                <div class="arrow-down"></div>
+            </div>
+            <!-- Rama NO -->
+            <div class="flex flex-col items-center px-4 w-1/2">
+                <span class="font-bold text-gray-700 mb-2">No</span>
+                <div class="w-full flex items-center min-h-12">
+                    <span class="mr-2 text-sm font-medium text-gray-700 whitespace-normal text-right flex-shrink">Volver a Fase 3: Identificar Alternativas</span>
+                    <div class="feedback-line left-arrow"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fase 5: Seleccionar Alternativa -->
+        <div class="shape-rect" id="fase5">
+            <span class="font-bold">Fase 5: Seleccionar Alternativa</span>
+            <p class="text-sm text-blue-100">(Formalizar la elección, considerar híbridos)</p>
+        </div>
+        <div class="arrow-down"></div>
+
+        <!-- Fase 6: Implementar Solución (Proceso Predefinido) -->
+        <div class="shape-predefined" id="fase6">
+            <span class="font-bold">Fase 6: Implementar Solución</span>
+            <p class="text-sm text-blue-200">(Plan de proyecto, asignar recursos, plazos)</p>
+        </div>
+        <div class="arrow-down"></div>
+
+        <!-- Fase 7: Revisar Resultados -->
+        <div class="shape-rect" id="fase7">
+            <span class="font-bold">Fase 7: Revisar Resultados</span>
+            <p class="text-sm text-blue-100">(Monitorear contra métricas de Fase 1)</p>
+        </div>
+        <div class="arrow-down"></div>
+
+        <!-- Decisión 3: ¿Problema Resuelto? -->
+        <div class="shape-diamond-wrapper" id="decision3">
+            <div class="shape-diamond">
+                <span class="shape-diamond-text">¿Problema Resuelto (Cumple Métricas)?</span>
+            </div>
+        </div>
+
+        <!-- Divisor de Flujo -->
+        <div class="flex w-full max-w-lg justify-center">
+            <!-- Rama SÍ -->
+            <div class="flex flex-col items-center px-4 w-1/2">
+                <span class="font-bold text-gray-700 mb-2">Sí</span>
+                <div class="arrow-down"></div>
+            </div>
+            <!-- Rama NO -->
+            <div class="flex flex-col items-center px-4 w-1/2">
+                <span class="font-bold text-gray-700 mb-2">No</span>
+                <div class="w-full flex items-center min-h-12">
+                    <span class="mr-2 text-sm font-medium text-gray-700 whitespace-normal text-right flex-shrink">Volver a Fase 3: Identificar Alternativas</span>
+                    <div class="feedback-line left-arrow"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fin -->
+        <div class="shape-oval">Fin</div>
+
+    </div>
 </body>
 </html>

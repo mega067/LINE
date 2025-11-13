@@ -40,6 +40,21 @@
             pointer-events: none; /* Evita que el texto interfiera con clics */
         }
 
+        /* ESTILO NUEVO PARA LOS PESOS */
+        .svg-weight {
+            font-family: inherit;
+            font-size: 20px;
+            font-weight: 600;
+            fill: #1D4ED8; /* Azul (Tailwind blue-700) */
+            text-anchor: middle;
+            dominant-baseline: central;
+            /* Fondo sutil para que sea legible sobre la línea */
+            paint-order: stroke;
+            stroke: white;
+            stroke-width: 4px;
+            stroke-linejoin: round;
+        }
+
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 p-4 md:p-8">
@@ -145,12 +160,97 @@
                 <div class="bg-indigo-50 p-5 rounded-lg shadow-sm border border-indigo-200">
                     <h3 class="text-lg font-semibold text-indigo-800 mb-2">Altura</h3>
                     <p class="text-3xl font-bold text-indigo-600">3</p>
-                    <p class="text-sm text-gray-600 mt-2">(Medida en aristas/conexiones)</p>
+                    <p class="text-sm text-gray-600 mt-2">(Medida en niveles, iniciando en 1)</p>
                 </div>
                 
             </div>
         </div>
 
+    </div>
+
+    <!-- ============================================= -->
+    <!-- == NUEVA SECCIÓN: ÁRBOL PONDERADO           == -->
+    <!-- ============================================= -->
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-6 md:p-10 mt-8">
+        
+        <h1 class="text-3xl font-bold text-center text-gray-900 mb-4">
+            ⚖️ Árbol Ponderado y Camino Mínimo
+        </h1>
+        <p class="text-center text-gray-600 mb-8">
+            Visualización de un árbol con pesos (costos) en sus aristas.
+        </p>
+
+        <!-- Contenedor del Árbol Ponderado (SVG) -->
+        <svg 
+             id="weighted-tree-svg" 
+             viewBox="0 0 800 400" 
+             preserveAspectRatio="xMidYMid meet"
+             class="w-full max-w-xl mx-auto"
+             style="height: 350px;">
+            
+            <!-- Grupo de Líneas -->
+            <g id="weighted-lines">
+                <line class="svg-line" x1="400" y1="50" x2="200" y2="175"></line> <!-- A-B -->
+                <line class="svg-line" x1="400" y1="50" x2="600" y2="175"></line> <!-- A-C -->
+                <line class="svg-line" x1="200" y1="175" x2="100" y2="300"></line> <!-- B-D -->
+                <line class="svg-line" x1="200" y1="175" x2="300" y2="300"></line> <!-- B-E -->
+                <line class="svg-line" x1="600" y1="175" x2="700" y2="300"></line> <!-- C-F -->
+            </g>
+            
+            <!-- Grupo de Nodos (Círculos + Letras) -->
+            <g id="weighted-nodes">
+                <!-- Nodos -->
+                <g transform="translate(400, 50)"><circle class="svg-node" r="25"></circle><text class="svg-text">A</text></g>
+                <g transform="translate(200, 175)"><circle class="svg-node" r="25"></circle><text class="svg-text">B</text></g>
+                <g transform="translate(600, 175)"><circle class="svg-node" r="25"></circle><text class="svg-text">C</text></g>
+                <g transform="translate(100, 300)"><circle class="svg-node" r="25"></circle><text class="svg-text">D</text></g>
+                <g transform="translate(300, 300)"><circle class="svg-node" r="25"></circle><text class="svg-text">E</text></g>
+                <g transform="translate(700, 300)"><circle class="svg-node" r="25"></circle><text class="svg-text">F</text></g>
+            </g>
+
+            <!-- Grupo de Pesos (Texto sobre líneas) -->
+            <g id="weights">
+                <text class="svg-weight" x="300" y="112.5">4</text> <!-- A-B -->
+                <text class="svg-weight" x="500" y="112.5">2</text> <!-- A-C -->
+                <text class="svg-weight" x="150" y="237.5">7</text> <!-- B-D -->
+                <text class="svg-weight" x="250" y="237.5">1</text> <!-- B-E -->
+                <text class="svg-weight" x="650" y="237.5">5</text> <!-- C-F -->
+            </g>
+        </svg>
+
+        <!-- Sección de Cálculo de Camino Mínimo -->
+        <div class="mt-8 pt-6 border-t border-gray-200">
+            <h2 class="text-2xl font-semibold text-center mb-6">
+                🧮 Cálculo de Camino de Peso Mínimo
+            </h2>
+            
+            <div class="max-w-2xl mx-auto text-center">
+                <p class="text-gray-700 mb-4">
+                    En un <strong class="font-semibold">árbol</strong>, solo existe un camino único entre dos nodos cualesquiera (no hay ciclos). Por lo tanto, el "camino de peso mínimo" es simplemente el peso total de ese único camino.
+                </p>
+                <p class="text-gray-700 mb-6">
+                    Calcularemos el peso del camino entre el nodo <strong class="font-semibold text-green-600">E</strong> y el nodo <strong class="font-semibold text-green-600">F</strong>.
+                </p>
+
+                <div class="bg-gray-50 p-6 rounded-lg shadow-inner border">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Camino: E → B → A → C → F</h3>
+                    <div class="flex flex-wrap justify-center items-center text-xl md:text-2xl font-semibold text-gray-700">
+                        <span class="text-blue-600 mx-1">(E→B: 1)</span>
+                        <span class="mx-1">+</span>
+                        <span class="text-blue-600 mx-1">(B→A: 4)</span>
+                        <span class="mx-1">+</span>
+                        <span class="text-blue-600 mx-1">(A→C: 2)</span>
+                        <span class="mx-1">+</span>
+                        <span class="text-blue-600 mx-1">(C→F: 5)</span>
+                    </div>
+                    <hr class="my-4 border-gray-300">
+                    <div class="text-xl font-bold text-gray-800">
+                        Peso Total: <span class="text-3xl text-indigo-600 ml-2">12</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 </body>

@@ -3,201 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicio: Vuelos entre 5 Ciudades</title>
-    <!-- Importamos Tailwind CSS para un diseño moderno -->
+    <title>Ejercicio 2: Autopistas</title>
+    <!-- Importamos Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Importamos la fuente Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Aplicamos la fuente Inter como fuente principal */
         html {
             font-family: 'Inter', sans-serif;
-        }
-        /* Estilos personalizados para el SVG */
-        .node-circle {
-            fill: #7C3AED; /* Corresponde a purple-600 */
-        }
-        .node-text {
-            font-size: 14px;
-            font-weight: 500;
-            fill: white;
-            text-anchor: middle;
-            dominant-baseline: middle;
-            pointer-events: none; /* Para que el texto no interfiera con eventos del círculo */
-        }
-        .edge-line-red {
-            stroke: #EF4444; /* red-500 */
-            stroke-width: 2.5;
-        }
-        .edge-line-cyan {
-            stroke: #06B6D4; /* cyan-500 */
-            stroke-width: 2.5;
-        }
-        /* Estilo para las puntas de flecha */
-        .arrowhead-red {
-            fill: #EF4444; /* red-500 */
-        }
-        .arrowhead-cyan {
-            fill: #06B6D4; /* cyan-500 */
         }
     </style>
 </head>
 <body class="bg-gray-100 p-4 md:p-8">
     
-    <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div class="p-6 md:p-10 bg-gradient-to-r from-purple-700 to-indigo-600">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">Ejercicio: Vuelos disponibles entre 5 ciudades</h1>
+    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="p-6 md:p-10 bg-gradient-to-r from-pink-500 to-rose-500">
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Ejercicio 2: Modelado de Autopistas</h1>
         </div>
         
-        <div class="md:flex">
+        <div class="p-6 md:p-8">
             
-            <!-- Columna Izquierda: Descripción del Problema -->
-            <div class="md:w-1/2 p-6 md:p-8 border-r border-gray-200">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Ejercicio (Parte e)</h2>
-                <p class="text-gray-600 mb-6">
-                    Dibuja un grafo con aristas para cada vuelo desde un vértice que representa la ciudad donde comienza el vuelo hasta el vértice que representa la ciudad donde termina el vuelo.
-                </p>
-
-                <h3 class="text-xl font-semibold text-gray-700 mb-3">Reglas del Ejercicio (Parte e)</h3>
-                <ul class="list-disc list-inside space-y-2 text-gray-600 mb-6">
-                    <li>Necesitamos dibujar una arista <strong>por cada vuelo</strong> entre dos ciudades.</li>
-                    <li>Las aristas tienen una <strong>dirección asociada</strong>, por lo que debemos usar aristas dirigidas (flechas).</li>
-                    <li><strong>Se permiten múltiples aristas</strong>, ya que existen múltiples vuelos entre algunos pares de ciudades.</li>
-                    <li><strong>No se permiten bucles</strong>, ya que no existen vuelos de una ciudad a sí misma.</li>
-                </ul>
-
-                <h3 class="text-xl font-semibold text-gray-700 mb-3">Datos de Vuelos</h3>
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <ul class="space-y-1 text-gray-700 font-mono">
-                        <li>Boston a Newark: 4 vuelos</li>
-                        <li>Newark a Boston: 2 vuelos</li>
-                        <li>Newark a Miami: 3 vuelos</li>
-                        <li>Miami a Newark: 2 vuelos</li>
-                        <li>Newark a Detroit: 1 vuelo</li>
-                        <li>Detroit a Newark: 2 vuelos</li>
-                        <li>Newark a Washington: 3 vuelos</li>
-                        <li>Washington a Newark: 2 vuelos</li>
-                        <li>Washington a Miami: 1 vuelo</li>
+            <!-- Pregunta Principal -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Pregunta del Ejercicio</h2>
+                <div class="bg-pink-50 p-6 rounded-lg border border-pink-200">
+                    <p class="text-lg text-gray-700 font-medium">
+                        ¿Qué tipo de grafo se puede usar para modelar un sistema de autopistas entre ciudades principales donde:
+                    </p>
+                    <ul class="list-disc list-outside pl-6 mt-4 space-y-3 text-gray-600">
+                        <li><strong>a)</strong> existe una arista entre los vértices que representan ciudades si hay una autopista interestatal entre ellas?</li>
+                        <li><strong>b)</strong> existe una arista entre los vértices que representan ciudades por cada autopista interestatal que las conecta?</li>
+                        <li><strong>c)</strong> existe una arista entre los vértices que representan ciudades por cada autopista interestatal que las conecta, y hay un bucle en el vértice que representa una ciudad si hay una autopista interestatal que rodea dicha ciudad?</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Columna Derecha: Solución Gráfica -->
-            <div class="md:w-1/2 p-6 md:p-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Solución: Grafo Dirigido Múltiple (Multidigrafo)</h2>
-                <p class="text-gray-600 mb-6">
-                    Finalmente, combinamos las reglas. El resultado es un multigrafo dirigido: dibujamos una flecha por cada vuelo individual, respetando su dirección.
-                </p>
-
-                <!-- Visualización del Grafo con SVG -->
-                <div class="w-full h-auto aspect-square bg-white rounded-lg p-4">
-                    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-                        
-                        <!-- Definición de las puntas de flecha -->
-                        <defs>
-                            <marker id="arrowhead-red" markerWidth="8" markerHeight="6" 
-                                    refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
-                              <polygon class="arrowhead-red" points="0 0, 8 3, 0 6" />
-                            </marker>
-                            <marker id="arrowhead-cyan" markerWidth="8" markerHeight="6" 
-                                    refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
-                              <polygon class="arrowhead-cyan" points="0 0, 8 3, 0 6" />
-                            </marker>
-                        </defs>
-
-                        <!-- Aristas (Conexiones Dirigidas Múltiples) -->
-                        <!-- Usamos rojo para N->W, N->M, N->D, B->N, W->M -->
-                        <!-- Usamos cian para W->N, M->N, D->N, N->B -->
-
-                        <!-- Boston (200, 70) -> Newark (200, 200) : 4 vuelos (Rojo) -->
-                        <line class="edge-line-red" x1="193" y1="80" x2="193" y2="190" marker-end="url(#arrowhead-red)"></line>
-                        <line class="edge-line-red" x1="196" y1="80" x2="196" y2="190" marker-end="url(#arrowhead-red)"></line>
-                        <line class="edge-line-red" x1="199" y1="80" x2="199" y2="190" marker-end="url(#arrowhead-red)"></line>
-                        <line class="edge-line-red" x1="202" y1="80" x2="202" y2="190" marker-end="url(#arrowhead-red)"></line>
-                        <!-- Newark (200, 200) -> Boston (200, 70) : 2 vuelos (Cian) -->
-                        <line class="edge-line-cyan" x1="205" y1="190" x2="205" y2="80" marker-end="url(#arrowhead-cyan)"></line>
-                        <line class="edge-line-cyan" x1="208" y1="190" x2="208" y2="80" marker-end="url(#arrowhead-cyan)"></line>
-                        
-                        <!-- Detroit (70, 200) -> Newark (200, 200) : 2 vuelos (Cian) -->
-                        <line class="edge-line-cyan" y1="196" x1="80" y2="196" x2="190" marker-end="url(#arrowhead-cyan)"></line>
-                        <line class="edge-line-cyan" y1="199" x1="80" y2="199" x2="190" marker-end="url(#arrowhead-cyan)"></line>
-                        <!-- Newark (200, 200) -> Detroit (70, 200) : 1 vuelo (Rojo) -->
-                        <line class="edge-line-red" y1="202" x1="190" y2="202" x2="80" marker-end="url(#arrowhead-red)"></line>
-
-                        <!-- Washington (330, 200) -> Newark (200, 200) : 2 vuelos (Cian) -->
-                        <line class="edge-line-cyan" y1="196" x1="320" y2="196" x2="210" marker-end="url(#arrowhead-cyan)"></line>
-                        <line class="edge-line-cyan" y1="199" x1="320" y2="199" x2="210" marker-end="url(#arrowhead-cyan)"></line>
-                        <!-- Newark (200, 200) -> Washington (330, 200) : 3 vuelos (Rojo) -->
-                        <line class="edge-line-red" y1="202" x1="210" y2="202" x2="320" marker-end="url(#arrowhead-red)"></line>
-                        <line class="edge-line-red" y1="205" x1="210" y2="205" x2="320" marker-end="url(#arrowhead-red)"></line>
-                        <line class="edge-line-red" y1="208" x1="210" y2="208" x2="320" marker-end="url(#arrowhead-red)"></line>
-                        
-                        <!-- Miami (200, 330) -> Newark (200, 200) : 2 vuelos (Cian) -->
-                        <line class="edge-line-cyan" x1="205" y1="320" x2="205" y2="210" marker-end="url(#arrowhead-cyan)"></line>
-                        <line class="edge-line-cyan" x1="208" y1="320" x2="208" y2="210" marker-end="url(#arrowhead-cyan)"></line>
-                        <!-- Newark (200, 200) -> Miami (200, 330) : 3 vuelos (Rojo) -->
-                        <line class="edge-line-red" x1="193" y1="210" x2="193" y2="320" marker-end="url(#arrowhead-red)"></line>
-                        <line class="edge-line-red" x1="196" y1="210" x2="196" y2="320" marker-end="url(#arrowhead-red)"></line>
-                        <line class="edge-line-red" x1="199" y1="210" x2="199" y2="320" marker-end="url(#arrowhead-red)"></line>
-                        
-                        <!-- Washington (330, 200) -> Miami (200, 330) : 1 vuelo (Rojo) -->
-                        <line class="edge-line-red" x1="325" y1="205" x2="205" y2="325" marker-end="url(#arrowhead-red)"></line>
-
-                        <!-- Nodos (Ciudades) -->
-                        <!-- Newark (Centro) -->
-                        <g transform="translate(200, 200)">
-                            <circle class="node-circle" r="35"></circle>
-                            <text class="node-text">Newark</text>
-                        </g>
-                        
-                        <!-- Boston (Arriba) -->
-                        <g transform="translate(200, 70)">
-                            <circle class="node-circle" r="35"></circle>
-                            <text class="node-text">Boston</text>
-                        </g>
-                        
-                        <!-- Detroit (Izquierda) -->
-                        <g transform="translate(70, 200)">
-                            <circle class="node-circle" r="35"></circle>
-                            <text class="node-text">Detroit</text>
-                        </g>
-                        
-                        <!-- Washington (Derecha) -->
-                        <g transform="translate(330, 200)">
-                            <circle class="node-circle" r="35"></circle>
-                            <text class="node-text">Washington</text>
-                        </g>
-                        
-                        <!-- Miami (Abajo) -->
-                        <g transform="translate(200, 330)">
-                            <circle class="node-circle" r="35"></circle>
-                            <text class="node-text">Miami</text>
-                        </g>
-                    </svg>
+            <!-- Respuestas y Justificación -->
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Respuestas y Justificación</h2>
+                
+                <!-- Inciso (a) -->
+                <div class="mb-6 bg-white border border-gray-200 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">a) Grafo Simple</h3>
+                    <p class="text-gray-600">
+                        <strong>Justificación:</strong> La regla dice "una arista... si hay *una* autopista". Esto ignora si hay múltiples autopistas. Solo nos importa si existe conexión (al menos una) o no. No se mencionan bucles.
+                    </p>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-500 mt-3">
+                        <li>No se permiten aristas múltiples.</li>
+                        <li>No se permiten bucles.</li>
+                    </ul>
+                </div>
+                
+                <!-- Inciso (b) -->
+                <div class="mb-6 bg-white border border-gray-200 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">b) Multigrafo</h3>
+                    <p class="text-gray-600">
+                        <strong>Justificación:</strong> La regla clave es "una arista... por *cada* autopista". Esto significa que si hay 3 autopistas entre dos ciudades, dibujamos 3 aristas entre sus vértices.
+                    </p>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-500 mt-3">
+                        <li><strong>Sí</strong> se permiten aristas múltiples.</li>
+                        <li>No se permiten bucles.</li>
+                    </ul>
+                </div>
+                
+                <!-- Inciso (c) -->
+                <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">c) Pseudografo (o Multigrafo con bucles)</h3>
+                    <p class="text-gray-600">
+                        <strong>Justificación:</strong> Este modelo toma el caso (b) y le añade la regla de los bucles ("...y hay un *bucle*... si... rodea dicha ciudad"). Un grafo que permite tanto aristas múltiples como bucles se conoce comúnmente como pseudografo.
+                    </p>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-500 mt-3">
+                        <li><strong>Sí</strong> se permiten aristas múltiples.</li>
+                        <li><strong>Sí</strong> se permiten bucles.</li>
+                    </ul>
                 </div>
 
-                <!-- Análisis de Conexiones -->
-                <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Análisis de Conexiones (Total Vuelos)</h3>
-                <ul class="list-disc list-inside space-y-2 text-gray-600">
-                    <li><strong>Boston &rarr; Newark</strong>: 4 flechas (vuelos)</li>
-                    <li><strong>Newark &rarr; Boston</strong>: 2 flechas (vuelos)</li>
-                    <li><strong>Newark &rarr; Miami</strong>: 3 flechas (vuelos)</li>
-                    <li><strong>Miami &rarr; Newark</strong>: 2 flechas (vuelos)</li>
-                    <li><strong>Newark &rarr; Detroit</strong>: 1 flecha (vuelo)</li>
-                    <li><strong>Detroit &rarr; Newark</strong>: 2 flechas (vuelos)</li>
-                    <li><strong>Newark &rarr; Washington</strong>: 3 flechas (vuelos)</li>
-                    <li><strong>Washington &rarr; Newark</strong>: 2 flechas (vuelos)</li>
-                    <li><strong>Washington &rarr; Miami</strong>: 1 flecha (vuelo)</li>
-                </ul>
-                <p class="text-sm text-gray-500 mt-4">
-                    <i>Nota: Los colores cian y rojo se usan para diferenciar visualmente las direcciones de los vuelos, coincidiendo con el estilo de la imagen del ejercicio.</i>
-                </p>
             </div>
-
         </div>
     </div>
-
 </body>
 </html>

@@ -27,13 +27,13 @@
             dominant-baseline: middle;
             pointer-events: none; /* Para que el texto no interfiera con eventos del círculo */
         }
-        .edge-line-red {
-            stroke: #EF4444; /* red-500 */
+        .edge-line {
+            stroke: #6B7280; /* Corresponde a gray-500 */
             stroke-width: 2.5;
         }
-        .edge-line-cyan {
-            stroke: #06B6D4; /* cyan-500 */
-            stroke-width: 2.5;
+        /* Estilo para el polígono de la punta de flecha */
+        .arrowhead-polygon {
+            fill: #6B7280; /* gray-500 */
         }
     </style>
 </head>
@@ -48,17 +48,16 @@
             
             <!-- Columna Izquierda: Descripción del Problema -->
             <div class="md:w-1/2 p-6 md:p-8 border-r border-gray-200">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Ejercicio (Parte c)</h2>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Ejercicio (Parte d)</h2>
                 <p class="text-gray-600 mb-6">
-                    Dibuja un grafo con una arista entre vértices que representan ciudades para cada vuelo que opera entre ellos, más un circuito para un viaje turístico especial que despega y aterriza en Miami.
+                    Dibuja un grafo con una arista desde un vértice que representa una ciudad donde comienza un vuelo hasta el vértice que representa la ciudad donde termina.
                 </p>
 
-                <h3 class="text-xl font-semibold text-gray-700 mb-3">Reglas del Ejercicio (Parte c)</h3>
+                <h3 class="text-xl font-semibold text-gray-700 mb-3">Reglas del Ejercicio (Parte d)</h3>
                 <ul class="list-disc list-inside space-y-2 text-gray-600 mb-6">
-                    <li>Necesitamos dibujar una arista entre cualquier par de ciudades <strong>por cada vuelo</strong> entre ellas.</li>
-                    <li>Las aristas pueden ser no dirigidas (representan una conexión, sin importar la dirección).</li>
-                    <li><strong>Se permiten múltiples aristas</strong>, ya que un par de ciudades puede tener múltiples vuelos.</li>
-                    <li><strong>Se permiten bucles</strong>, ya que se añade un bucle en Miami por el viaje turístico.</li>
+                    <li>Necesitamos dibujar una <strong>única arista</strong> entre dos ciudades si existe un vuelo entre ellas (en una dirección específica).</li>
+                    <li>Las aristas tienen una <strong>dirección asociada</strong>; por lo tanto, debemos usar <strong>aristas dirigidas</strong> (flechas).</li>
+                    <li><strong>No se permiten múltiples aristas</strong> (es decir, solo una flecha por dirección, sin importar cuántos vuelos haya en esa ruta).</li>
                 </ul>
 
                 <h3 class="text-xl font-semibold text-gray-700 mb-3">Datos de Vuelos</h3>
@@ -79,61 +78,45 @@
 
             <!-- Columna Derecha: Solución Gráfica -->
             <div class="md:w-1/2 p-6 md:p-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Solución: Grafo Múltiple con Bucle</h2>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Solución: Grafo Dirigido (Digrafo)</h2>
                 <p class="text-gray-600 mb-6">
-                    Mantenemos el multigrafo de la "Parte b", pero ahora añadimos un <strong>bucle</strong> (una arista de un nodo a sí mismo) en Miami para representar el viaje turístico especial.
+                    Aplicando las reglas, dibujamos una flecha por cada dirección en la que exista al menos un vuelo. Si hay vuelos en ambas direcciones, dibujamos dos flechas.
                 </p>
 
                 <!-- Visualización del Grafo con SVG -->
                 <div class="w-full h-auto aspect-square bg-white rounded-lg p-4">
                     <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 
-                          Diseño del grafo (Multigrafo):
-                          - Replicando el estilo de la imagen, usamos cian para una dirección y rojo para la otra.
-                          - Las aristas están ligeramente separadas para ser visibles.
-                        -->
                         
-                        <!-- Aristas (Conexiones) -->
+                        <!-- Definición de la punta de flecha -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="8" markerHeight="6" 
+                                    refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+                              <polygon class="arrowhead-polygon" points="0 0, 8 3, 0 6" />
+                            </marker>
+                        </defs>
+
+                        <!-- Aristas (Conexiones Dirigidas) -->
                         
                         <!-- Newark (200, 200) <-> Boston (200, 70) -->
-                        <!-- 4 vuelos (rojo) + 2 vuelos (cian) = 6 aristas -->
-                        <line class="edge-line-cyan" x1="193" y1="195" x2="193" y2="75"></line>
-                        <line class="edge-line-cyan" x1="196" y1="195" x2="196" y2="75"></line>
-                        <line class="edge-line-red" x1="199" y1="195" x2="199" y2="75"></line>
-                        <line class="edge-line-red" x1="202" y1="195" x2="202" y2="75"></line>
-                        <line class="edge-line-red" x1="205" y1="195" x2="205" y2="75"></line>
-                        <line class="edge-line-red" x1="208" y1="195" x2="208" y2="75"></line>
+                        <line class="edge-line" x1="195" y1="190" x2="195" y2="80" marker-end="url(#arrowhead)"></line>
+                        <line class="edge-line" x1="205" y1="80" x2="205" y2="190" marker-end="url(#arrowhead)"></line>
                         
                         <!-- Newark (200, 200) <-> Detroit (70, 200) -->
-                        <!-- 1 vuelo (rojo) + 2 vuelos (cian) = 3 aristas -->
-                        <line class="edge-line-cyan" y1="196" x1="195" y2="196" x2="75"></line>
-                        <line class="edge-line-cyan" y1="199" x1="195" y2="199" x2="75"></line>
-                        <line class="edge-line-red" y1="202" x1="195" y2="202" x2="75"></line>
+                        <line class="edge-line" y1="195" x1="190" y2="195" x2="80" marker-end="url(#arrowhead)"></line>
+                        <line class="edge-line" y1="205" x1="80" y2="205" x2="190" marker-end="url(#arrowhead)"></line>
                         
                         <!-- Newark (200, 200) <-> Washington (330, 200) -->
-                        <!-- 3 vuelos (rojo) + 2 vuelos (cian) = 5 aristas -->
-                        <line class="edge-line-cyan" y1="194" x1="205" y2="194" x2="325"></line>
-                        <line class="edge-line-cyan" y1="197" x1="205" y2="197" x2="325"></line>
-                        <line class="edge-line-red" y1="200" x1="205" y2="200" x2="325"></line>
-                        <line class="edge-line-red" y1="203" x1="205" y2="203" x2="325"></line>
-                        <line class="edge-line-red" y1="206" x1="205" y2="206" x2="325"></line>
+                        <line class="edge-line" y1="195" x1="210" y2="195" x2="320" marker-end="url(#arrowhead)"></line>
+                        <line class="edge-line" y1="205" x1="320" y2="205" x2="210" marker-end="url(#arrowhead)"></line>
                         
                         <!-- Newark (200, 200) <-> Miami (200, 330) -->
-                        <!-- 3 vuelos (rojo) + 2 vuelos (cian) = 5 aristas -->
-                        <line class="edge-line-cyan" x1="194" y1="205" x2="194" y2="325"></line>
-                        <line class="edge-line-cyan" x1="197" y1="205" x2="197" y2="325"></line>
-                        <line class="edge-line-red" x1="200" y1="205" x2="200" y2="325"></line>
-                        <line class="edge-line-red" x1="203" y1="205" x2="203" y2="325"></line>
-                        <line class="edge-line-red" x1="206" y1="205" x2="206" y2="325"></line>
+                        <line class="edge-line" x1="195" y1="210" x2="195" y2="320" marker-end="url(#arrowhead)"></line>
+                        <line class="edge-line" x1="205" y1="320" x2="205" y2="210" marker-end="url(#arrowhead)"></line>
                         
-                        <!-- Washington (330, 200) <-> Miami (200, 330) -->
-                        <!-- 1 vuelo (rojo) = 1 arista -->
-                        <line class="edge-line-red" x1="325" y1="205" x2="205" y2="325"></line>
-                        
-                        <!-- Bucle en Miami (200, 330) -->
-                        <!-- 1 circuito turístico (rojo) = 1 bucle -->
-                        <path class="edge-line-red" fill="none" d="M 185, 350 C 160, 410 240, 410 215, 350" />
-
+                        <!-- Washington (330, 200) -> Miami (200, 330) -->
+                        <!-- Esta es una conexión de un solo sentido según los datos -->
+                        <line class="edge-line" x1="320" y1="205" x2="210" y2="325" marker-end="url(#arrowhead)"></line>
+                
                         <!-- Nodos (Ciudades) -->
                         <!-- Newark (Centro) -->
                         <g transform="translate(200, 200)">
@@ -168,16 +151,18 @@
                 </div>
 
                 <!-- Análisis de Conexiones -->
-                <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Análisis de Conexiones (Total Aristas)</h3>
+                <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Análisis de Conexiones (Dirigidas)</h3>
                 <ul class="list-disc list-inside space-y-2 text-gray-600">
-                    <li><strong>Boston &harr; Newark</strong>: 6 aristas totales.</li>
-                    <li><strong>Newark &harr; Detroit</strong>: 3 aristas totales.</li>
-                    <li><strong>Newark &harr; Miami</strong>: 5 aristas totales.</li>
-                    <li><strong>Newark &harr; Washington</strong>: 5 aristas totales.</li>
-                    <li><strong>Washington &harr; Miami</strong>: 1 arista total.</li>
-                    <li><strong>Bucle en Miami</strong>: 1 arista (viaje turístico).</li>
-                    <li>Otras conexiones (ej. Boston-Miami): 0 aristas.</li>
+                    <li><strong>Boston &harr; Newark</strong>: Conectados (vuelos en ambas direcciones).</li>
+                    <li><strong>Newark &harr; Detroit</strong>: Conectados (vuelos en ambas direcciones).</li>
+                    <li><strong>Newark &harr; Miami</strong>: Conectados (vuelos en ambas direcciones).</li>
+                    <li><strong>Newark &harr; Washington</strong>: Conectados (vuelos en ambas direcciones).</li>
+                    <li><strong>Washington &rarr; Miami</strong>: Conectado (vuelo solo en esta dirección).</li>
+                    <li><strong>Miami &rarr; Washington</strong>: No conectado (no hay vuelos en esta dirección).</li>
                 </ul>
+                <p class="text-sm text-gray-500 mt-4">
+                    <i>Nota: El grafo de tu imagen de referencia parece mostrar una flecha de Miami a Washington, pero los datos del vuelo indican que la conexión es de <strong>Washington a Miami</strong>. Este grafo sigue los datos de la lista de vuelos.</i>
+                </p>
             </div>
 
         </div>

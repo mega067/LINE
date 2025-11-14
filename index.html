@@ -3,279 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diagrama del Proceso de Toma de Decisiones</title>
-    <!-- Carga de Tailwind CSS -->
+    <title>Cuadro Comparativo de Grafos</title>
+    <!-- Importamos Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Carga de la fuente Inter -->
+    <!-- Importamos la fuente Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <style>
-        /* Estilos personalizados para la fuente y las formas del diagrama */
+        /* Aplicamos la fuente Inter como fuente base */
         body {
             font-family: 'Inter', sans-serif;
         }
-
-        /* Contenedor para la forma de rombo (Decisión) */
-        .shape-diamond-wrapper {
-            width: 208px; /* 52 * 4 */
-            height: 208px; /* 52 * 4 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .shape-diamond {
-            width: 148px; /* ~w-36 */
-            height: 148px; /* ~h-36 */
-            background-color: #facc15; /* bg-amber-400 */
-            color: #1f2937; /* text-gray-800 */
-            font-weight: 600;
-            border-radius: 0.5rem; /* rounded-lg */
-            transform: rotate(45deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        /* Contenedor de texto dentro del rombo para anular la rotación */
-        .shape-diamond-text {
-            transform: rotate(-45deg);
-            text-align: center;
-            max-width: 140px;
-        }
-
-        /* Forma de óvalo (Terminador) */
-        .shape-oval {
-            width: 200px;
-            height: 60px;
-            border-radius: 9999px; /* rounded-full */
-            background-color: #4f46e5; /* bg-indigo-600 */
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        /* Forma de rectángulo (Proceso) */
-        .shape-rect {
-            width: 288px; /* w-72 */
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem; /* rounded-lg */
-            background-color: #2563eb; /* bg-blue-600 */
-            color: white;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        /* Forma de paralelogramo (Datos) */
-        .shape-data {
-            width: 288px; /* w-72 */
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem; /* rounded-lg */
-            background-color: #a855f7; /* bg-purple-500 */
-            color: white;
-            text-align: center;
-            font-weight: 500;
-            transform: skew(-15deg);
-        }
-
-        /* Forma de proceso predefinido */
-        .shape-predefined {
-            width: 288px; /* w-72 */
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem; /* rounded-lg */
-            background-color: #1d4ed8; /* bg-blue-800 */
-            color: white;
-            text-align: center;
-            font-weight: 500;
-            border-left: 10px solid #60a5fa; /* border-blue-400 */
-            border-right: 10px solid #60a5fa; /* border-blue-400 */
-        }
-
-        /* Flecha simple apuntando hacia abajo */
-        .arrow-down {
-            width: 2px;
-            height: 48px; /* h-12 */
-            background-color: #6b7281; /* bg-gray-500 */
-            position: relative;
-        }
-        .arrow-down::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 8px solid #6b7281; /* bg-gray-500 */
-        }
-
-        /* Línea de flujo horizontal (para bucles de 'No') */
-        .feedback-line {
-            /* width: 100%; */ /* Eliminado */
-            flex-grow: 1; /* Añadido */
-            height: 2px;
-            background-color: #6b7281; /* bg-gray-500 */
-            position: relative;
-        }
-        .feedback-line.left-arrow::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            border-top: 6px solid transparent;
-            border-bottom: 6px solid transparent;
-            border-right: 8px solid #6b7281;
-        }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen py-12 px-4">
-    <div class="max-w-4xl mx-auto flex flex-col items-center space-y-4">
+<body class="bg-gray-900 text-gray-100 min-h-screen p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
         
-        <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">Diagrama de Flujo: Proceso Racional de Toma de Decisiones</h1>
+        <!-- Título de la página -->
+        <h1 class="text-3xl sm:text-4xl font-bold text-center mb-8 text-white">
+            Cuadro Comparativo de Conceptos de Grafos
+        </h1>
+        <p class="text-center text-gray-400 mb-10 max-w-2xl mx-auto">
+            Este cuadro resume las características principales de la teoría de grafos, según lo solicitado.
+        </p>
 
-        <!-- Inicio -->
-        <div class="shape-oval">Inicio</div>
-        <div class="arrow-down"></div>
+        <!-- Contenedor de la tabla con scroll horizontal en móviles -->
+        <div class="overflow-x-auto rounded-lg shadow-xl bg-gray-800 border border-gray-700">
+            <table class="w-full text-left divide-y divide-gray-700">
+                <!-- Encabezado de la tabla -->
+                <thead class="bg-gray-700/50">
+                    <tr>
+                        <th class="px-6 py-4 text-xs font-semibold text-gray-300 uppercase tracking-wider">Concepto</th>
+                        <th class="px-6 py-4 text-xs font-semibold text-gray-300 uppercase tracking-wider">Definición</th>
+                        <th class="px-6 py-4 text-xs font-semibold text-gray-300 uppercase tracking-wider">Ejemplo / Notas</th>
+                        <th class="px-6 py-4 text-xs font-semibold text-gray-300 uppercase tracking-wider">Fuente(s)</th>
+                    </tr>
+                </thead>
+                <!-- Cuerpo de la tabla -->
+                <tbody class="divide-y divide-gray-700">
+                    
+                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Vértice (Nodo)</td>
+                        <td class="px-6 py-4 text-gray-300">La unidad fundamental de un grafo. Representa un objeto o entidad.</td>
+                        <td class="px-6 py-4 text-gray-300">En un mapa de ciudades, un vértice es "París".</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[1], [4]</td>
+                    </tr>
+                    
+                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Arista (Arco)</td>
+                        <td class="px-6 py-4 text-gray-300">La conexión o relación entre dos vértices.</td>
+                        <td class="px-6 py-4 text-gray-300">La carretera que conecta "París" y "Lyon".</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[1], [4]</td>
+                    </tr>
+                    
+                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Lazo (Bucle)</td>
+                        <td class="px-6 py-4 text-gray-300">Una arista que conecta un vértice consigo mismo. <code class="bg-gray-900 text-sm px-1.5 py-0.5 rounded">(V_i, V_i)</code>.</td>
+                        <td class="px-6 py-4 text-gray-300">En una máquina de estados, una acción que te mantiene en el mismo estado.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[2], [3]</td>
+                    </tr>
 
-        <!-- Fase 1: Identificar Decisión -->
-        <div class="shape-rect" id="fase1">
-            <span class="font-bold">Fase 1: Identificar Decisión</span>
-            <p class="text-sm text-blue-100">(Definir problema, objetivos, métricas)</p>
-        </div>
-        <div class="arrow-down"></div>
-
-        <!-- Fase 2: Reunir Información -->
-        <div class="shape-rect" id="fase2">
-            <span class="font-bold">Fase 2: Reunir Información</span>
-            <p class="text-sm text-blue-100">(Recopilar datos internos y externos)</p>
-        </div>
-        <div class="arrow-down"></div>
-
-        <!-- Datos (Salida de Fase 2) -->
-        <div class="shape-data">
-            <span>Datos/Informes Recopilados</span>
-        </div>
-        <div class="arrow-down"></div>
-
-        <!-- Decisión 1: ¿Información Suficiente? -->
-        <div class="shape-diamond-wrapper" id="decision1">
-            <div class="shape-diamond">
-                <span class="shape-diamond-text">¿Información Suficiente y Relevante?</span>
-            </div>
-        </div>
-
-        <!-- Divisor de Flujo -->
-        <div class="flex w-full max-w-lg justify-center">
-            <!-- Rama SÍ -->
-            <div class="flex flex-col items-center px-4 w-1/2">
-                <span class="font-bold text-gray-700 mb-2">Sí</span>
-                <div class="arrow-down"></div>
-            </div>
-            <!-- Rama NO -->
-            <div class="flex flex-col items-center px-4 w-1/2">
-                <span class="font-bold text-gray-700 mb-2">No</span>
-                <div class="w-full flex items-center min-h-12">
-                    <span class="mr-2 text-sm font-medium text-gray-700 whitespace-normal text-right flex-shrink">Volver a Fase 2: Reunir Información</span>
-                    <div class="feedback-line left-arrow"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Fase 3: Identificar Alternativas -->
-        <div class="shape-rect" id="fase3">
-            <span class="font-bold">Fase 3: Identificar Alternativas</span>
-            <p class="text-sm text-blue-100">(Brainstorming, generar múltiples opciones)</p>
-        </div>
-        <div class="arrow-down"></div>
-
-        <!-- Fase 4: Ponderar Alternativas (Proceso Predefinido) -->
-        <div class="shape-predefined" id="fase4">
-            <span class="font-bold">Fase 4: Ponderar Alternativas</span>
-            <p class="text-sm text-blue-200">(SWOT, Matriz de Decisión, Costo-Beneficio)</p>
-        </div>
-        <div class="arrow-down"></div>
-
-        <!-- Datos (Salida de Fase 4) -->
-        <div class="shape-data">
-            <span>Informe de Evaluación de Alternativas</span>
-        </div>
-        <div class="arrow-down"></div>
-
-        <!-- Decisión 2: ¿Alternativa Óptima? -->
-        <div class="shape-diamond-wrapper" id="decision2">
-            <div class="shape-diamond">
-                <span class="shape-diamond-text">¿Alternativa Óptima Identificada?</span>
-            </div>
-        </div>
-
-        <!-- Divisor de Flujo -->
-        <div class="flex w-full max-w-lg justify-center">
-            <!-- Rama SÍ -->
-            <div class="flex flex-col items-center px-4 w-1/2">
-                <span class="font-bold text-gray-700 mb-2">Sí</span>
-                <div class="arrow-down"></div>
-            </div>
-            <!-- Rama NO -->
-            <div class="flex flex-col items-center px-4 w-1/2">
-                <span class="font-bold text-gray-700 mb-2">No</span>
-                <div class="w-full flex items-center min-h-12">
-                    <span class="mr-2 text-sm font-medium text-gray-700 whitespace-normal text-right flex-shrink">Volver a Fase 3: Identificar Alternativas</span>
-                    <div class="feedback-line left-arrow"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Fase 5: Seleccionar Alternativa -->
-        <div class="shape-rect" id="fase5">
-            <span class="font-bold">Fase 5: Seleccionar Alternativa</span>
-            <p class="text-sm text-blue-100">(Formalizar la elección, considerar híbridos)</p>
-        </div>
-        <div class="arrow-down"></div>
-
-        <!-- Fase 6: Implementar Solución (Proceso Predefinido) -->
-        <div class="shape-predefined" id="fase6">
-            <span class="font-bold">Fase 6: Implementar Solución</span>
-            <p class="text-sm text-blue-200">(Plan de proyecto, asignar recursos, plazos)</p>
-        </div>
-        <div class="arrow-down"></div>
-
-        <!-- Fase 7: Revisar Resultados -->
-        <div class="shape-rect" id="fase7">
-            <span class="font-bold">Fase 7: Revisar Resultados</span>
-            <p class="text-sm text-blue-100">(Monitorear contra métricas de Fase 1)</p>
-        </div>
-        <div class="arrow-down"></div>
-
-        <!-- Decisión 3: ¿Problema Resuelto? -->
-        <div class="shape-diamond-wrapper" id="decision3">
-            <div class="shape-diamond">
-                <span class="shape-diamond-text">¿Problema Resuelto (Cumple Métricas)?</span>
-            </div>
+                    <!-- Fila combinada para Valencia y Grado -->
+                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white align-top" rowspan="2">Valencia (Grado)</td>
+                        <td class="px-6 py-4 text-gray-300">El número de aristas que inciden en un vértice.</td>
+                        <td class="px-6 py-4 text-gray-300">Si un vértice V1 está conectado a V2, V3 y V4, su valencia es 3.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-400 align-top" rowspan="2">[2], [3], [4]</td>
+                    </tr>
+                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
+                        <td class="px-6 py-4 text-gray-300 font-medium text-white">Grado de Entrada/Salida</td>
+                        <td class="px-6 py-4 text-gray-300">(Solo en grafos dirigidos) El número de aristas que entran (entrada) o salen (salida) de un vértice.</td>
+                    </tr>
+                    
+                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Camino</td>
+                        <td class="px-6 py-4 text-gray-300">Una secuencia de vértices conectados por aristas. <code class="bg-gray-900 text-sm px-1.5 py-0.5 rounded">V1 -> V2 -> V3</code>.</td>
+                        <td class="px-6 py-4 text-gray-300">Una ruta de vuelo: "México" -> "Madrid" -> "Berlín".</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[5]</td>
+                    </tr>
+                    
+                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Ciclo</td>
+                        <td class="px-6 py-4 text-gray-300">Un camino que empieza y termina en el mismo vértice.</td>
+                        <td class="px-6 py-4 text-gray-300">"México" -> "Madrid" -> "Berlín" -> "México".</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[5]</td>
+                    </tr>
+                    
+                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Grafo No Dirigido</td>
+                        <td class="px-6 py-4 text-gray-300">Las aristas no tienen dirección; la relación es simétrica. <code class="bg-gray-900 text-sm px-1.5 py-0.5 rounded">(A, B) = (B, A)</code>.</td>
+                        <td class="px-6 py-4 text-gray-300">Red de amigos en Facebook.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[1], [6]</td>
+                    </tr>
+                    
+                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Grafo Dirigido</td>
+                        <td class="px-6 py-4 text-gray-300">Las aristas tienen dirección; la relación es asimétrica. <code class="bg-gray-900 text-sm px-1.5 py-0.5 rounded">(A, B) != (B, A)</code>.</td>
+                        <td class="px-6 py-4 text-gray-300">Red de seguidores en Twitter.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[1], [6]</td>
+                    </tr>
+                    
+                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Grafo Ponderado</td>
+                        <td class="px-6 py-4 text-gray-300">A cada arista se le asigna un valor numérico (peso o costo).</td>
+                        <td class="px-6 py-4 text-gray-300">Un mapa de GPS donde el peso de la arista es la distancia en km.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[6]</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
         </div>
 
-        <!-- Divisor de Flujo -->
-        <div class="flex w-full max-w-lg justify-center">
-            <!-- Rama SÍ -->
-            <div class="flex flex-col items-center px-4 w-1/2">
-                <span class="font-bold text-gray-700 mb-2">Sí</span>
-                <div class="arrow-down"></div>
-            </div>
-            <!-- Rama NO -->
-            <div class="flex flex-col items-center px-4 w-1/2">
-                <span class="font-bold text-gray-700 mb-2">No</span>
-                <div class="w-full flex items-center min-h-12">
-                    <span class="mr-2 text-sm font-medium text-gray-700 whitespace-normal text-right flex-shrink">Volver a Fase 3: Identificar Alternativas</span>
-                    <div class="feedback-line left-arrow"></div>
-                </div>
-            </div>
+        <!-- Sección de Fuentes -->
+        <div class="mt-10 pt-6 border-t border-gray-700">
+            <h2 class="text-2xl font-semibold mb-4 text-white">Fuentes Citadas</h2>
+            <ul class="list-none space-y-2 text-gray-400">
+                <li>
+                    <span class="font-medium text-gray-200">[1] Wikipedia (Teoría de Grafos):</span>
+                    <a href="https://es.wikipedia.org/wiki/Teor%C3%ADa_de_grafos" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline break-all">
+                        https://es.wikipedia.org/wiki/Teor%C3%ADa_de_grafos
+                    </a>
+                </li>
+                <li>
+                    <span class="font-medium text-gray-200">[2] Wix.com (Matemáticas Discretas):</span>
+                    <a href="https://trabajoenequipoitq.wixsite.com/matematicas-discreta/61--elementos-y-caracteristicas" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline break-all">
+                        https://trabajoenequipoitq.wixsite.com/matematicas-discreta/61--elementos-y-caracteristicas
+                    </a>
+                </li>
+                <li>
+                    <span class="font-medium text-gray-200">[3] Wikipedia (Grado):</span>
+                    <a href="https://es.wikipedia.org/wiki/Grado_(teor%C3%ADa_de_grafos)" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline break-all">
+                        https://es.wikipedia.org/wiki/Grado_(teor%C3%ADa_de_grafos)
+                    </a>
+                </li>
+                <li>
+                    <span class="font-medium text-gray-200">[4] Wikipedia (Vértice):</span>
+                    <a href="https://en.wikipedia.org/wiki/Vertex_(graph_theory)" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline break-all">
+                        https://en.wikipedia.org/wiki/Vertex_(graph_theory)
+                    </a>
+                </li>
+                <li>
+                    <span class="font-medium text-gray-200">[5] DataCamp (Introduction to Graph Theory):</span>
+                    <a href="https://www.datacamp.com/tutorial/introduction-to-graph-theory" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline break-all">
+                        https://www.datacamp.com/tutorial/introduction-to-graph-theory
+                    </a>
+                </li>
+                <li>
+                    <span class="font-medium text-gray-200">[6] Medium (Types of Graphs):</span>
+                    <a href="https://medium.com/tebs-lab/types-of-graphs-7f3891303ea8" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline break-all">
+                        https://medium.com/tebs-lab/types-of-graphs-7f3891303ea8
+                    </a>
+                </li>
+            </ul>
         </div>
-
-        <!-- Fin -->
-        <div class="shape-oval">Fin</div>
 
     </div>
 </body>

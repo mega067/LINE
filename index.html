@@ -48,17 +48,17 @@
             
             <!-- Columna Izquierda: Descripción del Problema -->
             <div class="md:w-1/2 p-6 md:p-8 border-r border-gray-200">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Ejercicio (Parte b)</h2>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Ejercicio (Parte c)</h2>
                 <p class="text-gray-600 mb-6">
-                    Dadas 5 ciudades y una lista de vuelos programados, debemos dibujar un grafo que represente las conexiones aéreas basándonos en las siguientes reglas.
+                    Dibuja un grafo con una arista entre vértices que representan ciudades para cada vuelo que opera entre ellos, más un circuito para un viaje turístico especial que despega y aterriza en Miami.
                 </p>
 
-                <h3 class="text-xl font-semibold text-gray-700 mb-3">Reglas del Ejercicio (Parte b)</h3>
+                <h3 class="text-xl font-semibold text-gray-700 mb-3">Reglas del Ejercicio (Parte c)</h3>
                 <ul class="list-disc list-inside space-y-2 text-gray-600 mb-6">
                     <li>Necesitamos dibujar una arista entre cualquier par de ciudades <strong>por cada vuelo</strong> entre ellas.</li>
                     <li>Las aristas pueden ser no dirigidas (representan una conexión, sin importar la dirección).</li>
                     <li><strong>Se permiten múltiples aristas</strong>, ya que un par de ciudades puede tener múltiples vuelos.</li>
-                    <li><strong>No se permiten bucles</strong> (vuelos de una ciudad a sí misma).</li>
+                    <li><strong>Se permiten bucles</strong>, ya que se añade un bucle en Miami por el viaje turístico.</li>
                 </ul>
 
                 <h3 class="text-xl font-semibold text-gray-700 mb-3">Datos de Vuelos</h3>
@@ -79,9 +79,9 @@
 
             <!-- Columna Derecha: Solución Gráfica -->
             <div class="md:w-1/2 p-6 md:p-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Solución: Grafo Múltiple (Multigrafo)</h2>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Solución: Grafo Múltiple con Bucle</h2>
                 <p class="text-gray-600 mb-6">
-                    Aplicando las nuevas reglas, sumamos el total de vuelos entre cada par de ciudades para obtener el número de aristas. El resultado es un <strong>multigrafo</strong>, donde múltiples aristas pueden conectar los mismos dos nodos.
+                    Mantenemos el multigrafo de la "Parte b", pero ahora añadimos un <strong>bucle</strong> (una arista de un nodo a sí mismo) en Miami para representar el viaje turístico especial.
                 </p>
 
                 <!-- Visualización del Grafo con SVG -->
@@ -129,7 +129,11 @@
                         <!-- Washington (330, 200) <-> Miami (200, 330) -->
                         <!-- 1 vuelo (rojo) = 1 arista -->
                         <line class="edge-line-red" x1="325" y1="205" x2="205" y2="325"></line>
-                
+                        
+                        <!-- Bucle en Miami (200, 330) -->
+                        <!-- 1 circuito turístico (rojo) = 1 bucle -->
+                        <path class="edge-line-red" fill="none" d="M 185, 350 C 160, 410 240, 410 215, 350" />
+
                         <!-- Nodos (Ciudades) -->
                         <!-- Newark (Centro) -->
                         <g transform="translate(200, 200)">
@@ -166,11 +170,12 @@
                 <!-- Análisis de Conexiones -->
                 <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Análisis de Conexiones (Total Aristas)</h3>
                 <ul class="list-disc list-inside space-y-2 text-gray-600">
-                    <li><strong>Boston &harr; Newark</strong>: 6 aristas totales (4 en una dirección, 2 en la otra).</li>
-                    <li><strong>Newark &harr; Detroit</strong>: 3 aristas totales (1 en una dirección, 2 en la otra).</li>
-                    <li><strong>Newark &harr; Miami</strong>: 5 aristas totales (3 en una dirección, 2 en la otra).</li>
-                    <li><strong>Newark &harr; Washington</strong>: 5 aristas totales (3 en una dirección, 2 en la otra).</li>
-                    <li><strong>Washington &harr; Miami</strong>: 1 arista total (solo en una dirección).</li>
+                    <li><strong>Boston &harr; Newark</strong>: 6 aristas totales.</li>
+                    <li><strong>Newark &harr; Detroit</strong>: 3 aristas totales.</li>
+                    <li><strong>Newark &harr; Miami</strong>: 5 aristas totales.</li>
+                    <li><strong>Newark &harr; Washington</strong>: 5 aristas totales.</li>
+                    <li><strong>Washington &harr; Miami</strong>: 1 arista total.</li>
+                    <li><strong>Bucle en Miami</strong>: 1 arista (viaje turístico).</li>
                     <li>Otras conexiones (ej. Boston-Miami): 0 aristas.</li>
                 </ul>
             </div>

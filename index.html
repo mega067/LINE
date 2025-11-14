@@ -3,161 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuadro Comparativo de Grafos</title>
-    <!-- Importamos Tailwind CSS -->
+    <title>Ejercicio: Vuelos entre 5 Ciudades</title>
+    <!-- Importamos Tailwind CSS para un diseño moderno -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Importamos la fuente Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Aplicamos la fuente Inter como fuente base */
-        body {
+        /* Aplicamos la fuente Inter como fuente principal */
+        html {
             font-family: 'Inter', sans-serif;
+        }
+        /* Estilos personalizados para el SVG */
+        .node-circle {
+            fill: #7C3AED; /* Corresponde a purple-600 */
+        }
+        .node-text {
+            font-size: 14px;
+            font-weight: 500;
+            fill: white;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none; /* Para que el texto no interfiera con eventos del círculo */
+        }
+        .edge-line {
+            stroke: #6B7280; /* Corresponde a gray-500 */
+            stroke-width: 3;
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen p-4 sm:p-8">
-    <div class="max-w-7xl mx-auto">
+<body class="bg-gray-100 p-4 md:p-8">
+    
+    <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="p-6 md:p-10 bg-gradient-to-r from-purple-700 to-indigo-600">
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Ejercicio: Vuelos disponibles entre 5 ciudades</h1>
+        </div>
         
-        <!-- Título de la página -->
-        <h1 class="text-3xl sm:text-4xl font-bold text-center mb-8 text-white">
-            Cuadro Comparativo de Conceptos de Grafos
-        </h1>
-        <p class="text-center text-gray-400 mb-10 max-w-2xl mx-auto">
-            Este cuadro resume las características principales de la teoría de grafos, según lo solicitado.
-        </p>
+        <div class="md:flex">
+            
+            <!-- Columna Izquierda: Descripción del Problema -->
+            <div class="md:w-1/2 p-6 md:p-8 border-r border-gray-200">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Planteamiento del Problema</h2>
+                <p class="text-gray-600 mb-6">
+                    Dadas 5 ciudades y una lista de vuelos programados, debemos dibujar un grafo que represente las conexiones aéreas basándonos en las siguientes reglas.
+                </p>
 
-        <!-- Contenedor de la tabla con scroll horizontal en móviles -->
-        <div class="overflow-x-auto rounded-lg shadow-xl bg-gray-800 border border-gray-700">
-            <table class="w-full text-left divide-y divide-gray-700">
-                <!-- Encabezado de la tabla -->
-                <thead class="bg-gray-700/50">
-                    <tr>
-                        <th class="px-6 py-4 text-xs font-semibold text-gray-300 uppercase tracking-wider">Concepto</th>
-                        <th class="px-6 py-4 text-xs font-semibold text-gray-300 uppercase tracking-wider">Definición</th>
-                        <th class="px-6 py-4 text-xs font-semibold text-gray-300 uppercase tracking-wider">Ejemplo / Notas</th>
-                        <th class="px-6 py-4 text-xs font-semibold text-gray-300 uppercase tracking-wider">Fuente(s)</th>
-                    </tr>
-                </thead>
-                <!-- Cuerpo de la tabla -->
-                <tbody class="divide-y divide-gray-700">
-                    
-                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Vértice (Nodo)</td>
-                        <td class="px-6 py-4 text-gray-300">La unidad fundamental de un grafo. Representa un objeto o entidad.</td>
-                        <td class="px-6 py-4 text-gray-300">En un mapa de ciudades, un vértice es "París".</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[1], [4]</td>
-                    </tr>
-                    
-                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Arista (Arco)</td>
-                        <td class="px-6 py-4 text-gray-300">La conexión o relación entre dos vértices.</td>
-                        <td class="px-6 py-4 text-gray-300">La carretera que conecta "París" y "Lyon".</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[1], [4]</td>
-                    </tr>
-                    
-                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Lazo (Bucle)</td>
-                        <td class="px-6 py-4 text-gray-300">Una arista que conecta un vértice consigo mismo. <code class="bg-gray-900 text-sm px-1.5 py-0.5 rounded">(V_i, V_i)</code>.</td>
-                        <td class="px-6 py-4 text-gray-300">En una máquina de estados, una acción que te mantiene en el mismo estado.</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[2], [3]</td>
-                    </tr>
+                <h3 class="text-xl font-semibold text-gray-700 mb-3">Reglas del Ejercicio</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-600 mb-6">
+                    <li>Debemos dibujar una <strong>única arista</strong> entre dos ciudades cualesquiera que tengan un vuelo entre ellas.</li>
+                    <li>Las aristas son <strong>no dirigidas</strong> (representan una conexión, sin importar la dirección del vuelo).</li>
+                    <li><strong>No se permiten múltiples aristas</strong>. Un par de ciudades tiene una conexión (1 arista) o ninguna (0 aristas).</li>
+                </ul>
 
-                    <!-- Fila combinada para Valencia y Grado -->
-                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white align-top" rowspan="2">Valencia (Grado)</td>
-                        <td class="px-6 py-4 text-gray-300">El número de aristas que inciden en un vértice.</td>
-                        <td class="px-6 py-4 text-gray-300">Si un vértice V1 está conectado a V2, V3 y V4, su valencia es 3.</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-400 align-top" rowspan="2">[2], [3], [4]</td>
-                    </tr>
-                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
-                        <td class="px-6 py-4 text-gray-300 font-medium text-white">Grado de Entrada/Salida</td>
-                        <td class="px-6 py-4 text-gray-300">(Solo en grafos dirigidos) El número de aristas que entran (entrada) o salen (salida) de un vértice.</td>
-                    </tr>
-                    
-                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Camino</td>
-                        <td class="px-6 py-4 text-gray-300">Una secuencia de vértices conectados por aristas. <code class="bg-gray-900 text-sm px-1.5 py-0.5 rounded">V1 -> V2 -> V3</code>.</td>
-                        <td class="px-6 py-4 text-gray-300">Una ruta de vuelo: "México" -> "Madrid" -> "Berlín".</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[5]</td>
-                    </tr>
-                    
-                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Ciclo</td>
-                        <td class="px-6 py-4 text-gray-300">Un camino que empieza y termina en el mismo vértice.</td>
-                        <td class="px-6 py-4 text-gray-300">"México" -> "Madrid" -> "Berlín" -> "México".</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[5]</td>
-                    </tr>
-                    
-                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Grafo No Dirigido</td>
-                        <td class="px-6 py-4 text-gray-300">Las aristas no tienen dirección; la relación es simétrica. <code class="bg-gray-900 text-sm px-1.5 py-0.5 rounded">(A, B) = (B, A)</code>.</td>
-                        <td class="px-6 py-4 text-gray-300">Red de amigos en Facebook.</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[1], [6]</td>
-                    </tr>
-                    
-                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Grafo Dirigido</td>
-                        <td class="px-6 py-4 text-gray-300">Las aristas tienen dirección; la relación es asimétrica. <code class="bg-gray-900 text-sm px-1.5 py-0.5 rounded">(A, B) != (B, A)</code>.</td>
-                        <td class="px-6 py-4 text-gray-300">Red de seguidores en Twitter.</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[1], [6]</td>
-                    </tr>
-                    
-                    <tr class="hover:bg-gray-700/60 transition-colors duration-150">
-                        <td class="px-6 py-4 whitespace-nowrap font-medium text-white">Grafo Ponderado</td>
-                        <td class="px-6 py-4 text-gray-300">A cada arista se le asigna un valor numérico (peso o costo).</td>
-                        <td class="px-6 py-4 text-gray-300">Un mapa de GPS donde el peso de la arista es la distancia en km.</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-400">[6]</td>
-                    </tr>
-                    
-                </tbody>
-            </table>
+                <h3 class="text-xl font-semibold text-gray-700 mb-3">Datos de Vuelos</h3>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <ul class="space-y-1 text-gray-700 font-mono">
+                        <li>Boston a Newark: 4 vuelos</li>
+                        <li>Newark a Boston: 2 vuelos</li>
+                        <li>Newark a Miami: 3 vuelos</li>
+                        <li>Miami a Newark: 2 vuelos</li>
+                        <li>Newark a Detroit: 1 vuelo</li>
+                        <li>Detroit a Newark: 2 vuelos</li>
+                        <li>Newark a Washington: 3 vuelos</li>
+                        <li>Washington a Newark: 2 vuelos</li>
+                        <li>Washington a Miami: 1 vuelo</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Solución Gráfica -->
+            <div class="md:w-1/2 p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Solución: Grafo de Conexiones</h2>
+                <p class="text-gray-600 mb-6">
+                    Aplicando las reglas, si existe <strong>al menos un vuelo</strong> (de ida o vuelta) entre dos ciudades, dibujamos una arista. El número de vuelos es irrelevante, solo importa si la conexión existe.
+                </p>
+
+                <!-- Visualización del Grafo con SVG -->
+                <div class="w-full h-auto aspect-square bg-white rounded-lg p-4">
+                    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 
+                          Diseño del grafo:
+                          - Newark en el centro.
+                          - Boston, Detroit, Washington y Miami alrededor.
+                          - Conexión extra entre Miami y Washington.
+                        -->
+                        
+                        <!-- Aristas (Conexiones) -->
+                        <line class="edge-line" x1="200" y1="200" x2="200" y2="70"></line> <!-- Newark - Boston -->
+                        <line class="edge-line" x1="200" y1="200" x2="70" y2="200"></line> <!-- Newark - Detroit -->
+                        <line class="edge-line" x1="200" y1="200" x2="330" y2="200"></line> <!-- Newark - Washington -->
+                        <line class="edge-line" x1="200" y1="200" x2="200" y2="330"></line> <!-- Newark - Miami -->
+                        <line class="edge-line" x1="330" y1="200" x2="200" y2="330"></line> <!-- Washington - Miami -->
+                
+                        <!-- Nodos (Ciudades) -->
+                        <!-- Newark (Centro) -->
+                        <g transform="translate(200, 200)">
+                            <circle class="node-circle" r="35"></circle>
+                            <text class="node-text">Newark</text>
+                        </g>
+                        
+                        <!-- Boston (Arriba) -->
+                        <g transform="translate(200, 70)">
+                            <circle class="node-circle" r="35"></circle>
+                            <text class="node-text">Boston</text>
+                        </g>
+                        
+                        <!-- Detroit (Izquierda) -->
+                        <g transform="translate(70, 200)">
+                            <circle class="node-circle" r="35"></circle>
+                            <text class="node-text">Detroit</text>
+                        </g>
+                        
+                        <!-- Washington (Derecha) -->
+                        <g transform="translate(330, 200)">
+                            <circle class="node-circle" r="35"></circle>
+                            <text class="node-text">Washington</text>
+                        </g>
+                        
+                        <!-- Miami (Abajo) -->
+                        <g transform="translate(200, 330)">
+                            <circle class="node-circle" r="35"></circle>
+                            <text class="node-text">Miami</text>
+                        </g>
+                    </svg>
+                </div>
+
+                <!-- Análisis de Conexiones -->
+                <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Análisis de Conexiones</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                    <li><strong>Boston &harr; Newark</strong>: Conectados (vuelos en ambas direcciones).</li>
+                    <li><strong>Newark &harr; Detroit</strong>: Conectados (vuelos en ambas direcciones).</li>
+                    <li><strong>Newark &harr; Miami</strong>: Conectados (vuelos en ambas direcciones).</li>
+                    <li><strong>Newark &harr; Washington</strong>: Conectados (vuelos en ambas direcciones).</li>
+                    <li><strong>Washington &harr; Miami</strong>: Conectados (hay un vuelo de Washington a Miami).</li>
+                    <li>Otras conexiones (ej. Boston-Miami): No existen vuelos, por lo tanto no hay arista.</li>
+                </ul>
+            </div>
+
         </div>
-
-        <!-- Sección de Fuentes -->
-        <div class="mt-10 pt-6 border-t border-gray-700">
-            <h2 class="text-2xl font-semibold mb-4 text-white">Fuentes Citadas</h2>
-            <ul class="list-none space-y-2 text-gray-400">
-                <li>
-                    <span class="font-medium text-gray-200">[1] Wikipedia (Teoría de Grafos):</span>
-                    <a href="https://es.wikipedia.org/wiki/Teor%C3%ADa_de_grafos" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline break-all">
-                        https://es.wikipedia.org/wiki/Teor%C3%ADa_de_grafos
-                    </a>
-                </li>
-                <li>
-                    <span class="font-medium text-gray-200">[2] Wix.com (Matemáticas Discretas):</span>
-                    <a href="https://trabajoenequipoitq.wixsite.com/matematicas-discreta/61--elementos-y-caracteristicas" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline break-all">
-                        https://trabajoenequipoitq.wixsite.com/matematicas-discreta/61--elementos-y-caracteristicas
-                    </a>
-                </li>
-                <li>
-                    <span class="font-medium text-gray-200">[3] Wikipedia (Grado):</span>
-                    <a href="https://es.wikipedia.org/wiki/Grado_(teor%C3%ADa_de_grafos)" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline break-all">
-                        https://es.wikipedia.org/wiki/Grado_(teor%C3%ADa_de_grafos)
-                    </a>
-                </li>
-                <li>
-                    <span class="font-medium text-gray-200">[4] Wikipedia (Vértice):</span>
-                    <a href="https://en.wikipedia.org/wiki/Vertex_(graph_theory)" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline break-all">
-                        https://en.wikipedia.org/wiki/Vertex_(graph_theory)
-                    </a>
-                </li>
-                <li>
-                    <span class="font-medium text-gray-200">[5] DataCamp (Introduction to Graph Theory):</span>
-                    <a href="https://www.datacamp.com/tutorial/introduction-to-graph-theory" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline break-all">
-                        https://www.datacamp.com/tutorial/introduction-to-graph-theory
-                    </a>
-                </li>
-                <li>
-                    <span class="font-medium text-gray-200">[6] Medium (Types of Graphs):</span>
-                    <a href="https://medium.com/tebs-lab/types-of-graphs-7f3891303ea8" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 hover:underline break-all">
-                        https://medium.com/tebs-lab/types-of-graphs-7f3891303ea8
-                    </a>
-                </li>
-            </ul>
-        </div>
-
     </div>
+
 </body>
 </html>

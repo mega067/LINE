@@ -3,127 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicio 3: Tipos de Grafos</title>
-    <!-- Importamos Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Importamos la fuente Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>Ejercicio 4: Simplificación de Grafos</title>
+    <!-- Importamos Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Importamos la fuente Inter --><link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         html {
             font-family: 'Inter', sans-serif;
         }
-        /* Estilos para la tabla de terminología */
-        .table-header {
-            background-color: #7C3AED; /* purple-600 */
-            color: white;
-            font-weight: 600;
-        }
-        .table-cell {
-            padding: 12px 16px;
-            border-bottom: 1px solid #E5E7EB; /* gray-200 */
-        }
-        .table-row:nth-child(even) {
-            background-color: #F9FAFB; /* gray-50 */
-        }
-        .table-row:last-child .table-cell {
-            border-bottom: none;
-        }
     </style>
 </head>
 <body class="bg-gray-100 p-4 md:p-8">
     
     <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div class="p-6 md:p-10 bg-gradient-to-r from-purple-600 to-indigo-600">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">Ejercicio 3: Terminología de Grafos</h1>
+        <div class="p-6 md:p-10 bg-gradient-to-r from-teal-500 to-cyan-600">
+            <h1 class="text-3xl md:text-4xl font-bold text-white">Ejercicio 4: Simplificación de Grafos</h1>
         </div>
         
         <div class="p-6 md:p-8">
             
-            <!-- Sección de Terminología (Tabla 1) - ELIMINADA -->
+            <!-- Descripción del Ejercicio --><div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Pregunta del Ejercicio</h2>
+                <div class="bg-teal-50 p-6 rounded-lg border border-teal-200">
+                    <p class="text-lg text-gray-700 font-medium">
+                        Para cada grafo no dirigido de los ejercicios 3-9 que no sea simple, encuentre un conjunto de aristas que se puedan eliminar para simplificarlo.
+                    </p>
+                </div>
+                <p class="text-sm text-gray-500 mt-2">
+                    <i>Recordatorio: Un grafo simple no tiene aristas múltiples ni bucles. Los grafos no dirigidos son 3, 4, 5 y 6. El grafo 3 ya es simple.</i>
+                </p>
+            </div>
 
-            <!-- Análisis del Ejercicio 3 -->
-            <div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Análisis de Ejercicios 3-9</h2>
+            <!-- Análisis de Simplificación --><div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Análisis y Simplificación</h2>
                 
                 <div class="space-y-6">
-                    <!-- Grafo 3 -->
-                    <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                    <!-- Grafo 3 (Ya es simple) --><div class="bg-white border border-gray-200 p-6 rounded-lg">
                         <h3 class="text-xl font-semibold text-gray-700 mb-2">Grafo 3</h3>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li><strong>Aristas:</strong> No dirigidas (no hay flechas).</li>
-                            <li><strong>Múltiples aristas:</strong> No (solo una arista entre dos nodos).</li>
-                            <li><strong>Bucles:</strong> No.</li>
-                        </ul>
-                        <p class="mt-3 text-purple-700 font-semibold">Tipo de Grafo: <span class="font-bold">Grafo Simple</span></p>
+                        <p class="text-gray-600">
+                            Este grafo <strong class="text-green-600">ya es un grafo simple</strong>. No tiene aristas múltiples ni bucles.
+                        </p>
                     </div>
                     
-                    <!-- Grafo 4 -->
-                    <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                    <!-- Grafo 4 --><div class="bg-white border border-gray-200 p-6 rounded-lg">
                         <h3 class="text-xl font-semibold text-gray-700 mb-2">Grafo 4</h3>
+                        <p class="text-gray-600 mb-3">
+                            Este grafo es un multigrafo porque tiene aristas múltiples. Para simplificarlo, debemos eliminar las aristas duplicadas.
+                        </p>
                         <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li><strong>Aristas:</strong> No dirigidas (no hay flechas).</li>
-                            <li><strong>Múltiples aristas:</strong> Sí (p.ej. entre 'a' y 'b', 'b' y 'd').</li>
-                            <li><strong>Bucles:</strong> No.</li>
+                            <li>Entre 'a' y 'b': Eliminar una de las dos aristas.</li>
+                            <li>Entre 'b' y 'd': Eliminar una de las dos aristas.</li>
                         </ul>
-                        <p class="mt-3 text-purple-700 font-semibold">Tipo de Grafo: <span class="font-bold">Multigrafo</span></p>
+                        <p class="mt-3 text-cyan-700 font-semibold">
+                            Al eliminar estas aristas, cada par de vértices (a,b) y (b,d) tendrá solo una arista, convirtiéndolo en un grafo simple.
+                        </p>
                     </div>
                     
-                    <!-- Grafo 5 -->
-                    <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                    <!-- Grafo 5 --><div class="bg-white border border-gray-200 p-6 rounded-lg">
                         <h3 class="text-xl font-semibold text-gray-700 mb-2">Grafo 5</h3>
+                        <p class="text-gray-600 mb-3">
+                            Este grafo es un pseudografo, ya que tiene aristas múltiples y bucles. Para simplificarlo, debemos eliminar las aristas duplicadas y los bucles.
+                        </p>
                         <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li><strong>Aristas:</strong> No dirigidas (no hay flechas).</li>
-                            <li><strong>Múltiples aristas:</strong> Sí (p.ej. entre 'a' y 'b', 'c' y 'd').</li>
-                            <li><strong>Bucles:</strong> Sí (en 'a' y 'd').</li>
+                            <li>Entre 'a' y 'b': Eliminar una de las dos aristas.</li>
+                            <li>Entre 'c' y 'd': Eliminar una de las dos aristas.</li>
+                            <li>Bucle en 'a': Eliminar la arista que forma el bucle.</li>
+                            <li>Bucle en 'd': Eliminar la arista que forma el bucle.</li>
                         </ul>
-                        <p class="mt-3 text-purple-700 font-semibold">Tipo de Grafo: <span class="font-bold">Pseudografo</span></p>
+                        <p class="mt-3 text-cyan-700 font-semibold">
+                            Eliminando estos elementos, obtendríamos un grafo simple con una única arista entre (a,b) y (c,d) y sin bucles.
+                        </p>
                     </div>
 
-                    <!-- Grafo 6 -->
-                    <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                    <!-- Grafo 6 --><div class="bg-white border border-gray-200 p-6 rounded-lg">
                         <h3 class="text-xl font-semibold text-gray-700 mb-2">Grafo 6</h3>
+                        <p class="text-gray-600 mb-3">
+                            Este grafo es un multigrafo. Tiene aristas múltiples. Para simplificarlo, debemos eliminar las aristas duplicadas.
+                        </p>
                         <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li><strong>Aristas:</strong> No dirigidas (no hay flechas).</li>
-                            <li><strong>Múltiples aristas:</strong> Sí (p.ej. entre 'a' y 'c', 'b' y 'd').</li>
-                            <li><strong>Bucles:</strong> No. (El nodo 'e' es un vértice aislado).</li>
+                            <li>Entre 'a' y 'c': Eliminar una de las dos aristas.</li>
+                            <li>Entre 'b' y 'd': Eliminar una de las dos aristas.</li>
                         </ul>
-                        <p class="mt-3 text-purple-700 font-semibold">Tipo de Grafo: <span class="font-bold">Multigrafo</span></p>
-                    </div>
-
-                    <!-- Grafo 7 -->
-                    <div class="bg-white border border-gray-200 p-6 rounded-lg">
-                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Grafo 7</h3>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li><strong>Aristas:</strong> Dirigidas (hay flechas).</li>
-                            <li><strong>Múltiples aristas:</strong> No.</li>
-                            <li><strong>Bucles:</strong> Sí (en 'b', 'c', 'e').</li>
-                        </ul>
-                        <p class="mt-3 text-red-600 font-semibold">Tipo de Grafo: <span class="font-bold">No definido en la Tabla 1</span></p>
-                        <p class="text-sm text-gray-500 mt-1">La tabla no tiene una entrada para grafos Dirigidos, Sin múltiples aristas, y Con bucles.</p>
-                    </div>
-
-                    <!-- Grafo 8 -->
-                    <div class="bg-white border border-gray-200 p-6 rounded-lg">
-                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Grafo 8</h3>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li><strong>Aristas:</strong> Dirigidas (hay flechas).</li>
-                            <li><strong>Múltiples aristas:</strong> Sí (p.ej. dos flechas de 'e' a 'd').</li>
-                            <li><strong>Bucles:</strong> Sí (en 'a', 'b', 'e').</li>
-                        </ul>
-                        <p class="mt-3 text-purple-700 font-semibold">Tipo de Grafo: <span class="font-bold">Multigrafo dirigido</span> (o Grafo mixto)</p>
-                    </div>
-
-                    <!-- Grafo 9 -->
-                    <div class="bg-white border border-gray-200 p-6 rounded-lg">
-                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Grafo 9</h3>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li><strong>Aristas:</strong> Dirigidas (hay flechas).</li>
-                            <li><strong>Múltiples aristas:</strong> Sí (p.ej. dos flechas de 'a' a 'b').</li>
-                            <li><strong>Bucles:</strong> Sí (en 'a', 'c', 'e', 'f').</li>
-                        </ul>
-                        <p class="mt-3 text-purple-700 font-semibold">Tipo de Grafo: <span class="font-bold">Multigrafo dirigido</span> (o Grafo mixto)</p>
+                        <p class="mt-3 text-cyan-700 font-semibold">
+                            Al eliminar estas aristas, cada par de vértices (a,c) y (b,d) tendrá solo una arista. El vértice 'e' se mantendría aislado.
+                        </p>
                     </div>
 
                 </div>

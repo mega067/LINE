@@ -3,96 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicio 4: Simplificación de Grafos</title>
-    <!-- Importamos Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
-    <!-- Importamos la fuente Inter --><link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Ejercicios de Teoría de Grafos</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        html {
+        /* Usamos la fuente Inter */
+        body {
             font-family: 'Inter', sans-serif;
+        }
+        /* Importamos la fuente Inter desde Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        /* Estilos para los grafos SVG */
+        svg {
+            width: 100%;
+            min-height: 250px;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+        }
+        svg .edge {
+            stroke: #64748b;
+            stroke-width: 2;
+        }
+        svg .edge-purple {
+            stroke: #8b5cf6; /* Color morado para la arista A-B */
+            stroke-width: 2;
+        }
+        svg .edge-curved {
+            stroke: #64748b;
+            stroke-width: 2;
+            fill: none;
+        }
+        svg .vertex {
+            fill: #3b82f6;
+        }
+        svg .loop {
+            stroke: #64748b;
+            stroke-width: 2;
+            fill: none;
+        }
+        svg .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            fill: #1e293b;
+            text-anchor: middle;
+            dominant-baseline: central;
         }
     </style>
 </head>
-<body class="bg-gray-100 p-4 md:p-8">
-    
-    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div class="p-6 md:p-10 bg-gradient-to-r from-teal-500 to-cyan-600">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">Ejercicio 4: Simplificación de Grafos</h1>
-        </div>
-        
-        <div class="p-6 md:p-8">
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto max-w-5xl p-6 bg-white rounded-lg shadow-xl my-12">
+
+        <h1 class="text-3xl font-bold text-center text-blue-700 mb-8">
+            Ejercicios de Teoría de Grafos
+        </h1>
+
+        <!-- Sección 1: Grado de un Vértice -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-blue-600 mt-8 mb-4 border-b-2 border-blue-200 pb-2">
+                Definición: Grado de un Vértice
+            </h2>
             
-            <!-- Descripción del Ejercicio --><div class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Pregunta del Ejercicio</h2>
-                <div class="bg-teal-50 p-6 rounded-lg border border-teal-200">
-                    <p class="text-lg text-gray-700 font-medium">
-                        Para cada grafo no dirigido de los ejercicios 3-9 que no sea simple, encuentre un conjunto de aristas que se puedan eliminar para simplificarlo.
-                    </p>
-                </div>
-                <p class="text-sm text-gray-500 mt-2">
-                    <i>Recordatorio: Un grafo simple no tiene aristas múltiples ni bucles. Los grafos no dirigidos son 3, 4, 5 y 6. El grafo 3 ya es simple.</i>
-                </p>
+            <div class="bg-blue-50 border-l-4 border-blue-300 p-5 rounded-md text-lg leading-relaxed mb-6">
+                <p>El grado de un vértice <code>V</code> en un grafo no dirigido es el número de aristas incidentes en él, con la excepción de que un bucle en un vértice contribuye 2 veces al grado de ese vértice. El grado de vértice (V) se denota por <code>deg(V)</code>.</p>
             </div>
 
-            <!-- Análisis de Simplificación --><div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Análisis y Simplificación</h2>
-                
-                <div class="space-y-6">
-                    <!-- Grafo 3 (Ya es simple) --><div class="bg-white border border-gray-200 p-6 rounded-lg">
-                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Grafo 3</h3>
-                        <p class="text-gray-600">
-                            Este grafo <strong class="text-green-600">ya es un grafo simple</strong>. No tiene aristas múltiples ni bucles.
-                        </p>
-                    </div>
-                    
-                    <!-- Grafo 4 --><div class="bg-white border border-gray-200 p-6 rounded-lg">
-                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Grafo 4</h3>
-                        <p class="text-gray-600 mb-3">
-                            Este grafo es un multigrafo porque tiene aristas múltiples. Para simplificarlo, debemos eliminar las aristas duplicadas.
-                        </p>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li>Entre 'a' y 'b': Eliminar una de las dos aristas.</li>
-                            <li>Entre 'b' y 'd': Eliminar una de las dos aristas.</li>
-                        </ul>
-                        <p class="mt-3 text-cyan-700 font-semibold">
-                            Al eliminar estas aristas, cada par de vértices (a,b) y (b,d) tendrá solo una arista, convirtiéndolo en un grafo simple.
-                        </p>
-                    </div>
-                    
-                    <!-- Grafo 5 --><div class="bg-white border border-gray-200 p-6 rounded-lg">
-                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Grafo 5</h3>
-                        <p class="text-gray-600 mb-3">
-                            Este grafo es un pseudografo, ya que tiene aristas múltiples y bucles. Para simplificarlo, debemos eliminar las aristas duplicadas y los bucles.
-                        </p>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li>Entre 'a' y 'b': Eliminar una de las dos aristas.</li>
-                            <li>Entre 'c' y 'd': Eliminar una de las dos aristas.</li>
-                            <li>Bucle en 'a': Eliminar la arista que forma el bucle.</li>
-                            <li>Bucle en 'd': Eliminar la arista que forma el bucle.</li>
-                        </ul>
-                        <p class="mt-3 text-cyan-700 font-semibold">
-                            Eliminando estos elementos, obtendríamos un grafo simple con una única arista entre (a,b) y (c,d) y sin bucles.
-                        </p>
-                    </div>
+            <h2 class="text-2xl font-semibold text-blue-600 mt-8 mb-4 border-b-2 border-blue-200 pb-2">
+                Ejercicio 1: Calcular Grados de Vértices
+            </h2>
+            <p class="text-lg mb-6">Calcular los grados de los siguientes vértices en los grafos de las siguientes figuras:</p>
 
-                    <!-- Grafo 6 --><div class="bg-white border border-gray-200 p-6 rounded-lg">
-                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Grafo 6</h3>
-                        <p class="text-gray-600 mb-3">
-                            Este grafo es un multigrafo. Tiene aristas múltiples. Para simplificarlo, debemos eliminar las aristas duplicadas.
-                        </p>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li>Entre 'a' y 'c': Eliminar una de las dos aristas.</li>
-                            <li>Entre 'b' y 'd': Eliminar una de las dos aristas.</li>
-                        </ul>
-                        <p class="mt-3 text-cyan-700 font-semibold">
-                            Al eliminar estas aristas, cada par de vértices (a,c) y (b,d) tendrá solo una arista. El vértice 'e' se mantendría aislado.
-                        </p>
-                    </div>
+            <div class="md:flex md:space-x-8">
+                <!-- Grafo 1 (Nueva Figura 1) -->
+                <div class="w-full md:w-1/2 p-4 border rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Figura 1</h3>
+                    <!-- SVG para Nueva Figura 1 (image_de1243.png) -->
+                    <svg viewBox="0 0 300 250">
+                        <!-- Vertices -->
+                        <g><circle class="vertex" cx="50" cy="100" r="8"/><text class="label" x="30" y="100">A</text></g>
+                        <g><circle class="vertex" cx="120" cy="50" r="8"/><text class="label" x="120" y="30">B</text></g>
+                        <g><circle class="vertex" cx="200" cy="50" r="8"/><text class="label" x="200" y="30">C</text></g>
+                        <g><circle class="vertex" cx="270" cy="80" r="8"/><text class="label" x="290" y="80">D</text></g>
+                        <g><circle class="vertex" cx="200" cy="180" r="8"/><text class="label" x="200" y="200">E</text></g>
+                        <g><circle class="vertex" cx="120" cy="180" r="8"/><text class="label" x="120" y="200">F</text></g>
+                        <g><circle class="vertex" cx="270" cy="180" r="8"/><text class="label" x="290" y="180">G</text></g>
+                        
+                        <!-- Aristas -->
+                        <line class="edge" x1="50" y1="100" x2="120" y2="50"/> <!-- A-B -->
+                        <line class="edge" x1="50" y1="100" x2="120" y2="180"/> <!-- A-F -->
+                        
+                        <line class="edge" x1="120" y1="50" x2="200" y2="50"/> <!-- B-C -->
+                        <line class="edge" x1="120" y1="50" x2="200" y2="180"/> <!-- B-E -->
+                        <line class="edge" x1="120" y1="50" x2="120" y2="180"/> <!-- B-F -->
+                        
+                        <line class="edge" x1="200" y1="50" x2="270" y2="80"/> <!-- C-D -->
+                        <line class="edge" x1="200" y1="50" x2="200" y2="180"/> <!-- C-E -->
+                        <line class="edge" x1="200" y1="50" x2="120" y2="180"/> <!-- C-F -->
+                        
+                        <line class="edge" x1="200" y1="180" x2="120" y2="180"/> <!-- E-F -->
+                    </svg>
+                    
+                    <h4 class="text-lg font-semibold text-gray-600 mt-4 mb-2">Solución (Figura 1)</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-700 text-lg">
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(A) = 2</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(B) = 4</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(C) = 4</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(D) = 1</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(E) = 3</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(F) = 4</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(G) = 0</code></li>
+                    </ul>
+                </div>
 
+                <!-- Grafo 2 (Nueva Figura 2) -->
+                <div class="w-full md:w-1/2 p-4 border rounded-lg shadow-md mt-6 md:mt-0">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Figura 2</h3>
+                    <!-- SVG para Nueva Figura 2 (image_de19a8.png) -->
+                    <svg viewBox="0 0 300 250">
+                        <!-- Vertices -->
+                        <g><circle class="vertex" cx="70" cy="50" r="8"/><text class="label" x="70" y="30">A</text></g>
+                        <g><circle class="vertex" cx="170" cy="50" r="8"/><text class="label" x="170" y="30">B</text></g>
+                        <g><circle class="vertex" cx="250" cy="80" r="8"/><text class="label" x="270" y="80">C</text></g>
+                        <g><circle class="vertex" cx="200" cy="180" r="8"/><text class="label" x="200" y="200">D</text></g>
+                        <g><circle class="vertex" cx="70" cy="180" r="8"/><text class="label" x="70" y="200">E</text></g>
+
+                        <!-- Aristas -->
+                        <line class="edge-purple" x1="70" y1="50" x2="170" y2="50"/> <!-- A-B (morada) -->
+                        <line class="edge" x1="70" y1="50" x2="200" y2="180"/> <!-- A-D -->
+                        <path class="edge-curved" d="M 70 50 Q 20 115 70 180"/> <!-- A-E (curva) -->
+                        
+                        <line class="edge" x1="170" y1="50" x2="250" y2="80"/> <!-- B-C -->
+                        <line class="edge" x1="170" y1="50" x2="200" y2="180"/> <!-- B-D -->
+                        <line class="edge" x1="170" y1="50" x2="70" y2="180"/> <!-- B-E -->
+                        
+                        <line class="edge" x1="200" y1="180" x2="70" y2="180"/> <!-- D-E -->
+
+                        <!-- Bucle (Loop) en B -->
+                        <path class="loop" d="M 170, 30 A 15 15 0 1 1 180, 40"/>
+                    </svg>
+
+                    <h4 class="text-lg font-semibold text-gray-600 mt-4 mb-2">Solución (Figura 2)</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-700 text-lg">
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(A) = 3</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(B) = 6</code> (4 aristas + 2 por el bucle)</li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(C) = 1</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(D) = 3</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(E) = 3</code></li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- Sección 2: Vecindad de un Vértice -->
+        <section class="mt-12">
+            <h2 class="text-2xl font-semibold text-blue-600 mt-8 mb-4 border-b-2 border-blue-200 pb-2">
+                Definición: Vecindad de un Vértice
+            </h2>
+
+            <div class="bg-blue-50 border-l-4 border-blue-300 p-5 rounded-md text-lg leading-relaxed mb-6">
+                <p class="mb-3">El conjunto de todos los vecinos de un vértice (V) de E(V,E) denotado por <code>N(V)</code>, se llama vecindad de V(G). Si A es un conjunto de V, denotamos <code>N(A)</code> el conjunto de todos los vértices que son adyacentes a algunos vértices en A, por lo tanto <code>N(A) = U N(V)</code>.</p>
+                <p>Dos vértices <code>U</code> y <code>V</code> en un grafo no dirigido G se denominan adyacentes (o vecinos) en G si <code>U</code> y <code>V</code> son extremos de una arista <code>e</code> de E. Dicha arista <code>e</code> se denomina incide con los vértices <code>U</code> y <code>V</code> y se dice que <code>e</code> conecta <code>U</code> y <code>V</code>.</p>
+            </div>
+
+            <h2 class="text-2xl font-semibold text-blue-600 mt-8 mb-4 border-b-2 border-blue-200 pb-2">
+                Ejercicio 2: Encontrar Vecindades
+            </h2>
+
+            <div class="md:flex md:space-x-8">
+                <!-- Grafo 3 (Nueva Figura 1) -->
+                <div class="w-full md:w-1/2 p-4 border rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Figura 1</h3>
+                    <!-- SVG para Nueva Figura 1 (image_de1243.png) -->
+                    <svg viewBox="0 0 300 250">
+                        <!-- Vertices -->
+                        <g><circle class="vertex" cx="50" cy="100" r="8"/><text class="label" x="30" y="100">A</text></g>
+                        <g><circle class="vertex" cx="120" cy="50" r="8"/><text class="label" x="120" y="30">B</text></g>
+                        <g><circle class="vertex" cx="200" cy="50" r="8"/><text class="label" x="200" y="30">C</text></g>
+                        <g><circle class="vertex" cx="270" cy="80" r="8"/><text class="label" x="290" y="80">D</text></g>
+                        <g><circle class="vertex" cx="200" cy="180" r="8"/><text class="label" x="200" y="200">E</text></g>
+                        <g><circle class="vertex" cx="120" cy="180" r="8"/><text class="label" x="120" y="200">F</text></g>
+                        <g><circle class="vertex" cx="270" cy="180" r="8"/><text class="label" x="290" y="180">G</text></g>
+                        
+                        <!-- Aristas -->
+                        <line class="edge" x1="50" y1="100" x2="120" y2="50"/> <!-- A-B -->
+                        <line class="edge" x1="50" y1="100" x2="120" y2="180"/> <!-- A-F -->
+                        
+                        <line class="edge" x1="120" y1="50" x2="200" y2="50"/> <!-- B-C -->
+                        <line class="edge" x1="120" y1="50" x2="200" y2="180"/> <!-- B-E -->
+                        <line class="edge" x1="120" y1="50" x2="120" y2="180"/> <!-- B-F -->
+                        
+                        <line class="edge" x1="200" y1="50" x2="270" y2="80"/> <!-- C-D -->
+                        <line class="edge" x1="200" y1="50" x2="200" y2="180"/> <!-- C-E -->
+                        <line class="edge" x1="200" y1="50" x2="120" y2="180"/> <!-- C-F -->
+                        
+                        <line class="edge" x1="200" y1="180" x2="120" y2="180"/> <!-- E-F -->
+                    </svg>
+                    
+                    <h4 class="text-lg font-semibold text-gray-600 mt-4 mb-2">Solución (Figura 1)</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-700 text-lg">
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(A) = {B, F}</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(B) = {A, C, E, F}</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(C) = {B, D, E, F}</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(D) = {C}</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(E) = {B, C, F}</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(F) = {A, B, C, E}</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(G) = {Ø}</code> (Conjunto vacío)</li>
+                    </ul>
+                </div>
+
+                <!-- Grafo 4 (Nueva Figura 2) -->
+                <div class="w-full md:w-1/2 p-4 border rounded-lg shadow-md mt-6 md:mt-0">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Figura 2</h3>
+                    <!-- SVG para Nueva Figura 2 (image_de19a8.png) -->
+                    <svg viewBox="0 0 300 250">
+                        <!-- Vertices -->
+                        <g><circle class="vertex" cx="70" cy="50" r="8"/><text class="label" x="70" y="30">A</text></g>
+                        <g><circle class="vertex" cx="170" cy="50" r="8"/><text class="label" x="170" y="30">B</text></g>
+                        <g><circle class="vertex" cx="250" cy="80" r="8"/><text class="label" x="270" y="80">C</text></g>
+                        <g><circle class="vertex" cx="200" cy="180" r="8"/><text class="label" x="200" y="200">D</text></g>
+                        <g><circle class="vertex" cx="70" cy="180" r="8"/><text class="label" x="70" y="200">E</text></g>
+
+                        <!-- Aristas -->
+                        <line class="edge-purple" x1="70" y1="50" x2="170" y2="50"/> <!-- A-B (morada) -->
+                        <line class="edge" x1="70" y1="50" x2="200" y2="180"/> <!-- A-D -->
+                        <path class="edge-curved" d="M 70 50 Q 20 115 70 180"/> <!-- A-E (curva) -->
+                        
+                        <line class="edge" x1="170" y1="50" x2="250" y2="80"/> <!-- B-C -->
+                        <line class="edge" x1="170" y1="50" x2="200" y2="180"/> <!-- B-D -->
+                        <line class="edge" x1="170" y1="50" x2="70" y2="180"/> <!-- B-E -->
+                        
+                        <line class="edge" x1="200" y1="180" x2="70" y2="180"/> <!-- D-E -->
+
+                        <!-- Bucle (Loop) en B -->
+                        <path class="loop" d="M 170, 30 A 15 15 0 1 1 180, 40"/>
+                    </svg>
+
+                    <h4 class="text-lg font-semibold text-gray-600 mt-4 mb-2">Solución (Figura 2)</h4>
+                    <ul class="list-disc list-inside space-y-1 text-gray-700 text-lg">
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(A) = {B, D, E}</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(B) = {A, B, C, D, E}</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(C) = {B}</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(D) = {A, B, E}</code></li>
+                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(E) = {A, B, D}</code></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
     </div>
+
 </body>
 </html>

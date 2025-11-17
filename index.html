@@ -3,256 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicios de Teoría de Grafos</title>
-    <!-- Carga de Tailwind CSS -->
+    <title>Diagrama de Algoritmo</title>
+    <!-- Incluimos Tailwind CSS para el estilo -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Usamos la fuente Inter */
-        body {
-            font-family: 'Inter', sans-serif;
+        /* Estilos personalizados para los nodos del diagrama */
+        .diagram-node {
+            @apply border-2 p-4 rounded-lg mb-4 w-full max-w-lg text-center shadow-md;
         }
-        /* Importamos la fuente Inter desde Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-        /* Estilos para los grafos SVG */
-        svg {
-            width: 100%;
-            min-height: 250px;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
+        .start-end {
+            @apply diagram-node bg-green-100 border-green-500 text-green-800 font-bold;
         }
-        svg .edge {
-            stroke: #64748b;
-            stroke-width: 2;
+        .process {
+            @apply diagram-node bg-blue-100 border-blue-500 text-blue-800;
         }
-        svg .edge-purple {
-            stroke: #8b5cf6; /* Color morado para la arista A-B */
-            stroke-width: 2;
+        .loop {
+            @apply diagram-node bg-yellow-100 border-yellow-500 text-yellow-800;
         }
-        svg .edge-curved {
-            stroke: #64748b;
-            stroke-width: 2;
-            fill: none;
+        .conditional {
+            @apply diagram-node bg-purple-100 border-purple-500 text-purple-800;
         }
-        svg .vertex {
-            fill: #3b82f6;
+        .io {
+            @apply diagram-node bg-gray-100 border-gray-500 text-gray-800;
         }
-        svg .loop {
-            stroke: #64748b;
-            stroke-width: 2;
-            fill: none;
+        .arrow {
+            @apply text-gray-600 font-bold text-3xl my-2;
         }
-        svg .label {
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-            fill: #1e293b;
-            text-anchor: middle;
-            dominant-baseline: central;
+        code {
+            @apply bg-gray-200 text-gray-700 px-2 py-1 rounded-md font-mono text-sm;
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-50 font-sans p-6 md:p-10">
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Diagrama de "Pensamiento" del Algoritmo</h1>
+        <p class="text-center text-gray-600 mb-8">Así es como el algoritmo fluye paso a paso para resolver el problema.</p>
+        
+        <!-- NUEVA SECCIÓN: Visualización del Arreglo -->
+        <div class="mb-12">
+            <h2 class="text-2xl font-semibold text-center mb-4 text-gray-700">Visualización del <code>arreglo[12]</code></h2>
+            <p class="text-center text-gray-600 mb-6">Así es como se ven los datos en la "memoria", como celdas conectadas:</p>
+            <div class="flex flex-wrap justify-center gap-1">
+                <!-- Celda 0 -->
+                <div class="flex flex-col border-2 border-gray-600 rounded-md shadow-sm" title="Índice 0">
+                    <div class="bg-gray-200 text-gray-700 px-3 py-1 font-mono rounded-t-md text-sm">Índice [0]</div>
+                    <div class="bg-white text-gray-900 px-3 py-2 font-bold text-xl text-center">1</div>
+                </div>
+                <!-- Celda 1 -->
+                <div class="flex flex-col border-2 border-gray-600 rounded-md shadow-sm" title="Índice 1">
+                    <div class="bg-gray-200 text-gray-700 px-3 py-1 font-mono rounded-t-md text-sm">Índice [1]</div>
+                    <div class="bg-white text-gray-900 px-3 py-2 font-bold text-xl text-center">5</div>
+                </div>
+                <!-- Celda 2 -->
+                <div class="flex flex-col border-2 border-gray-600 rounded-md shadow-sm" title="Índice 2">
+                    <div class="bg-gray-200 text-gray-700 px-3 py-1 font-mono rounded-t-md text-sm">Índice [2]</div>
+                    <div class="bg-white text-gray-900 px-3 py-2 font-bold text-xl text-center">8</div>
+                </div>
+                <!-- Celda 3 -->
+                <div class="flex flex-col border-2 border-gray-600 rounded-md shadow-sm" title="Índice 3">
+                    <div class="bg-gray-200 text-gray-700 px-3 py-1 font-mono rounded-t-md text-sm">Índice [3]</div>
+                    <div class="bg-white text-gray-900 px-3 py-2 font-bold text-xl text-center">9</div>
+                </div>
+                <!-- Celda 4 -->
+                <div class="flex flex-col border-2 border-gray-600 rounded-md shadow-sm" title="Índice 4">
+                    <div class="bg-gray-200 text-gray-700 px-3 py-1 font-mono rounded-t-md text-sm">Índice [4]</div>
+                    <div class="bg-white text-gray-900 px-3 py-2 font-bold text-xl text-center">4</div>
+                </div>
+                <!-- Celda 5 -->
+                <div class="flex flex-col border-2 border-gray-600 rounded-md shadow-sm" title="Índice 5">
+                    <div class="bg-gray-200 text-gray-700 px-3 py-1 font-mono rounded-t-md text-sm">Índice [5]</div>
+                    <div class="bg-white text-gray-900 px-3 py-2 font-bold text-xl text-center">7</div>
+                </div>
+                <!-- Celda 6 -->
+                <div class="flex flex-col border-2 border-gray-600 rounded-md shadow-sm" title="Índice 6">
+                    <div class="bg-gray-200 text-gray-700 px-3 py-1 font-mono rounded-t-md text-sm">Índice [6]</div>
+                    <div class="bg-white text-gray-900 px-3 py-2 font-bold text-xl text-center">9</div>
+                </div>
+                <!-- Celda 7 -->
+                <div class="flex flex-col border-2 border-gray-600 rounded-md shadow-sm" title="Índice 7">
+                    <div class="bg-gray-200 text-gray-700 px-3 py-1 font-mono rounded-t-md text-sm">Índice [7]</div>
+                    <div class="bg-white text-gray-900 px-3 py-2 font-bold text-xl text-center">8</div>
+                </div>
+                <!-- Celda 8 -->
+                <div class="flex flex-col border-2 border-gray-600 rounded-md shadow-sm" title="Índice 8">
+                    <div class="bg-gray-200 text-gray-700 px-3 py-1 font-mono rounded-t-md text-sm">Índice [8]</div>
+                    <div class="bg-white text-gray-900 px-3 py-2 font-bold text-xl text-center">1</div>
+                </div>
+                <!-- Celda 9 -->
+                <div class="flex flex-col border-2 border-gray-600 rounded-md shadow-sm" title="Índice 9">
+                    <div class="bg-gray-200 text-gray-700 px-3 py-1 font-mono rounded-t-md text-sm">Índice [9]</div>
+                    <div class="bg-white text-gray-900 px-3 py-2 font-bold text-xl text-center">6</div>
+                </div>
+                <!-- Celda 10 -->
+                <div class="flex flex-col border-2 border-gray-600 rounded-md shadow-sm" title="Índice 10">
+                    <div class="bg-gray-200 text-gray-700 px-3 py-1 font-mono rounded-t-md text-sm">Índice [10]</div>
+                    <div class="bg-white text-gray-900 px-3 py-2 font-bold text-xl text-center">3</div>
+                </div>
+                <!-- Celda 11 -->
+                <div class="flex flex-col border-2 border-gray-600 rounded-md shadow-sm" title="Índice 11">
+                    <div class="bg-gray-200 text-gray-700 px-3 py-1 font-mono rounded-t-md text-sm">Índice [11]</div>
+                    <div class="bg-white text-gray-900 px-3 py-2 font-bold text-xl text-center">2</div>
+                </div>
+            </div>
+            <div class="w-full border-t-2 border-gray-300 border-dashed my-8"></div>
+        </div>
+        <!-- FIN NUEVA SECCIÓN -->
 
-    <div class="container mx-auto max-w-5xl p-6 bg-white rounded-lg shadow-xl my-12">
-
-        <h1 class="text-3xl font-bold text-center text-blue-700 mb-8">
-            Ejercicios de Teoría de Grafos
-        </h1>
-
-        <!-- Sección 1: Grado de un Vértice -->
-        <section class="mb-12">
-            <h2 class="text-2xl font-semibold text-blue-600 mt-8 mb-4 border-b-2 border-blue-200 pb-2">
-                Definición: Grado de un Vértice
-            </h2>
+        <!-- Contenedor del diagrama -->
+        <div class="flex flex-col items-center">
             
-            <div class="bg-blue-50 border-l-4 border-blue-300 p-5 rounded-md text-lg leading-relaxed mb-6">
-                <p>El grado de un vértice <code>V</code> en un grafo no dirigido es el número de aristas incidentes en él, con la excepción de que un bucle en un vértice contribuye 2 veces al grado de ese vértice. El grado de vértice (V) se denota por <code>deg(V)</code>.</p>
+            <div class="start-end">
+                INICIO
             </div>
 
-            <h2 class="text-2xl font-semibold text-blue-600 mt-8 mb-4 border-b-2 border-blue-200 pb-2">
-                Ejercicio 1: Calcular Grados de Vértices
-            </h2>
-            <p class="text-lg mb-6">Calcular los grados de los siguientes vértices en los grafos de las siguientes figuras:</p>
+            <div class="arrow">&darr;</div>
 
-            <div class="md:flex md:space-x-8">
-                <!-- Grafo 1 (Nueva Figura 1) -->
-                <div class="w-full md:w-1/2 p-4 border rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Figura 1</h3>
-                    <!-- SVG para Nueva Figura 1 (image_de1243.png) -->
-                    <svg viewBox="0 0 300 250">
-                        <!-- Vertices -->
-                        <g><circle class="vertex" cx="50" cy="100" r="8"/><text class="label" x="30" y="100">A</text></g>
-                        <g><circle class="vertex" cx="120" cy="50" r="8"/><text class="label" x="120" y="30">B</text></g>
-                        <g><circle class="vertex" cx="200" cy="50" r="8"/><text class="label" x="200" y="30">C</text></g>
-                        <g><circle class="vertex" cx="270" cy="80" r="8"/><text class="label" x="290" y="80">D</text></g>
-                        <g><circle class="vertex" cx="200" cy="180" r="8"/><text class="label" x="200" y="200">E</text></g>
-                        <g><circle class="vertex" cx="120" cy="180" r="8"/><text class="label" x="120" y="200">F</text></g>
-                        <g><circle class="vertex" cx="270" cy="180" r="8"/><text class="label" x="290" y="180">G</text></g>
-                        
-                        <!-- Aristas -->
-                        <line class="edge" x1="50" y1="100" x2="120" y2="50"/> <!-- A-B -->
-                        <line class="edge" x1="50" y1="100" x2="120" y2="180"/> <!-- A-F -->
-                        
-                        <line class="edge" x1="120" y1="50" x2="200" y2="50"/> <!-- B-C -->
-                        <line class="edge" x1="120" y1="50" x2="200" y2="180"/> <!-- B-E -->
-                        <line class="edge" x1="120" y1="50" x2="120" y2="180"/> <!-- B-F -->
-                        
-                        <line class="edge" x1="200" y1="50" x2="270" y2="80"/> <!-- C-D -->
-                        <line class="edge" x1="200" y1="50" x2="200" y2="180"/> <!-- C-E -->
-                        <line class="edge" x1="200" y1="50" x2="120" y2="180"/> <!-- C-F -->
-                        
-                        <line class="edge" x1="200" y1="180" x2="120" y2="180"/> <!-- E-F -->
-                    </svg>
-                    
-                    <h4 class="text-lg font-semibold text-gray-600 mt-4 mb-2">Solución (Figura 1)</h4>
-                    <ul class="list-disc list-inside space-y-1 text-gray-700 text-lg">
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(A) = 2</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(B) = 4</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(C) = 4</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(D) = 1</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(E) = 3</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(F) = 4</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(G) = 0</code></li>
-                    </ul>
-                </div>
-
-                <!-- Grafo 2 (Nueva Figura 2) -->
-                <div class="w-full md:w-1/2 p-4 border rounded-lg shadow-md mt-6 md:mt-0">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Figura 2</h3>
-                    <!-- SVG para Nueva Figura 2 (image_de19a8.png) -->
-                    <svg viewBox="0 0 300 250">
-                        <!-- Vertices -->
-                        <g><circle class="vertex" cx="70" cy="50" r="8"/><text class="label" x="70" y="30">A</text></g>
-                        <g><circle class="vertex" cx="170" cy="50" r="8"/><text class="label" x="170" y="30">B</text></g>
-                        <g><circle class="vertex" cx="250" cy="80" r="8"/><text class="label" x="270" y="80">C</text></g>
-                        <g><circle class="vertex" cx="200" cy="180" r="8"/><text class="label" x="200" y="200">D</text></g>
-                        <g><circle class="vertex" cx="70" cy="180" r="8"/><text class="label" x="70" y="200">E</text></g>
-
-                        <!-- Aristas -->
-                        <line class="edge-purple" x1="70" y1="50" x2="170" y2="50"/> <!-- A-B (morada) -->
-                        <line class="edge" x1="70" y1="50" x2="200" y2="180"/> <!-- A-D -->
-                        <path class="edge-curved" d="M 70 50 Q 20 115 70 180"/> <!-- A-E (curva) -->
-                        
-                        <line class="edge" x1="170" y1="50" x2="250" y2="80"/> <!-- B-C -->
-                        <line class="edge" x1="170" y1="50" x2="200" y2="180"/> <!-- B-D -->
-                        <line class="edge" x1="170" y1="50" x2="70" y2="180"/> <!-- B-E -->
-                        
-                        <line class="edge" x1="200" y1="180" x2="70" y2="180"/> <!-- D-E -->
-
-                        <!-- Bucle (Loop) en B -->
-                        <path class="loop" d="M 170, 30 A 15 15 0 1 1 180, 40"/>
-                    </svg>
-
-                    <h4 class="text-lg font-semibold text-gray-600 mt-4 mb-2">Solución (Figura 2)</h4>
-                    <ul class="list-disc list-inside space-y-1 text-gray-700 text-lg">
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(A) = 3</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(B) = 6</code> (4 aristas + 2 por el bucle)</li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(C) = 1</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(D) = 3</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">deg(E) = 3</code></li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sección 2: Vecindad de un Vértice -->
-        <section class="mt-12">
-            <h2 class="text-2xl font-semibold text-blue-600 mt-8 mb-4 border-b-2 border-blue-200 pb-2">
-                Definición: Vecindad de un Vértice
-            </h2>
-
-            <div class="bg-blue-50 border-l-4 border-blue-300 p-5 rounded-md text-lg leading-relaxed mb-6">
-                <p class="mb-3">El conjunto de todos los vecinos de un vértice (V) de E(V,E) denotado por <code>N(V)</code>, se llama vecindad de V(G). Si A es un conjunto de V, denotamos <code>N(A)</code> el conjunto de todos los vértices que son adyacentes a algunos vértices en A, por lo tanto <code>N(A) = U N(V)</code>.</p>
-                <p>Dos vértices <code>U</code> y <code>V</code> en un grafo no dirigido G se denominan adyacentes (o vecinos) en G si <code>U</code> y <code>V</code> son extremos de una arista <code>e</code> de E. Dicha arista <code>e</code> se denomina incide con los vértices <code>U</code> y <code>V</code> y se dice que <code>e</code> conecta <code>U</code> y <code>V</code>.</p>
+            <div class="process">
+                <strong>Declarar Variables</strong>
+                <ul class="list-none mt-2">
+                    <li><code>int arreglo[12] = {1, 5, ...}</code> (Nuestros datos iniciales)</li>
+                    <li><code>int C, C2</code> (Contadores para los bucles)</li>
+                    <li><code>int S = 0</code> (Acumulador para la Suma)</li>
+                    <li><code>int P = 0</code> (Para guardar el Promedio)</li>
+                    <li><code>int P_S = 0</code> (Contador Superior al promedio)</li>
+                    <li><code>int P_i = 0</code> (Contador Inferior al promedio)</li>
+                    <li><code>int P_N = 0</code> (Contador Igual al promedio)</li>
+                </ul>
             </div>
 
-            <h2 class="text-2xl font-semibold text-blue-600 mt-8 mb-4 border-b-2 border-blue-200 pb-2">
-                Ejercicio 2: Encontrar Vecindades
-            </h2>
+            <div class="arrow">&darr;</div>
 
-            <div class="md:flex md:space-x-8">
-                <!-- Grafo 3 (Nueva Figura 1) -->
-                <div class="w-full md:w-1/2 p-4 border rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Figura 1</h3>
-                    <!-- SVG para Nueva Figura 1 (image_de1243.png) -->
-                    <svg viewBox="0 0 300 250">
-                        <!-- Vertices -->
-                        <g><circle class="vertex" cx="50" cy="100" r="8"/><text class="label" x="30" y="100">A</text></g>
-                        <g><circle class="vertex" cx="120" cy="50" r="8"/><text class="label" x="120" y="30">B</text></g>
-                        <g><circle class="vertex" cx="200" cy="50" r="8"/><text class="label" x="200" y="30">C</text></g>
-                        <g><circle class="vertex" cx="270" cy="80" r="8"/><text class="label" x="290" y="80">D</text></g>
-                        <g><circle class="vertex" cx="200" cy="180" r="8"/><text class="label" x="200" y="200">E</text></g>
-                        <g><circle class="vertex" cx="120" cy="180" r="8"/><text class="label" x="120" y="200">F</text></g>
-                        <g><circle class="vertex" cx="270" cy="180" r="8"/><text class="label" x="290" y="180">G</text></g>
-                        
-                        <!-- Aristas -->
-                        <line class="edge" x1="50" y1="100" x2="120" y2="50"/> <!-- A-B -->
-                        <line class="edge" x1="50" y1="100" x2="120" y2="180"/> <!-- A-F -->
-                        
-                        <line class="edge" x1="120" y1="50" x2="200" y2="50"/> <!-- B-C -->
-                        <line class="edge" x1="120" y1="50" x2="200" y2="180"/> <!-- B-E -->
-                        <line class="edge" x1="120" y1="50" x2="120" y2="180"/> <!-- B-F -->
-                        
-                        <line class="edge" x1="200" y1="50" x2="270" y2="80"/> <!-- C-D -->
-                        <line class="edge" x1="200" y1="50" x2="200" y2="180"/> <!-- C-E -->
-                        <line class="edge" x1="200" y1="50" x2="120" y2="180"/> <!-- C-F -->
-                        
-                        <line class="edge" x1="200" y1="180" x2="120" y2="180"/> <!-- E-F -->
-                    </svg>
-                    
-                    <h4 class="text-lg font-semibold text-gray-600 mt-4 mb-2">Solución (Figura 1)</h4>
-                    <ul class="list-disc list-inside space-y-1 text-gray-700 text-lg">
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(A) = {B, F}</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(B) = {A, C, E, F}</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(C) = {B, D, E, F}</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(D) = {C}</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(E) = {B, C, F}</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(F) = {A, B, C, E}</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(G) = {Ø}</code> (Conjunto vacío)</li>
-                    </ul>
-                </div>
-
-                <!-- Grafo 4 (Nueva Figura 2) -->
-                <div class="w-full md:w-1/2 p-4 border rounded-lg shadow-md mt-6 md:mt-0">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Figura 2</h3>
-                    <!-- SVG para Nueva Figura 2 (image_de19a8.png) -->
-                    <svg viewBox="0 0 300 250">
-                        <!-- Vertices -->
-                        <g><circle class="vertex" cx="70" cy="50" r="8"/><text class="label" x="70" y="30">A</text></g>
-                        <g><circle class="vertex" cx="170" cy="50" r="8"/><text class="label" x="170" y="30">B</text></g>
-                        <g><circle class="vertex" cx="250" cy="80" r="8"/><text class="label" x="270" y="80">C</text></g>
-                        <g><circle class="vertex" cx="200" cy="180" r="8"/><text class="label" x="200" y="200">D</text></g>
-                        <g><circle class="vertex" cx="70" cy="180" r="8"/><text class="label" x="70" y="200">E</text></g>
-
-                        <!-- Aristas -->
-                        <line class="edge-purple" x1="70" y1="50" x2="170" y2="50"/> <!-- A-B (morada) -->
-                        <line class="edge" x1="70" y1="50" x2="200" y2="180"/> <!-- A-D -->
-                        <path class="edge-curved" d="M 70 50 Q 20 115 70 180"/> <!-- A-E (curva) -->
-                        
-                        <line class="edge" x1="170" y1="50" x2="250" y2="80"/> <!-- B-C -->
-                        <line class="edge" x1="170" y1="50" x2="200" y2="180"/> <!-- B-D -->
-                        <line class="edge" x1="170" y1="50" x2="70" y2="180"/> <!-- B-E -->
-                        
-                        <line class="edge" x1="200" y1="180" x2="70" y2="180"/> <!-- D-E -->
-
-                        <!-- Bucle (Loop) en B -->
-                        <path class="loop" d="M 170, 30 A 15 15 0 1 1 180, 40"/>
-                    </svg>
-
-                    <h4 class="text-lg font-semibold text-gray-600 mt-4 mb-2">Solución (Figura 2)</h4>
-                    <ul class="list-disc list-inside space-y-1 text-gray-700 text-lg">
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(A) = {B, D, E}</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(B) = {A, B, C, D, E}</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(C) = {B}</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(D) = {A, B, E}</code></li>
-                        <li><code class="bg-gray-200 px-2 py-1 rounded">N(E) = {A, B, D}</code></li>
-                    </ul>
-                </div>
+            <div class="loop">
+                <strong>BUCLE 1: Calcular Suma Total</strong>
+                <p class="mt-2">Para cada número en <code>arreglo</code> (de C=0 a 11):</p>
+                <ul class="list-none mt-2 space-y-2">
+                    <li class="io">1. Imprimir el número actual (<code>arreglo[C]</code>)</li>
+                    <li class="process">2. Acumular la suma: <code>S = S + arreglo[C]</code></li>
+                </ul>
+                <p class="mt-2">...repetir 12 veces...</p>
             </div>
-        </section>
 
+            <div class="arrow">&darr;</div>
+
+            <div class="io">
+                <strong>Imprimir Suma</strong>
+                <p>Mostrar "SUMA"</p>
+                <p>Mostrar valor de <code>S</code></p>
+            </div>
+
+            <div class="arrow">&darr;</div>
+
+            <div class="process">
+                <strong>Calcular Promedio Anual</strong>
+                <code>P = S / 12</code>
+            </div>
+
+            <div class="arrow">&darr;</div>
+
+            <div class="io">
+                <strong>Imprimir Promedio</strong>
+                <p>Mostrar "a) Promedio..."</p>
+                <p>Mostrar valor de <code>P</code></p>
+            </div>
+
+            <div class="arrow">&darr;</div>
+
+            <div class="loop">
+                <strong>BUCLE 2: Comparar con Promedio</strong>
+                <p class="mt-2">Para cada número en <code>arreglo</code> (de C2=0 a 11):</p>
+                <div class="conditional mt-4">
+                    <strong>Decisión:</strong>
+                    <p class="mt-2">¿<code>arreglo[C2] > P</code>?</p>
+                    <p class="font-semibold">SI &rarr; <code>P_S = P_S + 1</code></p>
+                    <p class="font-semibold mt-2">NO &darr;</p>
+                    <div class="conditional mt-2 border-dashed">
+                        <p>¿<code>arreglo[C2] < P</code>?</p>
+                        <p class="font-semibold">SI &rarr; <code>P_i = P_i + 1</code></p>
+                        <p class="font-semibold mt-2">NO &darr;</p>
+                         <p>(Significa que es igual)</p>
+                         <p><code>P_N = P_N + 1</code></p>
+                    </div>
+                </div>
+                <p class="mt-2">...repetir 12 veces...</p>
+            </div>
+
+            <div class="arrow">&darr;</div>
+
+            <div class="io">
+                <strong>Imprimir Resultados Finales</strong>
+                <p class="mt-2">Mostrar "b) ...superior..." y el valor de <code>P_S</code></p>
+                <p class="mt-1">Mostrar "c) ...inferior..." y el valor de <code>P_i</code></p>
+                <p class="mt-1">Mostrar "c) ...igual..." y el valor de <code>P_N</code></p>
+            </div>
+
+            <div class="arrow">&darr;</div>
+
+            <div class="start-end">
+                FIN
+            </div>
+
+        </div>
     </div>
-
 </body>
 </html>

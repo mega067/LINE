@@ -15,7 +15,7 @@ const LadderHexSolver = () => {
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Función para obtener el carácter Hexadecimal
+  // Función para obtener el carácter Hexa
   const getHexChar = (num) => {
     if (num >= 0 && num <= 9) return num.toString();
     const map = { 10: 'A', 11: 'B', 12: 'C', 13: 'D', 14: 'E', 15: 'F' };
@@ -29,7 +29,7 @@ const LadderHexSolver = () => {
     const hexRem = getHexChar(remainder);
     const isRemLetter = remainder > 9;
 
-    // Caso base: si el dividendo es menor que 16, es el último paso (el último cociente)
+    // Cas base: si el dividendo es menor que 16, es el último paso (el último cociente)
     if (dividend < 16) {
       const hexDigit = getHexChar(dividend);
       return (
@@ -215,3 +215,4 @@ const LadderHexSolver = () => {
 };
 
 export default LadderHexSolver;
+

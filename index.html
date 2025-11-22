@@ -1,223 +1,318 @@
-import React, { useState } from 'react';
-import { ArrowDown, ArrowRight, RefreshCw, Calculator, CheckCircle, XCircle, Equal, HelpCircle } from 'lucide-react';
-
-const PizarronCosecha = () => {
-  const [step, setStep] = useState(0);
-
-  // Datos del problema
-  const datos = [1, 5, 8, 9, 4, 7, 9, 8, 1, 6, 3, 2];
-  
-  // Cálculos
-  const suma = datos.reduce((a, b) => a + b, 0);
-  const promedio = Math.floor(suma / 12); // Usando enteros como en C
-  
-  // Clasificación
-  const superiores = datos.filter(d => d > promedio);
-  const inferiores = datos.filter(d => d < promedio);
-  const iguales = datos.filter(d => d === promedio);
-
-  const nextStep = () => setStep(prev => Math.min(prev + 1, 4));
-  const prevStep = () => setStep(prev => Math.max(prev - 1, 0));
-
-  // Estilos para simular dibujo a mano
-  const handDrawnBox = "border-2 border-gray-700 rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)] p-4 bg-white transform rotate-[-1deg] transition-all duration-300";
-  const stickyNote = "shadow-lg p-4 transform rotate-[1deg] text-gray-800 font-medium text-sm";
-
-  return (
-    <div className="min-h-screen bg-gray-100 p-4 font-sans overflow-y-auto pb-20">
-      <div className="max-w-4xl mx-auto">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarrón de Lógica: Cosecha</title>
+    
+    <!-- React y ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel para traducir JSX en el navegador -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Estilos adicionales para animación -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap');
         
-        {/* Header */}
-        <div className="bg-gray-800 text-white p-6 rounded-xl shadow-xl mb-8 border-b-8 border-gray-600">
-          <h1 className="text-3xl font-bold mb-2">✏️ Pizarrón de Lógica: Cosecha de Cereales</h1>
-          <p className="text-gray-300">Diagrama mental para resolver el algoritmo paso a paso.</p>
-        </div>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-handwriting {
+            font-family: 'Patrick Hand', cursive;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
 
-        {/* Controls */}
-        <div className="flex justify-center gap-4 mb-8 sticky top-4 z-50">
-          <button 
-            onClick={prevStep} 
-            disabled={step === 0}
-            className={`px-6 py-2 rounded-full font-bold shadow-md ${step === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-white hover:bg-blue-50 text-blue-600 border-2 border-blue-600'}`}
-          >
-            ⬅️ Anterior
-          </button>
-          <span className="px-4 py-2 bg-gray-800 text-white rounded-full font-mono">Paso {step + 1} de 5</span>
-          <button 
-            onClick={nextStep} 
-            disabled={step === 4}
-            className={`px-6 py-2 rounded-full font-bold shadow-md ${step === 4 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
-          >
-            Siguiente ➡️
-          </button>
-        </div>
+    <div id="root"></div>
 
-        {/* Whiteboard Area */}
-        <div className="bg-white border-4 border-gray-300 rounded-xl p-8 min-h-[600px] relative shadow-inner bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px]">
-          
-          {/* STEP 1: INPUT */}
-          <div className={`transition-opacity duration-500 ${step >= 0 ? 'opacity-100' : 'opacity-50 blur-sm'}`}>
-            <div className="flex flex-col items-center mb-12">
-              <div className={`${stickyNote} bg-yellow-100 mb-4 -rotate-2`}>
-                <span className="font-bold text-red-600">ENTRADA:</span> Tenemos un arreglo (array) que representa los 12 meses.
-                <br/>
-                <span className="text-xs text-gray-500 font-mono">int arreglo[12] = ...</span>
-              </div>
-              
-              <div className="flex flex-wrap justify-center gap-2">
-                {datos.map((val, idx) => (
-                  <div key={idx} className="flex flex-col items-center">
-                    <div className="w-12 h-12 border-2 border-blue-500 rounded-lg flex items-center justify-center text-xl font-bold bg-blue-50">
-                      {val}
+    <script type="text/babel">
+        const { useState } = React;
+
+        // --- ICONOS (Reemplazando lucide-react para que funcione sin build) ---
+        const IconBase = ({ children, className }) => (
+            <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="24" 
+                height="24" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className={className}
+            >
+                {children}
+            </svg>
+        );
+
+        const ArrowDown = (props) => (
+            <IconBase {...props}><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></IconBase>
+        );
+        const ArrowRight = (props) => (
+            <IconBase {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></IconBase>
+        );
+        const RefreshCw = (props) => (
+            <IconBase {...props}><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="m21 12-9 9-9.75-9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></IconBase>
+        );
+        const Calculator = (props) => (
+            <IconBase {...props}><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></IconBase>
+        );
+
+        // --- COMPONENTE PRINCIPAL ---
+        const PizarronCosecha = () => {
+            const [step, setStep] = useState(0);
+
+            // Datos del problema
+            const datos = [1, 5, 8, 9, 4, 7, 9, 8, 1, 6, 3, 2];
+            
+            // Cálculos
+            const suma = datos.reduce((a, b) => a + b, 0);
+            const promedio = Math.floor(suma / 12); // Usando enteros como en C
+            
+            // Clasificación
+            const superiores = datos.filter(d => d > promedio);
+            const inferiores = datos.filter(d => d < promedio);
+            const iguales = datos.filter(d => d === promedio);
+
+            const nextStep = () => setStep(prev => Math.min(prev + 1, 4));
+            const prevStep = () => setStep(prev => Math.max(prev - 1, 0));
+
+            // Estilos
+            const handDrawnBox = "border-2 border-gray-700 rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)] p-4 bg-white transform rotate-[-1deg] transition-all duration-300";
+            const stickyNote = "shadow-lg p-4 transform rotate-[1deg] text-gray-800 font-medium text-sm bg-yellow-100 font-handwriting text-lg";
+
+            return (
+                <div className="min-h-screen bg-gray-100 p-4 font-sans overflow-y-auto pb-20">
+                <div className="max-w-4xl mx-auto">
+                    
+                    {/* Header */}
+                    <div className="bg-gray-800 text-white p-6 rounded-xl shadow-xl mb-8 border-b-8 border-gray-600">
+                    <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+                        <span>✏️</span> Pizarrón de Lógica
+                    </h1>
+                    <p className="text-gray-300">Cosecha de Cereales: Algoritmo paso a paso</p>
                     </div>
-                    <span className="text-xs text-gray-400 mt-1">Mes {idx}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
 
-          {/* STEP 2: SUM LOOP */}
-          {step >= 1 && (
-            <div className="flex flex-col items-center mb-12 animate-in fade-in slide-in-from-bottom-10 duration-700">
-              <ArrowDown className="w-12 h-12 text-gray-400 mb-4" />
-              
-              <div className={`${handDrawnBox} max-w-2xl w-full relative border-orange-400`}>
-                <h3 className="font-bold text-xl text-orange-700 mb-2 flex items-center gap-2">
-                  <RefreshCw className="w-5 h-5" /> Ciclo 1: Acumular (La Suma)
-                </h3>
-                <div className="flex md:flex-row flex-col items-center justify-around gap-8">
-                  <div className="text-sm font-mono bg-gray-900 text-green-400 p-3 rounded w-full md:w-1/2">
-                    <p>// Pseudocódigo</p>
-                    <p>S = 0</p>
-                    <p>Para C = 0 hasta 11:</p>
-                    <p className="pl-4">S = S + arreglo[C]</p>
-                  </div>
-                  <div className="flex flex-col items-center justify-center">
-                     <div className="text-4xl font-bold text-orange-600 border-b-4 border-orange-600 px-4">
-                       {suma}
-                     </div>
-                     <span className="text-gray-500 font-handwriting mt-1">Toneladas Totales (S)</span>
-                  </div>
+                    {/* Controls */}
+                    <div className="flex justify-center gap-4 mb-8 sticky top-4 z-50">
+                    <button 
+                        onClick={prevStep} 
+                        disabled={step === 0}
+                        className={`px-6 py-2 rounded-full font-bold shadow-md transition-colors ${step === 0 ? 'bg-gray-300 cursor-not-allowed text-gray-500' : 'bg-white hover:bg-blue-50 text-blue-600 border-2 border-blue-600'}`}
+                    >
+                        ⬅️ Anterior
+                    </button>
+                    <span className="px-4 py-2 bg-gray-800 text-white rounded-full font-mono flex items-center">
+                        Paso {step + 1} de 5
+                    </span>
+                    <button 
+                        onClick={nextStep} 
+                        disabled={step === 4}
+                        className={`px-6 py-2 rounded-full font-bold shadow-md transition-colors ${step === 4 ? 'bg-gray-300 cursor-not-allowed text-gray-500' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+                    >
+                        Siguiente ➡️
+                    </button>
+                    </div>
+
+                    {/* Whiteboard Area */}
+                    <div className="bg-white border-4 border-gray-300 rounded-xl p-8 min-h-[600px] relative shadow-inner" style={{backgroundImage: 'radial-gradient(#e5e7eb 1px, transparent 1px)', backgroundSize: '20px 20px'}}>
+                    
+                    {/* STEP 1: INPUT */}
+                    <div className={`transition-all duration-500 ${step >= 0 ? 'opacity-100 translate-y-0' : 'opacity-50 blur-sm translate-y-4'}`}>
+                        <div className="flex flex-col items-center mb-12">
+                        <div className={`${stickyNote} mb-6 -rotate-2 border-l-4 border-yellow-400 max-w-md text-center`}>
+                            <span className="font-bold text-red-600 font-sans">ENTRADA:</span> 
+                            <p>Un arreglo con 12 números (Toneladas por mes).</p>
+                            <span className="text-sm text-gray-600 font-mono bg-white/50 px-1 rounded">int arreglo[12] = &#123;1, 5, ...&#125;;</span>
+                        </div>
+                        
+                        <div className="flex flex-wrap justify-center gap-2">
+                            {datos.map((val, idx) => (
+                            <div key={idx} className="flex flex-col items-center group">
+                                <div className="w-10 h-10 md:w-12 md:h-12 border-2 border-blue-500 rounded-lg flex items-center justify-center text-lg md:text-xl font-bold bg-blue-50 group-hover:bg-blue-100 transition-colors">
+                                {val}
+                                </div>
+                                <span className="text-[10px] uppercase font-bold text-gray-400 mt-1">Mes {idx}</span>
+                            </div>
+                            ))}
+                        </div>
+                        </div>
+                    </div>
+
+                    {/* STEP 2: SUM LOOP */}
+                    {step >= 1 && (
+                        <div className="flex flex-col items-center mb-12 animate-[fadeIn_0.7s_ease-out]">
+                        <ArrowDown className="w-12 h-12 text-gray-400 mb-4 animate-bounce" />
+                        
+                        <div className={`${handDrawnBox} max-w-2xl w-full relative border-orange-400`}>
+                            <h3 className="font-bold text-xl text-orange-700 mb-2 flex items-center gap-2">
+                            <RefreshCw className="w-5 h-5" /> Ciclo 1: Sumatoria
+                            </h3>
+                            <div className="flex md:flex-row flex-col items-center justify-around gap-8">
+                            <div className="text-sm font-mono bg-gray-900 text-green-400 p-4 rounded w-full md:w-1/2 shadow-inner">
+                                <p className="text-gray-500 text-xs mb-1">// Código equivalente</p>
+                                <p>int S = 0;</p>
+                                <p>for (C = 0; C &lt; 12; C++) &#123;</p>
+                                <p className="pl-4 text-white">S = S + arreglo[C];</p>
+                                <p>&#125;</p>
+                            </div>
+                            <div className="flex flex-col items-center justify-center bg-orange-50 p-4 rounded-full w-32 h-32 border-4 border-orange-200">
+                                <div className="text-4xl font-bold text-orange-600">
+                                {suma}
+                                </div>
+                                <span className="text-gray-500 font-handwriting text-sm mt-1">Total (S)</span>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    )}
+
+                    {/* STEP 3: AVERAGE */}
+                    {step >= 2 && (
+                        <div className="flex flex-col items-center mb-12 animate-[fadeIn_0.7s_ease-out]">
+                        <ArrowDown className="w-12 h-12 text-gray-400 mb-4 animate-bounce" />
+                        
+                        <div className={`${handDrawnBox} border-purple-400 w-fit mx-auto`}>
+                            <h3 className="font-bold text-xl text-purple-700 mb-2 flex items-center gap-2">
+                            <Calculator className="w-5 h-5" /> Cálculo del Promedio
+                            </h3>
+                            <div className="flex flex-wrap justify-center items-center gap-2 md:gap-4 text-xl md:text-2xl font-mono font-bold bg-purple-50 p-4 rounded-lg">
+                            <div className="flex flex-col items-center">
+                                <span className="text-orange-600">{suma}</span>
+                                <span className="text-xs text-gray-400 font-sans">Suma</span>
+                            </div>
+                            <span className="text-gray-400">÷</span>
+                            <div className="flex flex-col items-center">
+                                <span>12</span>
+                                <span className="text-xs text-gray-400 font-sans">Meses</span>
+                            </div>
+                            <span className="text-gray-400">=</span>
+                            <div className="flex flex-col items-center">
+                                <span className="text-purple-600 bg-white border-2 border-dashed border-purple-400 px-3 py-1 rounded shadow-sm">
+                                {promedio}
+                                </span>
+                                <span className="text-xs text-gray-400 font-sans mt-1">Promedio (P)</span>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    )}
+
+                    {/* STEP 4: COMPARISON LOOP */}
+                    {step >= 3 && (
+                        <div className="flex flex-col items-center mb-12 animate-[fadeIn_0.7s_ease-out]">
+                        <ArrowDown className="w-12 h-12 text-gray-400 mb-4 animate-bounce" />
+                        
+                        <div className={`${handDrawnBox} w-full border-blue-400`}>
+                            <h3 className="font-bold text-xl text-blue-700 mb-4 flex items-center gap-2">
+                            <RefreshCw className="w-5 h-5" /> Ciclo 2: Clasificación
+                            </h3>
+                            
+                            <div className="grid md:grid-cols-3 gap-4 text-center">
+                            {/* Logic Diagram */}
+                            <div className="md:col-span-3 mb-6">
+                                <div className="inline-flex flex-col md:flex-row justify-center items-center gap-2 text-sm font-mono bg-blue-50 p-3 rounded-full border border-blue-200 shadow-sm">
+                                <span>¿Dato actual?</span>
+                                <ArrowRight className="hidden md:block w-4 h-4 text-blue-400" />
+                                <ArrowDown className="md:hidden w-4 h-4 text-blue-400" />
+                                <div className="px-3 py-1 bg-purple-600 text-white rounded-full font-bold shadow">
+                                    Comparar con {promedio}
+                                </div>
+                                <ArrowRight className="hidden md:block w-4 h-4 text-blue-400" />
+                                <ArrowDown className="md:hidden w-4 h-4 text-blue-400" />
+                                <span>Decisión</span>
+                                </div>
+                            </div>
+
+                            {/* Buckets */}
+                            <div className="bg-red-50 rounded-xl p-4 border-2 border-red-200 flex flex-col h-full shadow-sm hover:shadow-md transition-shadow">
+                                <div className="flex items-center justify-center gap-2 text-red-700 font-bold mb-3 border-b border-red-200 pb-2">
+                                <span className="text-xl">&lt;</span> Menor
+                                </div>
+                                <div className="flex flex-wrap justify-center gap-1 mb-4 flex-grow content-start">
+                                {inferiores.map((v, i) => (
+                                    <span key={i} className="bg-white border border-red-200 text-red-800 w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold shadow-sm">{v}</span>
+                                ))}
+                                </div>
+                                <div className="text-4xl font-bold text-red-600">{inferiores.length}</div>
+                                <div className="text-xs font-bold text-red-400 uppercase tracking-wider">Meses (P_i)</div>
+                            </div>
+
+                            <div className="bg-green-50 rounded-xl p-4 border-2 border-green-200 flex flex-col h-full shadow-sm hover:shadow-md transition-shadow order-first md:order-none">
+                                <div className="flex items-center justify-center gap-2 text-green-700 font-bold mb-3 border-b border-green-200 pb-2">
+                                <span className="text-xl">&gt;</span> Mayor
+                                </div>
+                                <div className="flex flex-wrap justify-center gap-1 mb-4 flex-grow content-start">
+                                {superiores.map((v, i) => (
+                                    <span key={i} className="bg-white border border-green-200 text-green-800 w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold shadow-sm">{v}</span>
+                                ))}
+                                </div>
+                                <div className="text-4xl font-bold text-green-600">{superiores.length}</div>
+                                <div className="text-xs font-bold text-green-400 uppercase tracking-wider">Meses (P_S)</div>
+                            </div>
+                            
+                            <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200 flex flex-col h-full shadow-sm hover:shadow-md transition-shadow opacity-75">
+                                <div className="flex items-center justify-center gap-2 text-gray-700 font-bold mb-3 border-b border-gray-200 pb-2">
+                                <span className="text-xl">=</span> Igual
+                                </div>
+                                <div className="flex flex-wrap justify-center gap-1 mb-4 flex-grow content-start">
+                                {iguales.map((v, i) => (
+                                    <span key={i} className="bg-white border border-gray-200 text-gray-800 w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold shadow-sm">{v}</span>
+                                ))}
+                                {iguales.length === 0 && <span className="text-xs text-gray-400 italic">Ninguno</span>}
+                                </div>
+                                <div className="text-4xl font-bold text-gray-600">{iguales.length}</div>
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-wider">Meses (P_N)</div>
+                            </div>
+
+                            </div>
+                        </div>
+                        </div>
+                    )}
+
+                    {/* STEP 5: OUTPUT */}
+                    {step >= 4 && (
+                        <div className="flex flex-col items-center animate-[popIn_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)]">
+                        <ArrowDown className="w-12 h-12 text-gray-400 mb-4 animate-bounce" />
+                        
+                        <div className={`${stickyNote} bg-yellow-200 rotate-2 w-72 text-center border-t-8 border-yellow-400/20 shadow-xl`}>
+                            <h4 className="font-bold text-xl mb-4 border-b-2 border-yellow-800/20 pb-2 text-yellow-900">RESULTADOS</h4>
+                            <div className="space-y-3 font-mono text-left px-4">
+                            <div className="flex justify-between items-center border-b border-yellow-800/10 pb-1">
+                                <span className="text-gray-700">Promedio:</span>
+                                <span className="font-bold text-purple-700 text-lg">{promedio}</span>
+                            </div>
+                            <div className="flex justify-between items-center border-b border-yellow-800/10 pb-1">
+                                <span className="text-gray-700">Sup. Promedio:</span>
+                                <span className="font-bold text-green-700 text-lg">{superiores.length}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-gray-700">Inf. Promedio:</span>
+                                <span className="font-bold text-red-700 text-lg">{inferiores.length}</span>
+                            </div>
+                            </div>
+                            <div className="mt-6 text-sm text-yellow-800/60 font-sans font-bold">
+                            // FIN DEL PROGRAMA
+                            </div>
+                        </div>
+                        </div>
+                    )}
+
+                    </div>
                 </div>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 3: AVERAGE */}
-          {step >= 2 && (
-            <div className="flex flex-col items-center mb-12 animate-in fade-in slide-in-from-bottom-10 duration-700">
-              <ArrowDown className="w-12 h-12 text-gray-400 mb-4" />
-              
-              <div className={`${handDrawnBox} border-purple-400 w-fit mx-auto`}>
-                <h3 className="font-bold text-xl text-purple-700 mb-2 flex items-center gap-2">
-                  <Calculator className="w-5 h-5" /> Operación: Promedio Anual
-                </h3>
-                <div className="flex items-center gap-4 text-2xl font-mono font-bold bg-purple-50 p-4 rounded-lg">
-                  <span className="text-orange-600">{suma}</span>
-                  <span className="text-gray-400">÷</span>
-                  <span>12</span>
-                  <span className="text-gray-400">=</span>
-                  <span className="text-purple-600 border-2 border-dashed border-purple-400 p-1 rounded">
-                    {promedio}
-                  </span>
                 </div>
-                <p className="text-center text-sm text-gray-500 mt-2">Promedio (P)</p>
-              </div>
-            </div>
-          )}
+            );
+        };
 
-          {/* STEP 4: COMPARISON LOOP */}
-          {step >= 3 && (
-            <div className="flex flex-col items-center mb-12 animate-in fade-in slide-in-from-bottom-10 duration-700">
-              <ArrowDown className="w-12 h-12 text-gray-400 mb-4" />
-              
-              <div className={`${handDrawnBox} w-full border-blue-400`}>
-                <h3 className="font-bold text-xl text-blue-700 mb-4 flex items-center gap-2">
-                  <RefreshCw className="w-5 h-5" /> Ciclo 2: Comparación y Conteo
-                </h3>
-                
-                <div className="grid md:grid-cols-3 gap-4 text-center">
-                  {/* Logic Diagram */}
-                  <div className="md:col-span-3 mb-4">
-                    <div className="flex justify-center items-center gap-2 text-sm font-mono bg-gray-50 p-2 rounded border border-gray-200">
-                      <span>¿Dato actual?</span>
-                      <ArrowRight className="w-4 h-4" />
-                      <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">{promedio}</div>
-                      <ArrowRight className="w-4 h-4" />
-                      <span>Decisión</span>
-                    </div>
-                  </div>
-
-                  {/* Buckets */}
-                  <div className="bg-red-50 rounded-lg p-4 border-2 border-red-200">
-                    <div className="flex items-center justify-center gap-2 text-red-700 font-bold mb-2">
-                      <ArrowDown className="w-4 h-4" /> Menor que {promedio}
-                    </div>
-                    <div className="flex flex-wrap justify-center gap-1">
-                      {inferiores.map((v, i) => (
-                        <span key={i} className="bg-red-200 text-red-800 px-2 py-1 rounded text-xs font-bold">{v}</span>
-                      ))}
-                    </div>
-                    <div className="mt-2 text-2xl font-bold text-red-600">{inferiores.length}</div>
-                    <div className="text-xs text-gray-500">Contador P_i</div>
-                  </div>
-
-                  <div className="bg-green-50 rounded-lg p-4 border-2 border-green-200">
-                    <div className="flex items-center justify-center gap-2 text-green-700 font-bold mb-2">
-                      <ArrowDown className="w-4 h-4" /> Mayor que {promedio}
-                    </div>
-                    <div className="flex flex-wrap justify-center gap-1">
-                      {superiores.map((v, i) => (
-                        <span key={i} className="bg-green-200 text-green-800 px-2 py-1 rounded text-xs font-bold">{v}</span>
-                      ))}
-                    </div>
-                    <div className="mt-2 text-2xl font-bold text-green-600">{superiores.length}</div>
-                    <div className="text-xs text-gray-500">Contador P_S</div>
-                  </div>
-                  
-                   <div className="bg-gray-50 rounded-lg p-4 border-2 border-gray-200 opacity-60">
-                    <div className="flex items-center justify-center gap-2 text-gray-700 font-bold mb-2">
-                      <ArrowDown className="w-4 h-4" /> Igual a {promedio}
-                    </div>
-                    <div className="flex flex-wrap justify-center gap-1">
-                      {iguales.map((v, i) => (
-                        <span key={i} className="bg-gray-200 text-gray-800 px-2 py-1 rounded text-xs font-bold">{v}</span>
-                      ))}
-                    </div>
-                    <div className="mt-2 text-2xl font-bold text-gray-600">{iguales.length}</div>
-                    <div className="text-xs text-gray-500">Contador P_N</div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 5: OUTPUT */}
-          {step >= 4 && (
-            <div className="flex flex-col items-center animate-in zoom-in-95 duration-500">
-              <ArrowDown className="w-12 h-12 text-gray-400 mb-4" />
-              
-              <div className={`${stickyNote} bg-yellow-200 rotate-1 w-64 text-center border-l-4 border-yellow-400`}>
-                <h4 className="font-bold text-lg mb-2 border-b border-yellow-400 pb-1">SALIDA FINAL</h4>
-                <ul className="text-left space-y-2 font-mono text-sm">
-                  <li>Promedio: <span className="font-bold">{promedio}</span></li>
-                  <li>Meses Mayores: <span className="font-bold">{superiores.length}</span></li>
-                  <li>Meses Menores: <span className="font-bold">{inferiores.length}</span></li>
-                </ul>
-                <div className="mt-4 text-xs text-gray-600 italic">
-                  "Fin del Programa"
-                </div>
-              </div>
-            </div>
-          )}
-
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default PizarronCosecha;
-
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<PizarronCosecha />);
+    </script>
+</body>
+</html>

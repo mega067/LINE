@@ -1,268 +1,223 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solucionario Octal</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- React & ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
-    <!-- Babel -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <style>
-        .fade-in { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
-</head>
-<body class="bg-slate-100 text-slate-800 font-sans">
-    <div id="root"></div>
+import React, { useState } from 'react';
+import { ArrowDown, ArrowRight, RefreshCw, Calculator, CheckCircle, XCircle, Equal, HelpCircle } from 'lucide-react';
 
-    <script type="text/babel">
-        const { useState } = React;
+const PizarronCosecha = () => {
+  const [step, setStep] = useState(0);
 
-        // --- Iconos ---
-        const IconLadder = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 2v20"/><path d="M8 2v20"/><path d="M8 6h8"/><path d="M8 10h8"/><path d="M8 14h8"/><path d="M8 18h8"/></svg>;
-        const IconExpand = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21 21-6-6m6 6v-4.8m0 4.8h-4.8"/><path d="M3 16.2V21m0 0h4.8M3 21l6-6"/><path d="M21 7.8V3m0 0h-4.8M21 3l-6 6"/><path d="M3 7.8V3m0 0h4.8M3 3l6 6"/></svg>;
-        const IconAlert = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>;
+  // Datos del problema
+  const datos = [1, 5, 8, 9, 4, 7, 9, 8, 1, 6, 3, 2];
+  
+  // Cálculos
+  const suma = datos.reduce((a, b) => a + b, 0);
+  const promedio = Math.floor(suma / 12); // Usando enteros como en C
+  
+  // Clasificación
+  const superiores = datos.filter(d => d > promedio);
+  const inferiores = datos.filter(d => d < promedio);
+  const iguales = datos.filter(d => d === promedio);
 
-        // --- Componente Principal ---
-        const OctalSolver = () => {
-            const [mode, setMode] = useState('decToOct'); // 'decToOct' or 'octToDec'
-            const [selectedIndex, setSelectedIndex] = useState(0);
+  const nextStep = () => setStep(prev => Math.min(prev + 1, 4));
+  const prevStep = () => setStep(prev => Math.max(prev - 1, 0));
 
-            const decToOctExercises = [
-                66, 964, 871, 6823, 9871, 8923, 71353, 41369, 71392, 92468
-            ];
+  // Estilos para simular dibujo a mano
+  const handDrawnBox = "border-2 border-gray-700 rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)] p-4 bg-white transform rotate-[-1deg] transition-all duration-300";
+  const stickyNote = "shadow-lg p-4 transform rotate-[1deg] text-gray-800 font-medium text-sm";
 
-            const octToDecExercises = [
-                "76", "164", "571", "6023", "9171", "7923", "01353", "41369", "71392", "52460"
-            ];
+  return (
+    <div className="min-h-screen bg-gray-100 p-4 font-sans overflow-y-auto pb-20">
+      <div className="max-w-4xl mx-auto">
+        
+        {/* Header */}
+        <div className="bg-gray-800 text-white p-6 rounded-xl shadow-xl mb-8 border-b-8 border-gray-600">
+          <h1 className="text-3xl font-bold mb-2">✏️ Pizarrón de Lógica: Cosecha de Cereales</h1>
+          <p className="text-gray-300">Diagrama mental para resolver el algoritmo paso a paso.</p>
+        </div>
 
-            // --- Lógica Decimal a Octal (Escalera) ---
-            const DivisionStep = ({ dividend }) => {
-                const quotient = Math.floor(dividend / 8);
-                const remainder = dividend % 8;
+        {/* Controls */}
+        <div className="flex justify-center gap-4 mb-8 sticky top-4 z-50">
+          <button 
+            onClick={prevStep} 
+            disabled={step === 0}
+            className={`px-6 py-2 rounded-full font-bold shadow-md ${step === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-white hover:bg-blue-50 text-blue-600 border-2 border-blue-600'}`}
+          >
+            ⬅️ Anterior
+          </button>
+          <span className="px-4 py-2 bg-gray-800 text-white rounded-full font-mono">Paso {step + 1} de 5</span>
+          <button 
+            onClick={nextStep} 
+            disabled={step === 4}
+            className={`px-6 py-2 rounded-full font-bold shadow-md ${step === 4 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+          >
+            Siguiente ➡️
+          </button>
+        </div>
 
-                if (dividend < 8) {
-                    return (
-                        <div className="flex flex-col items-center fade-in">
-                            <div className="relative p-4 border-2 border-dashed border-orange-300 rounded-lg bg-orange-50 min-w-[80px] text-center">
-                                <span className="text-2xl font-bold text-orange-700">{dividend}</span>
-                                <div className="absolute -bottom-6 text-[10px] font-bold text-orange-500 uppercase tracking-wider whitespace-nowrap">Último<br/>Cociente</div>
-                            </div>
-                        </div>
-                    );
-                }
-
-                return (
-                    <div className="flex items-start fade-in">
-                        <div className="flex flex-col mr-4">
-                            <div className="flex items-stretch h-12">
-                                <div className="flex items-center justify-end px-3 text-2xl font-bold text-slate-800 min-w-[4rem]">
-                                    {dividend}
-                                </div>
-                                <div className="border-l-2 border-b-2 border-slate-800 px-2 flex items-center justify-center min-w-[3rem]">
-                                    <span className="text-xl font-semibold text-slate-600">8</span>
-                                </div>
-                            </div>
-                            <div className="flex mt-2">
-                                <div className="flex flex-col items-end justify-start px-3 min-w-[4rem] relative">
-                                    <div className="relative border-2 border-slate-800 rounded-full w-10 h-10 flex items-center justify-center bg-white z-10">
-                                        <span className="text-lg font-bold text-slate-800">{remainder}</span>
-                                    </div>
-                                    <div className="mt-6 text-[9px] uppercase font-bold text-slate-400 text-center">Residuo</div>
-                                </div>
-                                <div className="pl-4 pt-1">
-                                    <DivisionStep dividend={quotient} />
-                                </div>
-                            </div>
-                        </div>
+        {/* Whiteboard Area */}
+        <div className="bg-white border-4 border-gray-300 rounded-xl p-8 min-h-[600px] relative shadow-inner bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px]">
+          
+          {/* STEP 1: INPUT */}
+          <div className={`transition-opacity duration-500 ${step >= 0 ? 'opacity-100' : 'opacity-50 blur-sm'}`}>
+            <div className="flex flex-col items-center mb-12">
+              <div className={`${stickyNote} bg-yellow-100 mb-4 -rotate-2`}>
+                <span className="font-bold text-red-600">ENTRADA:</span> Tenemos un arreglo (array) que representa los 12 meses.
+                <br/>
+                <span className="text-xs text-gray-500 font-mono">int arreglo[12] = ...</span>
+              </div>
+              
+              <div className="flex flex-wrap justify-center gap-2">
+                {datos.map((val, idx) => (
+                  <div key={idx} className="flex flex-col items-center">
+                    <div className="w-12 h-12 border-2 border-blue-500 rounded-lg flex items-center justify-center text-xl font-bold bg-blue-50">
+                      {val}
                     </div>
-                );
-            };
+                    <span className="text-xs text-gray-400 mt-1">Mes {idx}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
 
-            const solveDecToOct = (n) => n.toString(8).toUpperCase();
-
-            // --- Lógica Octal a Decimal (Expansión) ---
-            const solveOctToDec = (octStr) => {
-                // Validar si es octal válido
-                if (/[89]/.test(octStr)) return "ERROR";
-                return parseInt(octStr, 8);
-            };
-
-            const OctalExpansion = ({ octStr }) => {
-                if (/[89]/.test(octStr)) {
-                    return (
-                        <div className="bg-red-50 border border-red-200 rounded-xl p-6 flex flex-col items-center text-center fade-in">
-                            <IconAlert />
-                            <h3 className="text-red-700 font-bold mt-2">Número Octal Inválido</h3>
-                            <p className="text-sm text-red-600 mt-1">
-                                El número <span className="font-mono font-bold">{octStr}</span> contiene dígitos '8' o '9'.<br/>
-                                En el sistema Octal (Base 8), solo existen los dígitos del 0 al 7.
-                            </p>
-                            <p className="text-xs text-red-400 mt-4">
-                                *Esto parece ser un error de escritura en el ejercicio original del PDF.
-                            </p>
-                        </div>
-                    );
-                }
-
-                const digits = octStr.split('').reverse();
-                const total = solveOctToDec(octStr);
-
-                return (
-                    <div className="space-y-6 fade-in">
-                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {[...digits].reverse().map((char, idx) => {
-                                const power = digits.length - 1 - idx;
-                                const result = parseInt(char) * Math.pow(8, power);
-                                return (
-                                    <div key={idx} className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm relative overflow-hidden">
-                                        <div className="absolute -right-2 -top-2 text-8xl font-black text-slate-50 opacity-50 pointer-events-none">{power}</div>
-                                        <div className="flex justify-between mb-2">
-                                            <span className="w-8 h-8 rounded bg-orange-100 text-orange-800 flex items-center justify-center font-bold">{char}</span>
-                                            <span className="text-xs font-mono text-slate-400 mt-1">8<sup>{power}</sup></span>
-                                        </div>
-                                        <div className="text-sm text-slate-500">{char} × {Math.pow(8, power)}</div>
-                                        <div className="text-xl font-bold text-orange-600 text-right">= {result}</div>
-                                    </div>
-                                )
-                            })}
-                         </div>
-                         
-                         <div className="bg-slate-800 text-white p-4 rounded-xl shadow-lg flex flex-wrap items-center gap-2 font-mono text-lg">
-                            <span className="text-slate-400">Total:</span>
-                            {digits.map((char, idx) => (
-                                <span key={idx}>
-                                    {parseInt(char) * Math.pow(8, idx)} {idx < digits.length - 1 ? '+' : ''}
-                                </span>
-                            )).reverse()}
-                            <span className="text-orange-400 font-bold text-2xl ml-auto">= {total}</span>
-                         </div>
-                    </div>
-                );
-            };
-
-
-            // Render
-            const currentList = mode === 'decToOct' ? decToOctExercises : octToDecExercises;
-            const currentVal = currentList[selectedIndex];
-
-            return (
-                <div className="flex flex-col h-screen bg-slate-50 overflow-hidden">
-                    {/* Header / Tabs */}
-                    <header className="bg-orange-600 text-white shadow-lg z-20">
-                        <div className="p-4 flex justify-between items-center">
-                            <h1 className="text-xl font-bold flex items-center gap-2">
-                                <div className="bg-white text-orange-600 p-1 rounded font-mono text-sm">8</div>
-                                Solucionario Octal
-                            </h1>
-                        </div>
-                        <div className="flex text-sm font-medium">
-                            <button 
-                                onClick={() => { setMode('decToOct'); setSelectedIndex(0); }}
-                                className={`flex-1 p-3 flex items-center justify-center gap-2 transition-colors ${mode === 'decToOct' ? 'bg-white text-orange-700 shadow-inner' : 'bg-orange-700 hover:bg-orange-600 text-orange-100'}`}
-                            >
-                                <IconLadder /> Decimal ➔ Octal
-                            </button>
-                            <button 
-                                onClick={() => { setMode('octToDec'); setSelectedIndex(0); }}
-                                className={`flex-1 p-3 flex items-center justify-center gap-2 transition-colors ${mode === 'octToDec' ? 'bg-white text-orange-700 shadow-inner' : 'bg-orange-700 hover:bg-orange-600 text-orange-100'}`}
-                            >
-                                <IconExpand /> Octal ➔ Decimal
-                            </button>
-                        </div>
-                    </header>
-
-                    <div className="flex flex-1 overflow-hidden">
-                        {/* Sidebar */}
-                        <aside className="w-64 bg-white border-r border-slate-200 overflow-y-auto hidden md:block">
-                            <div className="p-4 bg-slate-50 border-b border-slate-100">
-                                <h3 className="text-xs font-bold text-slate-400 uppercase">Ejercicios (Pág {mode === 'decToOct' ? '5' : '11'})</h3>
-                            </div>
-                            <ul>
-                                {currentList.map((item, idx) => (
-                                    <li key={idx}>
-                                        <button
-                                            onClick={() => setSelectedIndex(idx)}
-                                            className={`w-full text-left px-4 py-3 border-b border-slate-100 flex justify-between items-center transition-all
-                                                ${selectedIndex === idx 
-                                                    ? 'bg-orange-50 border-l-4 border-l-orange-500 text-orange-800 font-medium' 
-                                                    : 'hover:bg-slate-50 text-slate-600'}`}
-                                        >
-                                            <span>#{idx+1}. {item}</span>
-                                            {mode === 'octToDec' && /[89]/.test(item) && <span className="text-[10px] bg-red-100 text-red-600 px-1 rounded">Error</span>}
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </aside>
-
-                        {/* Mobile Dropdown */}
-                        <div className="md:hidden absolute top-[116px] left-0 right-0 z-10 bg-white p-2 border-b shadow-md">
-                             <select 
-                                className="w-full p-2 border rounded bg-slate-50"
-                                value={selectedIndex} 
-                                onChange={(e) => setSelectedIndex(Number(e.target.value))}
-                             >
-                                {currentList.map((item, idx) => (
-                                    <option key={idx} value={idx}>#{idx+1}: {item} {mode === 'octToDec' && /[89]/.test(item) ? '(Error)' : ''}</option>
-                                ))}
-                             </select>
-                        </div>
-
-                        {/* Main Content */}
-                        <main className="flex-1 overflow-y-auto p-4 md:p-8 relative">
-                             <div className="max-w-3xl mx-auto pb-20 md:pb-0 mt-12 md:mt-0">
-                                {/* Result Card */}
-                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-8 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-10">
-                                    <div>
-                                        <div className="text-xs font-bold text-slate-400 uppercase mb-1">Entrada ({mode === 'decToOct' ? 'Decimal' : 'Octal'})</div>
-                                        <div className="text-4xl font-mono font-bold text-slate-800">{currentVal}</div>
-                                    </div>
-                                    <div className="text-slate-300 text-2xl">➔</div>
-                                    <div className="text-right">
-                                        <div className="text-xs font-bold text-orange-500 uppercase mb-1">Resultado ({mode === 'decToOct' ? 'Octal' : 'Decimal'})</div>
-                                        <div className="text-4xl font-mono font-bold text-orange-600">
-                                            {mode === 'decToOct' 
-                                                ? <span>{solveDecToOct(currentVal)}<sub className="text-sm ml-1 opacity-60">8</sub></span>
-                                                : /[89]/.test(currentVal) 
-                                                    ? <span className="text-red-500 text-2xl">INVÁLIDO</span>
-                                                    : <span>{solveOctToDec(currentVal)}<sub className="text-sm ml-1 opacity-60">10</sub></span>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Visualization Area */}
-                                {mode === 'decToOct' ? (
-                                    <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-lg overflow-x-auto">
-                                        <h3 className="text-sm font-bold text-slate-400 uppercase mb-6 border-b pb-2">Método de Escalera (÷8)</h3>
-                                        <DivisionStep dividend={currentVal} />
-                                    </div>
-                                ) : (
-                                    <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-lg">
-                                        <h3 className="text-sm font-bold text-slate-400 uppercase mb-6 border-b pb-2">Notación Desarrollada (×8ⁿ)</h3>
-                                        <OctalExpansion octStr={currentVal.toString()} />
-                                    </div>
-                                )}
-                             </div>
-                        </main>
-                    </div>
+          {/* STEP 2: SUM LOOP */}
+          {step >= 1 && (
+            <div className="flex flex-col items-center mb-12 animate-in fade-in slide-in-from-bottom-10 duration-700">
+              <ArrowDown className="w-12 h-12 text-gray-400 mb-4" />
+              
+              <div className={`${handDrawnBox} max-w-2xl w-full relative border-orange-400`}>
+                <h3 className="font-bold text-xl text-orange-700 mb-2 flex items-center gap-2">
+                  <RefreshCw className="w-5 h-5" /> Ciclo 1: Acumular (La Suma)
+                </h3>
+                <div className="flex md:flex-row flex-col items-center justify-around gap-8">
+                  <div className="text-sm font-mono bg-gray-900 text-green-400 p-3 rounded w-full md:w-1/2">
+                    <p>// Pseudocódigo</p>
+                    <p>S = 0</p>
+                    <p>Para C = 0 hasta 11:</p>
+                    <p className="pl-4">S = S + arreglo[C]</p>
+                  </div>
+                  <div className="flex flex-col items-center justify-center">
+                     <div className="text-4xl font-bold text-orange-600 border-b-4 border-orange-600 px-4">
+                       {suma}
+                     </div>
+                     <span className="text-gray-500 font-handwriting mt-1">Toneladas Totales (S)</span>
+                  </div>
                 </div>
-            );
-        };
+              </div>
+            </div>
+          )}
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<OctalSolver />);
-    </script>
-</body>
-</html>
+          {/* STEP 3: AVERAGE */}
+          {step >= 2 && (
+            <div className="flex flex-col items-center mb-12 animate-in fade-in slide-in-from-bottom-10 duration-700">
+              <ArrowDown className="w-12 h-12 text-gray-400 mb-4" />
+              
+              <div className={`${handDrawnBox} border-purple-400 w-fit mx-auto`}>
+                <h3 className="font-bold text-xl text-purple-700 mb-2 flex items-center gap-2">
+                  <Calculator className="w-5 h-5" /> Operación: Promedio Anual
+                </h3>
+                <div className="flex items-center gap-4 text-2xl font-mono font-bold bg-purple-50 p-4 rounded-lg">
+                  <span className="text-orange-600">{suma}</span>
+                  <span className="text-gray-400">÷</span>
+                  <span>12</span>
+                  <span className="text-gray-400">=</span>
+                  <span className="text-purple-600 border-2 border-dashed border-purple-400 p-1 rounded">
+                    {promedio}
+                  </span>
+                </div>
+                <p className="text-center text-sm text-gray-500 mt-2">Promedio (P)</p>
+              </div>
+            </div>
+          )}
 
+          {/* STEP 4: COMPARISON LOOP */}
+          {step >= 3 && (
+            <div className="flex flex-col items-center mb-12 animate-in fade-in slide-in-from-bottom-10 duration-700">
+              <ArrowDown className="w-12 h-12 text-gray-400 mb-4" />
+              
+              <div className={`${handDrawnBox} w-full border-blue-400`}>
+                <h3 className="font-bold text-xl text-blue-700 mb-4 flex items-center gap-2">
+                  <RefreshCw className="w-5 h-5" /> Ciclo 2: Comparación y Conteo
+                </h3>
+                
+                <div className="grid md:grid-cols-3 gap-4 text-center">
+                  {/* Logic Diagram */}
+                  <div className="md:col-span-3 mb-4">
+                    <div className="flex justify-center items-center gap-2 text-sm font-mono bg-gray-50 p-2 rounded border border-gray-200">
+                      <span>¿Dato actual?</span>
+                      <ArrowRight className="w-4 h-4" />
+                      <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">{promedio}</div>
+                      <ArrowRight className="w-4 h-4" />
+                      <span>Decisión</span>
+                    </div>
+                  </div>
+
+                  {/* Buckets */}
+                  <div className="bg-red-50 rounded-lg p-4 border-2 border-red-200">
+                    <div className="flex items-center justify-center gap-2 text-red-700 font-bold mb-2">
+                      <ArrowDown className="w-4 h-4" /> Menor que {promedio}
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-1">
+                      {inferiores.map((v, i) => (
+                        <span key={i} className="bg-red-200 text-red-800 px-2 py-1 rounded text-xs font-bold">{v}</span>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-2xl font-bold text-red-600">{inferiores.length}</div>
+                    <div className="text-xs text-gray-500">Contador P_i</div>
+                  </div>
+
+                  <div className="bg-green-50 rounded-lg p-4 border-2 border-green-200">
+                    <div className="flex items-center justify-center gap-2 text-green-700 font-bold mb-2">
+                      <ArrowDown className="w-4 h-4" /> Mayor que {promedio}
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-1">
+                      {superiores.map((v, i) => (
+                        <span key={i} className="bg-green-200 text-green-800 px-2 py-1 rounded text-xs font-bold">{v}</span>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-2xl font-bold text-green-600">{superiores.length}</div>
+                    <div className="text-xs text-gray-500">Contador P_S</div>
+                  </div>
+                  
+                   <div className="bg-gray-50 rounded-lg p-4 border-2 border-gray-200 opacity-60">
+                    <div className="flex items-center justify-center gap-2 text-gray-700 font-bold mb-2">
+                      <ArrowDown className="w-4 h-4" /> Igual a {promedio}
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-1">
+                      {iguales.map((v, i) => (
+                        <span key={i} className="bg-gray-200 text-gray-800 px-2 py-1 rounded text-xs font-bold">{v}</span>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-2xl font-bold text-gray-600">{iguales.length}</div>
+                    <div className="text-xs text-gray-500">Contador P_N</div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 5: OUTPUT */}
+          {step >= 4 && (
+            <div className="flex flex-col items-center animate-in zoom-in-95 duration-500">
+              <ArrowDown className="w-12 h-12 text-gray-400 mb-4" />
+              
+              <div className={`${stickyNote} bg-yellow-200 rotate-1 w-64 text-center border-l-4 border-yellow-400`}>
+                <h4 className="font-bold text-lg mb-2 border-b border-yellow-400 pb-1">SALIDA FINAL</h4>
+                <ul className="text-left space-y-2 font-mono text-sm">
+                  <li>Promedio: <span className="font-bold">{promedio}</span></li>
+                  <li>Meses Mayores: <span className="font-bold">{superiores.length}</span></li>
+                  <li>Meses Menores: <span className="font-bold">{inferiores.length}</span></li>
+                </ul>
+                <div className="mt-4 text-xs text-gray-600 italic">
+                  "Fin del Programa"
+                </div>
+              </div>
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PizarronCosecha;
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pizarrón Neón: Calificaciones</title>
+    <title>Diagrama Estructurado: Calificaciones Neón</title>
     
     <!-- React y ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -17,385 +17,321 @@
     
     <!-- Fuentes y Animaciones -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Fira+Code:wght@400;600&family=Inter:wght@400;600&display=swap');
         
         body {
             font-family: 'Inter', sans-serif;
             background-color: #050505;
             color: #e0e0e0;
+            overflow-x: hidden;
         }
-        .font-tech {
+        .font-cyber {
             font-family: 'Orbitron', sans-serif;
         }
         .font-code {
-            font-family: 'Roboto Mono', monospace;
+            font-family: 'Fira Code', monospace;
         }
         
-        /* Efecto Neón */
-        .neon-text-blue {
-            text-shadow: 0 0 5px #3b82f6, 0 0 10px #3b82f6;
+        /* Efectos Neón */
+        .neon-blue-box {
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2), inset 0 0 20px rgba(0, 243, 255, 0.05);
+            border: 1px solid #00f3ff;
         }
-        .neon-box-blue {
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3), inset 0 0 20px rgba(59, 130, 246, 0.05);
-        }
-        
-        .neon-text-pink {
-            text-shadow: 0 0 5px #ec4899, 0 0 10px #ec4899;
-        }
-        .neon-box-pink {
-            box-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
+        .neon-pink-box {
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.2), inset 0 0 20px rgba(255, 0, 255, 0.05);
+            border: 1px solid #ff00ff;
         }
 
-        /* Grid de fondo animado */
+        /* Flechas de Flujo Animadas */
+        .flow-line {
+            stroke-dasharray: 10;
+            animation: dash 30s linear infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+
         .cyber-grid {
             background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(50, 50, 50, 0.5) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(50, 50, 50, 0.5) 1px, transparent 1px);
-            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
-        }
-
-        @keyframes pulse-border {
-            0% { border-color: rgba(59, 130, 246, 0.4); }
-            50% { border-color: rgba(59, 130, 246, 1); }
-            100% { border-color: rgba(59, 130, 246, 0.4); }
-        }
-        .animate-pulse-border {
-            animation: pulse-border 2s infinite;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen flex flex-col">
 
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState } = React;
+        const { useState, useEffect } = React;
 
-        // --- ICONOS SVG (Estilo Neón) ---
-        const IconBase = ({ children, className }) => (
-            <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="24" height="24" viewBox="0 0 24 24" 
-                fill="none" stroke="currentColor" strokeWidth="2" 
-                strokeLinecap="round" strokeLinejoin="round" 
-                className={className}
-            >
-                {children}
-            </svg>
-        );
+        // --- COMPONENTES VISUALES --- //
 
-        const ArrowDown = (props) => <IconBase {...props}><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></IconBase>;
-        const ArrowRight = (props) => <IconBase {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></IconBase>;
-        const User = (props) => <IconBase {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></IconBase>;
-        const Award = (props) => <IconBase {...props}><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></IconBase>;
-        const TerminalIcon = (props) => <IconBase {...props}><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></IconBase>;
+        // Flecha simple SVG
+        const Arrow = ({ className, direction = "down" }) => {
+            const rotations = { down: 0, right: -90, left: 90, up: 180 };
+            return (
+                <svg className={`w-6 h-6 ${className}`} style={{transform: `rotate(${rotations[direction]}deg)`}} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <polyline points="19 12 12 19 5 12"></polyline>
+                </svg>
+            );
+        };
 
-        // --- COMPONENTE PRINCIPAL ---
-        const PizarronCalificaciones = () => {
+        // Bloque de Diagrama de Flujo
+        const FlowBlock = ({ type, title, content, color, active }) => {
+            const baseClass = `relative p-4 rounded-lg border-2 transition-all duration-300 font-code text-xs md:text-sm text-center z-10`;
+            const activeClass = active ? `scale-110 bg-${color}-500/10 shadow-[0_0_20px_rgba(var(--c),0.4)]` : 'opacity-60 grayscale';
+            
+            // Estilos según forma (Rombo para decisión, Rectángulo para proceso)
+            if (type === 'decision') {
+                return (
+                    <div className={`w-32 h-32 flex items-center justify-center transform rotate-45 border-2 ${active ? 'border-yellow-400 bg-yellow-900/20 text-yellow-300' : 'border-gray-700 text-gray-500'} m-4`}>
+                        <div className="transform -rotate-45 text-center">
+                            <div className="font-bold mb-1">?</div>
+                            {content}
+                        </div>
+                    </div>
+                );
+            }
+            
+            // Rectángulo por defecto
+            const colorClasses = {
+                blue: 'border-[#00f3ff] text-[#00f3ff] shadow-[0_0_10px_#00f3ff]',
+                green: 'border-[#00ff00] text-[#00ff00] shadow-[0_0_10px_#00ff00]',
+                pink: 'border-[#ff00ff] text-[#ff00ff] shadow-[0_0_10px_#ff00ff]',
+                gray: 'border-gray-600 text-gray-400'
+            }[color] || 'border-gray-600';
+
+            return (
+                <div className={`${baseClass} ${active ? colorClasses : 'border-gray-800 text-gray-600'} bg-black`}>
+                    <div className="font-bold mb-1 border-b border-white/10 pb-1">{title}</div>
+                    <div>{content}</div>
+                </div>
+            );
+        };
+
+        const App = () => {
             const [step, setStep] = useState(0);
 
             // Datos
-            const calificaciones = [10, 5, 8, 9, 4, 6, 7, 10, 5, 8];
-            const N = calificaciones.length;
+            const N = 8;
+            const Arre = [10, 5, 8, 4, 6, 9, 5, 8];
+            const S = Arre.reduce((a,b) => a+b, 0);
+            const Pro = Math.floor(S / N);
             
-            // Lógica
-            const suma = calificaciones.reduce((a, b) => a + b, 0);
-            const promedioEntero = Math.floor(suma / N);
-            const promedioDecimal = (suma / N).toFixed(1);
-            
-            const aprobados = calificaciones.filter(c => c >= 6);
-            const reprobados = calificaciones.filter(c => c < 6);
-            const mayoresOcho = calificaciones.filter(c => c >= 8);
-
-            const porcAprobados = ((aprobados.length / N) * 100).toFixed(1);
-            const porcReprobados = ((reprobados.length / N) * 100).toFixed(1);
-
             const nextStep = () => setStep(prev => Math.min(prev + 1, 4));
             const prevStep = () => setStep(prev => Math.max(prev - 1, 0));
 
-            // ESTILOS NEÓN REUTILIZABLES
-            // Caja "cristal" con borde neón
-            const neonCard = "bg-gray-900/80 backdrop-blur-md border border-gray-700 rounded-xl p-6 transition-all duration-300 relative overflow-hidden";
-            const neonCardBlue = `${neonCard} border-blue-500/30 hover:border-blue-400 hover:shadow-[0_0_20px_rgba(59,130,246,0.2)]`;
-            const neonCardPink = `${neonCard} border-pink-500/30 hover:border-pink-400 hover:shadow-[0_0_20px_rgba(236,72,153,0.2)]`;
-            const neonCardGreen = `${neonCard} border-green-500/30 hover:border-green-400 hover:shadow-[0_0_20px_rgba(34,197,94,0.2)]`;
-            const neonCardYellow = `${neonCard} border-yellow-500/30 hover:border-yellow-400 hover:shadow-[0_0_20px_rgba(234,179,8,0.2)]`;
-
             return (
-                <div className="min-h-screen bg-[#050505] text-gray-200 p-4 font-sans overflow-y-auto pb-20 relative selection:bg-pink-500 selection:text-white">
-                    
-                    {/* Fondo de malla cyber */}
-                    <div className="fixed inset-0 cyber-grid pointer-events-none z-0"></div>
+                <div className="flex-1 flex flex-col h-screen bg-[#050505] text-white overflow-hidden relative font-sans">
+                    <div className="cyber-grid absolute inset-0 pointer-events-none opacity-20"></div>
 
-                    <div className="max-w-5xl mx-auto relative z-10">
+                    {/* HEADER */}
+                    <header className="p-4 border-b border-gray-800 bg-[#0a0a0a] flex justify-between items-center z-20">
+                        <div className="flex items-center gap-3">
+                            <div className="w-3 h-3 rounded-full bg-[#00f3ff] animate-pulse"></div>
+                            <h1 className="font-cyber text-xl md:text-2xl tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#00f3ff] to-[#ff00ff]">
+                                ESTRUCTURA_ALGORITMO
+                            </h1>
+                        </div>
+                        <div className="flex gap-2">
+                             <button onClick={prevStep} disabled={step===0} className="px-4 py-1 border border-gray-700 rounded hover:bg-gray-800 disabled:opacity-30 font-code text-xs">PREV</button>
+                             <span className="px-4 py-1 bg-[#00f3ff]/10 border border-[#00f3ff] rounded text-[#00f3ff] font-code font-bold text-xs flex items-center">
+                                FASE {step}
+                             </span>
+                             <button onClick={nextStep} disabled={step===4} className="px-4 py-1 border border-gray-700 rounded hover:bg-gray-800 disabled:opacity-30 font-code text-xs">NEXT</button>
+                        </div>
+                    </header>
+
+                    <div className="flex flex-1 overflow-hidden relative">
                         
-                        {/* Header */}
-                        <div className="flex flex-col md:flex-row items-center justify-between mb-8 border-b border-gray-800 pb-6">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center border border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-                                    <TerminalIcon className="text-blue-400" />
-                                </div>
-                                <div>
-                                    <h1 className="text-3xl md:text-4xl font-bold text-white font-tech tracking-wider neon-text-blue">
-                                        SYSTEM<span className="text-pink-500">_GRADES</span>
-                                    </h1>
-                                    <p className="text-blue-300/70 text-sm font-code flex items-center gap-2">
-                                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                                        ONLINE // N = {N} ESTUDIANTES
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Controls */}
-                            <div className="flex items-center gap-4 mt-6 md:mt-0 bg-gray-900/90 p-2 rounded-full border border-gray-700 shadow-xl">
-                                <button 
-                                    onClick={prevStep} 
-                                    disabled={step === 0}
-                                    className={`px-4 py-2 rounded-full font-bold transition-all font-tech text-sm flex items-center gap-2 ${step === 0 ? 'text-gray-600 cursor-not-allowed' : 'text-blue-400 hover:bg-blue-500/10 hover:text-blue-300'}`}
-                                >
-                                    <span>◄</span> PREV
-                                </button>
+                        {/* PANEL IZQUIERDO: Pseudocódigo Estructurado */}
+                        <div className="w-1/3 border-r border-gray-800 bg-[#080808] p-6 overflow-y-auto hidden md:block z-10">
+                            <h3 className="text-gray-500 font-cyber text-xs mb-4">/// CÓDIGO_FUENTE_INTERNO</h3>
+                            
+                            <div className="font-code text-xs md:text-sm space-y-1">
+                                <div className={`pl-2 ${step===0 ? 'bg-[#00f3ff]/20 text-white' : 'text-gray-600'}`}>1. INICIO Variables (N, Arre, S=0)</div>
+                                <div className={`pl-2 ${step===1 ? 'bg-[#00f3ff]/20 text-white' : 'text-gray-600'}`}>2. LEER N</div>
+                                <div className="pl-2 text-gray-600">3. ...</div>
                                 
-                                <div className="px-4 py-1 bg-black rounded-md border border-gray-800 font-code text-pink-500 min-w-[100px] text-center">
-                                    STEP_0{step + 1}
+                                {/* BLOQUE DEL CICLO */}
+                                <div className={`mt-4 border-l-2 ${step===2 || step===3 ? 'border-[#ff00ff] bg-[#ff00ff]/5' : 'border-gray-800'} pl-4 py-2 transition-all`}>
+                                    <div className="text-[#ff00ff] mb-1 opacity-70">// ESTRUCTURA DEL CICLO</div>
+                                    <div className={`${step===2 ? 'text-white font-bold' : 'text-gray-500'}`}>
+                                        <span className="text-purple-400">PARA</span> i = 0 <span className="text-purple-400">HASTA</span> N-1 <span className="text-purple-400">HACER</span>:
+                                    </div>
+                                    <div className={`pl-4 ${step===2 ? 'text-[#00f3ff]' : 'text-gray-600'}`}>
+                                        ➢ LEER Calificación (C)
+                                    </div>
+                                    <div className={`pl-4 ${step===2 ? 'text-[#00f3ff]' : 'text-gray-600'}`}>
+                                        ➢ S = S + C  <span className="text-gray-500 text-[10px]">(Acumulador)</span>
+                                    </div>
+                                    <div className={`pl-4 mt-2 ${step===3 ? 'text-yellow-300' : 'text-gray-600'}`}>
+                                        ➢ <span className="text-purple-400">SI</span> (C >= 6) <span className="text-purple-400">ENTONCES</span>:
+                                    </div>
+                                    <div className={`pl-8 ${step===3 ? 'text-green-400' : 'text-gray-700'}`}>
+                                        Aprobados++
+                                    </div>
+                                    <div className={`pl-4 ${step===3 ? 'text-yellow-300' : 'text-gray-600'}`}>
+                                        ➢ <span className="text-purple-400">SINO</span>:
+                                    </div>
+                                    <div className={`pl-8 ${step===3 ? 'text-red-400' : 'text-gray-700'}`}>
+                                        Reprobados++
+                                    </div>
+                                    <div className="text-purple-400 text-[10px] mt-1">FIN_PARA</div>
                                 </div>
 
-                                <button 
-                                    onClick={nextStep} 
-                                    disabled={step === 4}
-                                    className={`px-4 py-2 rounded-full font-bold transition-all font-tech text-sm flex items-center gap-2 ${step === 4 ? 'text-gray-600 cursor-not-allowed' : 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.5)] hover:bg-blue-500 hover:shadow-[0_0_25px_rgba(37,99,235,0.7)]'}`}
-                                >
-                                    NEXT <span>►</span>
-                                </button>
+                                <div className={`mt-4 pl-2 ${step===4 ? 'bg-[#00f3ff]/20 text-white' : 'text-gray-600'}`}>5. CALCULAR Promedio = S / N</div>
+                                <div className={`pl-2 ${step===4 ? 'bg-[#00f3ff]/20 text-white' : 'text-gray-600'}`}>6. IMPRIMIR Resultados</div>
                             </div>
                         </div>
 
-                        {/* Área Principal Estilo "Pantalla" */}
-                        <div className="border border-gray-800 bg-[#0a0a0a] rounded-2xl min-h-[600px] relative shadow-2xl p-6 md:p-10 overflow-hidden">
-                            {/* Linea de scan decorativa */}
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-20 animate-[pulse_3s_ease-in-out_infinite]"></div>
-
-                            {/* PASO 1: INPUT DATA */}
-                            <div className={`transition-all duration-700 ${step >= 0 ? 'opacity-100 translate-y-0' : 'opacity-30 blur-sm translate-y-10 hidden'}`}>
-                                <div className="flex flex-col items-center mb-16">
-                                    <div className="mb-8 text-center relative">
-                                        <div className="inline-block px-6 py-2 bg-blue-500/10 border-l-4 border-blue-500 text-blue-300 font-code text-sm mb-4 backdrop-blur-sm">
-                                            > INICIANDO LECTURA DE DATOS...
-                                        </div>
-                                        <div className="text-gray-400 text-xs font-code mt-1">Scanner: Active</div>
-                                    </div>
-                                    
-                                    <div className="flex flex-wrap justify-center gap-3 md:gap-4 max-w-3xl">
-                                        {calificaciones.map((calif, idx) => (
-                                            <div key={idx} className="group relative">
-                                                {/* Efecto Glow detrás */}
-                                                <div className={`absolute inset-0 rounded-lg blur opacity-20 group-hover:opacity-60 transition-opacity ${calif >= 6 ? 'bg-blue-500' : 'bg-red-500'}`}></div>
-                                                
-                                                <div className={`relative w-14 h-14 md:w-16 md:h-16 border rounded-lg flex items-center justify-center text-xl md:text-2xl font-bold font-tech transition-all duration-300 z-10 bg-gray-900 ${calif >= 6 ? 'border-blue-500/50 text-blue-400 group-hover:border-blue-400 group-hover:text-white' : 'border-red-500/50 text-red-500 group-hover:border-red-400 group-hover:text-white'}`}>
-                                                    {calif}
-                                                </div>
-                                                
-                                                {/* Etiqueta ID */}
-                                                <div className="absolute -bottom-6 left-0 w-full text-center">
-                                                    <span className="text-[9px] font-code text-gray-600 uppercase tracking-widest group-hover:text-gray-400">ID_{idx + 1}</span>
-                                                </div>
-
-                                                {/* Indicador de "Destacado" */}
-                                                {calif >= 8 && step >= 3 && (
-                                                    <div className="absolute -top-2 -right-2 z-20">
-                                                        <div className="relative">
-                                                            <div className="absolute inset-0 bg-yellow-400 rounded-full blur-sm opacity-50 animate-pulse"></div>
-                                                            <div className="bg-yellow-500 text-black p-1 rounded-full shadow-lg relative">
-                                                                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
+                        {/* PANEL DERECHO: Diagrama Visual */}
+                        <div className="flex-1 bg-[#050505] relative flex flex-col items-center justify-center p-4">
+                            
+                            {/* Visualización del Array siempre visible pero destacada según paso */}
+                            <div className="absolute top-4 left-0 w-full flex justify-center z-0">
+                                <div className="flex gap-1 md:gap-2 p-4 bg-[#111] rounded-xl border border-gray-800">
+                                    {Arre.map((val, idx) => (
+                                        <div key={idx} className="flex flex-col items-center group">
+                                            {/* Puntero del ciclo */}
+                                            <div className={`text-[#ff00ff] text-xs font-code mb-1 transition-opacity duration-300 ${step >= 2 && step <= 3 ? 'opacity-100' : 'opacity-0'}`}>
+                                                i={idx}
+                                                <Arrow className="w-3 h-3 mx-auto text-[#ff00ff]" />
                                             </div>
-                                        ))}
-                                    </div>
+                                            
+                                            {/* Caja de valor */}
+                                            <div className={`
+                                                w-8 h-10 md:w-10 md:h-12 border rounded flex items-center justify-center font-bold text-sm md:text-base font-code transition-all duration-500
+                                                ${step === 0 ? 'border-gray-800 text-gray-700' : ''}
+                                                ${step === 1 ? 'border-[#00f3ff] text-white' : ''}
+                                                ${(step === 2 || step === 3) ? 'border-[#ff00ff] shadow-[0_0_10px_#ff00ff]' : ''}
+                                                ${step === 4 ? (val >= 6 ? 'border-green-500 text-green-500' : 'border-red-500 text-red-500') : ''}
+                                            `}>
+                                                {step === 0 ? '?' : val}
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 
-                            {/* PASO 2: PROCESAMIENTO (Suma y Clasificación) */}
-                            {step >= 1 && (
-                                <div className="flex flex-col items-center mb-16 animate-[fadeIn_0.7s_ease-out]">
-                                    <ArrowDown className="w-8 h-8 text-gray-700 mb-6 animate-bounce" />
-                                    
-                                    <div className="grid md:grid-cols-2 gap-6 w-full max-w-4xl">
-                                        
-                                        {/* Bloque Acumulador */}
-                                        <div className={neonCardYellow}>
-                                            <div className="absolute top-0 right-0 p-2 opacity-10 text-yellow-500">
-                                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
-                                            </div>
-                                            <h3 className="font-tech text-yellow-500 text-lg mb-4 flex items-center gap-2">
-                                                <span className="w-2 h-2 bg-yellow-500 rounded-full"></span> ACUMULADOR
-                                            </h3>
-                                            <div className="flex justify-between items-end border-b border-gray-700 pb-2 mb-2">
-                                                <span className="text-gray-400 font-code text-xs">var S = S + C;</span>
-                                                <span className="text-3xl font-bold text-white neon-text-blue">{suma}</span>
-                                            </div>
-                                            <div className="text-right text-[10px] text-gray-500 font-code tracking-widest">TOTAL SCORE</div>
-                                        </div>
-
-                                        {/* Bloque Clasificación */}
-                                        <div className={neonCardBlue}>
-                                             <div className="absolute top-0 right-0 p-2 opacity-10 text-blue-500">
-                                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                                            </div>
-                                            <h3 className="font-tech text-blue-400 text-lg mb-4 flex items-center gap-2">
-                                                <span className="w-2 h-2 bg-blue-500 rounded-full"></span> CONTADORES
-                                            </h3>
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <div className="bg-gray-800/50 p-2 rounded border border-green-500/20 text-center">
-                                                    <div className="text-[10px] text-green-500 mb-1 font-bold">PASS (>6)</div>
-                                                    <div className="text-2xl font-bold text-white">{aprobados.length}</div>
-                                                </div>
-                                                <div className="bg-gray-800/50 p-2 rounded border border-red-500/20 text-center">
-                                                    <div className="text-[10px] text-red-500 mb-1 font-bold">FAIL (&lt;6)</div>
-                                                    <div className="text-2xl font-bold text-white">{reprobados.length}</div>
-                                                </div>
-                                            </div>
-                                        </div>
+                            {/* ZONA DE DIAGRAMAS - Cambia según el paso */}
+                            <div className="mt-20 w-full h-full flex items-center justify-center relative">
+                                
+                                {/* PASO 0 & 1: INICIO */}
+                                {(step === 0 || step === 1) && (
+                                    <div className="flex flex-col items-center animate-[fadeIn_0.5s]">
+                                        <FlowBlock 
+                                            title="INICIO" 
+                                            content="Reserva Memoria para N y Arreglo[]" 
+                                            color="blue" 
+                                            active={true} 
+                                        />
+                                        <Arrow className="text-gray-600 my-2" />
+                                        <FlowBlock 
+                                            title="INPUT" 
+                                            content={`Usuario define N = ${N}`} 
+                                            color="blue" 
+                                            active={step === 1} 
+                                        />
                                     </div>
-                                </div>
-                            )}
+                                )}
 
-                            {/* PASO 3: CÁLCULOS (Promedio) */}
-                            {step >= 2 && (
-                                <div className="flex flex-col items-center mb-16 animate-[fadeIn_0.7s_ease-out]">
-                                    <ArrowDown className="w-8 h-8 text-gray-700 mb-6" />
-                                    
-                                    <div className={`${neonCardPink} w-full max-w-2xl`}>
-                                        <h3 className="font-tech text-pink-400 text-lg mb-6 text-center tracking-widest">
-                                            // PROCESANDO ESTADÍSTICAS
-                                        </h3>
+                                {/* PASO 2: ESTRUCTURA DEL CICLO (ACUMULADOR) */}
+                                {step === 2 && (
+                                    <div className="relative w-full max-w-2xl h-[400px] border border-gray-800 rounded-xl bg-[#0a0a0a] p-4 flex flex-col items-center justify-center animate-[fadeIn_0.5s]">
+                                        <div className="absolute top-2 left-2 text-[#ff00ff] font-cyber text-xs">VISUALIZACIÓN DEL BUCLE</div>
                                         
-                                        <div className="grid md:grid-cols-2 gap-8 items-center">
-                                            {/* Promedio */}
-                                            <div className="text-center border-r border-gray-700 pr-4">
-                                                <div className="text-xs text-pink-300/50 font-code mb-2">AVERAGE_CALC()</div>
-                                                <div className="text-4xl font-bold text-white neon-text-pink mb-1">
-                                                    {promedioEntero}
-                                                </div>
-                                                <div className="text-[10px] text-gray-500 font-mono">
-                                                    Exact: {promedioDecimal}
-                                                </div>
-                                            </div>
+                                        {/* Línea que representa el ciclo */}
+                                        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30">
+                                            <path d="M 100 200 Q 50 200 50 100 T 100 50" fill="none" stroke="#ff00ff" strokeWidth="2" strokeDasharray="5,5" />
+                                            <text x="60" y="150" fill="#ff00ff" fontSize="10" className="font-code">REPETIR N VECES</text>
+                                        </svg>
 
-                                            {/* Barras de Porcentaje */}
-                                            <div className="space-y-4">
-                                                <div>
-                                                    <div className="flex justify-between text-[10px] font-code mb-1 text-gray-400">
-                                                        <span>APROBADOS</span>
-                                                        <span className="text-green-400">{porcAprobados}%</span>
-                                                    </div>
-                                                    <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-                                                        <div className="h-full bg-gradient-to-r from-green-600 to-green-400 shadow-[0_0_10px_#22c55e]" style={{width: `${porcAprobados}%`}}></div>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <div className="flex justify-between text-[10px] font-code mb-1 text-gray-400">
-                                                        <span>REPROBADOS</span>
-                                                        <span className="text-red-400">{porcReprobados}%</span>
-                                                    </div>
-                                                    <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-                                                        <div className="h-full bg-gradient-to-r from-red-600 to-red-400 shadow-[0_0_10px_#ef4444]" style={{width: `${porcReprobados}%`}}></div>
-                                                    </div>
+                                        <div className="flex items-center gap-8">
+                                            <div className="flex flex-col items-center">
+                                                <div className="text-gray-400 text-xs mb-2">DATO ENTRANTE (C)</div>
+                                                <div className="w-16 h-16 border-2 border-white rounded flex items-center justify-center text-2xl font-bold animate-pulse">
+                                                    {Arre[2]}
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                             {/* PASO 4: HONOR ROLL (>=8) */}
-                            {step >= 3 && (
-                                <div className="flex flex-col items-center mb-16 animate-[fadeIn_0.7s_ease-out]">
-                                    <ArrowDown className="w-8 h-8 text-gray-700 mb-6" />
-                                    
-                                    <div className="relative group">
-                                        <div className="absolute -inset-0.5 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-lg blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-                                        <div className="relative bg-black border border-yellow-600/30 rounded-lg p-6 flex items-center gap-6 max-w-lg">
-                                            <div className="p-3 bg-yellow-900/20 rounded-full border border-yellow-500/50">
-                                                <Award className="text-yellow-400 w-8 h-8" />
-                                            </div>
-                                            <div>
-                                                <h4 className="text-yellow-500 font-tech font-bold text-lg">HIGH PERFORMANCE</h4>
-                                                <p className="text-gray-400 text-xs font-code mb-2">Query: Grades >= 8</p>
-                                                <div className="flex gap-2 mt-2">
-                                                    {mayoresOcho.map((v, i) => (
-                                                        <span key={i} className="text-xs font-bold bg-yellow-500/20 text-yellow-200 border border-yellow-500/30 px-2 py-1 rounded">
-                                                            {v}
-                                                        </span>
-                                                    ))}
-                                                    <span className="ml-2 text-xs text-gray-500 flex items-center">
-                                                        Total: {mayoresOcho.length}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* PASO 5: REPORTE FINAL */}
-                            {step >= 4 && (
-                                <div className="flex flex-col items-center animate-[popIn_0.5s_cubic-bezier(0.175,0.885,0.32,1.275)] pb-10">
-                                    <ArrowDown className="w-8 h-8 text-gray-700 mb-6" />
-                                    
-                                    <div className="relative w-full max-w-md">
-                                        {/* Borde brillante animado */}
-                                        <div className="absolute inset-0 rounded-xl border-2 border-blue-500 opacity-50 blur-md"></div>
-                                        
-                                        <div className="relative bg-gray-900 border-2 border-blue-500/50 rounded-xl p-8 shadow-[0_0_50px_rgba(59,130,246,0.15)] overflow-hidden">
-                                            {/* Fondo terminal */}
-                                            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMTAxMDEwIiAvPgo8cmVjdCB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSIjMjAyMDIwIiAvPgo8L3N2Zz4=')] opacity-50"></div>
                                             
-                                            <div className="relative z-10">
-                                                <div className="flex justify-between items-center mb-6 border-b border-gray-800 pb-4">
-                                                    <h4 className="font-tech text-2xl text-white neon-text-blue">FINAL_REPORT</h4>
-                                                    <span className="text-xs bg-green-900/30 text-green-400 border border-green-500/30 px-2 py-1 rounded font-code">STATUS: COMPLETE</span>
-                                                </div>
-                                                
-                                                <div className="space-y-4 font-code text-sm">
-                                                    <div className="flex justify-between items-center">
-                                                        <span className="text-gray-400">Average Grade</span>
-                                                        <span className="text-xl font-bold text-white">{promedioEntero}</span>
-                                                    </div>
-                                                    
-                                                    <div className="h-px bg-gray-800 my-2"></div>
-                                                    
-                                                    <div className="flex justify-between items-center">
-                                                        <span className="text-gray-400">Passed</span>
-                                                        <span className="text-green-400 font-bold">{aprobados.length} <span className="text-[10px] opacity-70">({porcAprobados}%)</span></span>
-                                                    </div>
-                                                    
-                                                    <div className="flex justify-between items-center">
-                                                        <span className="text-gray-400">Failed</span>
-                                                        <span className="text-red-400 font-bold">{reprobados.length} <span className="text-[10px] opacity-70">({porcReprobados}%)</span></span>
-                                                    </div>
-                                                    
-                                                    <div className="h-px bg-gray-800 my-2"></div>
+                                            <Arrow direction="right" className="text-[#00f3ff] w-8 h-8" />
+                                            
+                                            <div className="flex flex-col items-center p-4 border border-[#00f3ff] bg-[#00f3ff]/5 rounded-lg">
+                                                <div className="text-[#00f3ff] text-xs mb-1 font-cyber">PROCESO: SUMA</div>
+                                                <div className="font-code text-lg">S = S + C</div>
+                                                <div className="mt-2 text-gray-400 text-xs">Acumulando total...</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
-                                                    <div className="flex justify-between items-center text-yellow-500">
-                                                        <span>Top Students (>=8)</span>
-                                                        <span className="font-bold border border-yellow-500/30 bg-yellow-500/10 px-2 rounded">{mayoresOcho.length}</span>
-                                                    </div>
+                                {/* PASO 3: ESTRUCTURA DEL CICLO (DECISIÓN) */}
+                                {step === 3 && (
+                                    <div className="relative w-full max-w-3xl h-[400px] border border-gray-800 rounded-xl bg-[#0a0a0a] p-4 flex flex-col items-center animate-[fadeIn_0.5s]">
+                                        <div className="absolute top-2 left-2 text-yellow-400 font-cyber text-xs">LÓGICA DE DECISIÓN</div>
+                                        
+                                        {/* Diagrama de Flujo Condicional */}
+                                        <div className="flex flex-col items-center mt-8">
+                                            <div className="border border-white px-4 py-2 rounded text-sm mb-2">DATO: {Arre[2]}</div>
+                                            <Arrow className="text-gray-500" />
+                                            
+                                            {/* Rombo */}
+                                            <FlowBlock type="decision" content="¿ >= 6 ?" active={true} />
+                                            
+                                            <div className="flex justify-between w-[300px] relative -mt-8">
+                                                {/* Rama SI */}
+                                                <div className="flex flex-col items-center">
+                                                    <div className="h-8 w-0.5 bg-green-500 absolute left-[25%] top-[50%] transform -rotate-45 origin-top"></div>
+                                                    <div className="mt-16 text-green-400 font-bold text-xs mb-2">VERDADERO</div>
+                                                    <FlowBlock title="CONTADOR A" content="Aprobados + 1" color="green" active={true} />
                                                 </div>
-                                                
-                                                <div className="mt-8 text-center">
-                                                    <p className="text-[10px] text-gray-600 font-code animate-pulse">
-                                                        > SYSTEM SHUTDOWN PENDING...
-                                                    </p>
+
+                                                {/* Rama NO */}
+                                                <div className="flex flex-col items-center">
+                                                    <div className="h-8 w-0.5 bg-red-500 absolute right-[25%] top-[50%] transform rotate-45 origin-top"></div>
+                                                    <div className="mt-16 text-red-400 font-bold text-xs mb-2">FALSO</div>
+                                                    <FlowBlock title="CONTADOR B" content="Reprobados + 1" color="gray" active={false} />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
 
+                                {/* PASO 4: RESULTADOS */}
+                                {step === 4 && (
+                                    <div className="w-full max-w-2xl grid grid-cols-2 gap-4 animate-[zoomIn_0.5s]">
+                                        <div className="col-span-2 text-center mb-4">
+                                            <h2 className="text-2xl font-cyber text-white">SALIDA DEL SISTEMA</h2>
+                                            <p className="text-gray-500 font-code text-xs">Ciclos finalizados. Memoria liberada.</p>
+                                        </div>
+                                        
+                                        <FlowBlock 
+                                            title="PROMEDIO" 
+                                            content={`Suma Total (${S}) / N (${N}) = ${Pro}`} 
+                                            color="blue" 
+                                            active={true} 
+                                        />
+                                        <FlowBlock 
+                                            title="ESTADÍSTICAS" 
+                                            content="Cálculo de % Completado" 
+                                            color="pink" 
+                                            active={true} 
+                                        />
+                                        
+                                        <div className="col-span-2 mt-4 p-4 border border-dashed border-gray-700 rounded bg-[#111] font-code text-xs text-left">
+                                            <div className="text-green-400">> Output: Promedio general: {Pro}</div>
+                                            <div className="text-green-400">> Output: Aprobados: {Arre.filter(x=>x>=6).length}</div>
+                                            <div className="text-green-400 animate-pulse">> _</div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -403,7 +339,7 @@
         };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<PizarronCalificaciones />);
+        root.render(<App />);
     </script>
 </body>
 </html>

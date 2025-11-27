@@ -3,142 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actividad de Integración - Angel de Jesús Juárez Roman</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Tabla Comparativa de Sistemas Numéricos</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e6f7ff;
+        }
+        .base-tag {
+            display: inline-block;
+            background-color: #eee;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .example {
+            font-family: 'Courier New', monospace;
+            background-color: #f4f4f4;
+            padding: 4px;
+            border-radius: 3px;
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+<body>
 
-    <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
-        
-        <!-- Header Section mimicking the image header -->
-        <div class="bg-gradient-to-r from-orange-500 via-yellow-400 to-red-500 p-6 text-center border-b-4 border-red-700">
-            <h1 class="text-2xl md:text-3xl font-bold text-black uppercase tracking-wide bg-yellow-300 inline-block px-4 py-1 rounded shadow-sm">
-                Actividad de Integración, Comunicación y Motivación
-            </h1>
-            <div class="mt-4 bg-white/90 inline-block px-6 py-2 rounded-full shadow-md">
-                <p class="text-lg font-semibold text-gray-800">Participante: <span class="text-red-600">Angel de Jesús Juárez Roman</span></p>
-            </div>
-        </div>
+    <h1>Cuadro Comparativo: Sistemas Numéricos</h1>
 
-        <!-- Table Container -->
-        <div class="overflow-x-auto">
-            <table class="w-full border-collapse min-w-[900px]">
-                <thead>
-                    <tr class="bg-red-700 text-white text-sm uppercase text-left">
-                        <th class="p-4 border-r border-white/20 w-1/6">Ámbitos</th>
-                        <th class="p-4 border-r border-white/20 w-1/5">Juicios</th>
-                        <th class="p-4 border-r border-white/20 w-1/5">¿Qué tipos de resultados tienes en tu vida?</th>
-                        <th class="p-4 border-r border-white/20 w-1/5">Pronóstico Futuro</th>
-                        <th class="p-4 w-1/5">¿Cómo es el futuro que quisiera?</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-700 text-sm">
-                    <!-- Row 1: Personal -->
-                    <tr class="border-b hover:bg-red-50 transition-colors">
-                        <td class="p-4 font-bold bg-red-600 text-white border-r border-red-500">PERSONAL</td>
-                        <td class="p-4 border-r">Soy una persona resiliente y adaptable.</td>
-                        <td class="p-4 border-r">Equilibrio entre tiempo libre y obligaciones.</td>
-                        <td class="p-4 border-r">Crecimiento continuo y madurez emocional.</td>
-                        <td class="p-4">Una vida llena de viajes y nuevas experiencias.</td>
-                    </tr>
-                    <!-- Row 2: Profesional -->
-                    <tr class="bg-red-50 border-b hover:bg-red-100 transition-colors">
-                        <td class="p-4 font-bold bg-red-600 text-white border-r border-red-500">PROFESIONAL</td>
-                        <td class="p-4 border-r">Comprometido y eficaz en tareas.</td>
-                        <td class="p-4 border-r">Reconocimiento por parte de superiores.</td>
-                        <td class="p-4 border-r">Ascenso a un puesto de liderazgo.</td>
-                        <td class="p-4">Dirigir mi propia empresa o equipo.</td>
-                    </tr>
-                    <!-- Row 3: Aprendizaje -->
-                    <tr class="border-b hover:bg-red-50 transition-colors">
-                        <td class="p-4 font-bold bg-red-600 text-white border-r border-red-500">APRENDIZAJE</td>
-                        <td class="p-4 border-r">Curioso y dispuesto a estudiar.</td>
-                        <td class="p-4 border-r">Adquisición de nuevas certificaciones.</td>
-                        <td class="p-4 border-r">Dominio de un tercer idioma.</td>
-                        <td class="p-4">Nunca dejar de aprender cosas nuevas.</td>
-                    </tr>
-                    <!-- Row 4: Sentimental -->
-                    <tr class="bg-red-50 border-b hover:bg-red-100 transition-colors">
-                        <td class="p-4 font-bold bg-red-600 text-white border-r border-red-500">SENTIMENTAL</td>
-                        <td class="p-4 border-r">Leal y comunicativo.</td>
-                        <td class="p-4 border-r">Relaciones estables y duraderas.</td>
-                        <td class="p-4 border-r">Construcción de un hogar sólido.</td>
-                        <td class="p-4">Compañerismo y amor incondicional.</td>
-                    </tr>
-                    <!-- Row 5: Espiritual -->
-                    <tr class="border-b hover:bg-red-50 transition-colors">
-                        <td class="p-4 font-bold bg-red-600 text-white border-r border-red-500">ESPIRITUAL</td>
-                        <td class="p-4 border-r">En búsqueda de paz interior.</td>
-                        <td class="p-4 border-r">Sensación de calma y propósito.</td>
-                        <td class="p-4 border-r">Mayor conexión con mis valores.</td>
-                        <td class="p-4">Plenitud y serenidad absoluta.</td>
-                    </tr>
-                    <!-- Row 6: Familiar -->
-                    <tr class="bg-red-50 border-b hover:bg-red-100 transition-colors">
-                        <td class="p-4 font-bold bg-red-600 text-white border-r border-red-500">FAMILIAR</td>
-                        <td class="p-4 border-r">Unido y solidario.</td>
-                        <td class="p-4 border-r">Apoyo mutuo en momentos difíciles.</td>
-                        <td class="p-4 border-r">Reuniones familiares frecuentes.</td>
-                        <td class="p-4">Que la familia siempre permanezca unida.</td>
-                    </tr>
-                    <!-- Row 7: Cuerpo -->
-                    <tr class="border-b hover:bg-red-50 transition-colors">
-                        <td class="p-4 font-bold bg-red-600 text-white border-r border-red-500">CUERPO</td>
-                        <td class="p-4 border-r">Saludable y activo.</td>
-                        <td class="p-4 border-r">Buena condición física y energía.</td>
-                        <td class="p-4 border-r">Mantenimiento de peso ideal.</td>
-                        <td class="p-4">Vivir sin enfermedades y con vitalidad.</td>
-                    </tr>
-                    <!-- Row 8: Cuidado del Mundo -->
-                    <tr class="bg-red-50 border-b hover:bg-red-100 transition-colors">
-                        <td class="p-4 font-bold bg-red-600 text-white border-r border-red-500">CUIDADO DEL MUNDO</td>
-                        <td class="p-4 border-r">Consciente y responsable.</td>
-                        <td class="p-4 border-r">Prácticas de reciclaje en casa.</td>
-                        <td class="p-4 border-r">Reducción de huella de carbono.</td>
-                        <td class="p-4">Un planeta limpio para futuras generaciones.</td>
-                    </tr>
-                    <!-- Row 9: Economico -->
-                    <tr class="hover:bg-red-50 transition-colors">
-                        <td class="p-4 font-bold bg-red-600 text-white border-r border-red-500">ECONÓMICO</td>
-                        <td class="p-4 border-r">Organizado y previsor.</td>
-                        <td class="p-4 border-r">Ahorros constantes y sin deudas.</td>
-                        <td class="p-4 border-r">Estabilidad financiera a largo plazo.</td>
-                        <td class="p-4">Libertad financiera total.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 15%;">Sistema</th>
+                <th style="width: 10%;">Base</th>
+                <th style="width: 20%;">Símbolos Utilizados</th>
+                <th style="width: 35%;">Características Principales</th>
+                <th style="width: 20%;">Ejemplo de Conversión<br><small>(Número 25 decimal)</small></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Decimal</strong></td>
+                <td><span class="base-tag">10</span></td>
+                <td>0, 1, 2, 3, 4, 5, 6, 7, 8, 9</td>
+                <td>Es el sistema de uso cotidiano. Es posicional, lo que significa que el valor de cada dígito depende de su posición (unidades, decenas, centenas).</td>
+                <td>
+                    <span class="example">25<sub>10</sub></span>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Binario</strong></td>
+                <td><span class="base-tag">2</span></td>
+                <td>0, 1</td>
+                <td>Lenguaje base de las computadoras. Utiliza dos niveles de voltaje (encendido/apagado). Cada dígito se llama "bit".</td>
+                <td>
+                    <span class="example">11001<sub>2</sub></span><br>
+                    <small>(16 + 8 + 1 = 25)</small>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Octal</strong></td>
+                <td><span class="base-tag">8</span></td>
+                <td>0, 1, 2, 3, 4, 5, 6, 7</td>
+                <td>Utilizado para abreviar cadenas binarias, ya que cada dígito octal representa exactamente 3 bits. No utiliza los dígitos 8 ni 9.</td>
+                <td>
+                    <span class="example">31<sub>8</sub></span><br>
+                    <small>(3×8 + 1 = 25)</small>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Hexadecimal</strong></td>
+                <td><span class="base-tag">16</span></td>
+                <td>0-9 y A, B, C, D, E, F</td>
+                <td>Permite representar valores binarios grandes de forma compacta (1 dígito hex = 4 bits). Muy usado en códigos de colores y direcciones de memoria.</td>
+                <td>
+                    <span class="example">19<sub>16</sub></span><br>
+                    <small>(1×16 + 9 = 25)</small>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-        <!-- Footer / Signature Area -->
-        <div class="p-8 bg-gray-50 border-t border-gray-200">
-            <div class="flex justify-between items-end">
-                <div class="text-sm text-gray-500">
-                    <p>Documento generado digitalmente.</p>
-                    <p>Fecha: <span id="date"></span></p>
-                </div>
-                <div class="text-center">
-                    <div class="font-dancing-script text-2xl text-blue-900 font-bold mb-2 border-b-2 border-blue-900 inline-block px-4" style="font-family: 'Brush Script MT', cursive;">
-                        Angel de Jesús Juárez Roman
-                    </div>
-                    <p class="text-xs uppercase tracking-widest text-gray-400">Firma del Participante</p>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        // Set current date
-        const dateElement = document.getElementById('date');
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        dateElement.textContent = new Date().toLocaleDateString('es-ES', options);
-    </script>
 </body>
 </html>
 

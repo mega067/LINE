@@ -3,114 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabla Comparativa de Sistemas Numéricos</title>
+    <title>Mapa Conceptual: Administración de Proyectos</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Fuente Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f9f9f9;
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            overflow-x: auto; /* Permitir scroll si el mapa es muy ancho */
         }
-        h1 {
-            text-align: center;
-            color: #333;
+
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+
+        /* --- ESTILOS DEL ÁRBOL (Desktop) --- */
+        @media (min-width: 1024px) {
+            .tree-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 40px;
+            }
+
+            /* Contenedor de las ramas */
+            .branches {
+                display: flex;
+                justify-content: center;
+                position: relative;
+                padding-top: 40px; /* Espacio para las líneas verticales */
+            }
+
+            /* Nodo individual (columna) */
+            .branch-node {
+                flex: 1;
+                margin: 0 15px;
+                position: relative;
+                max-width: 320px;
+            }
+
+            /* Línea vertical que sale del nodo central hacia abajo */
+            .root-connector {
+                position: absolute;
+                bottom: -40px; /* Conecta con el branches padding */
+                left: 50%;
+                width: 2px;
+                height: 40px;
+                background-color: #475569;
+                z-index: 0;
+            }
+
+            /* Línea horizontal que conecta todas las ramas arriba */
+            .branches::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: calc(12.5% + 15px); /* Ajuste fino basado en el ancho aproximado */
+                right: calc(12.5% + 15px);
+                height: 2px;
+                background-color: #475569;
+                z-index: 0;
+            }
+            
+            /* Ajuste dinámico de la línea horizontal para que toque el centro de cada nodo */
+            /* Nota: En un grid flexible puro es difícil calcular exacto sin JS, 
+               usaremos pseudo-elementos en cada hijo para dibujar la "T" invertida */
+            
+            .branches::before { display: none; } /* Ocultamos la general y usamos la individual */
+
+            .branch-node::before {
+                content: '';
+                position: absolute;
+                top: -40px; /* Sube al nivel de la conexión */
+                left: 50%;
+                width: 2px;
+                height: 40px; /* Baja hasta el nodo */
+                background-color: #475569;
+            }
+
+            .branch-node::after {
+                content: '';
+                position: absolute;
+                top: -40px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: #475569;
+            }
+
+            /* Quitar líneas sobrantes en los extremos */
+            .branch-node:first-child::after {
+                left: 50%;
+                width: 50%;
+            }
+            .branch-node:last-child::after {
+                width: 50%;
+            }
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-            vertical-align: top;
+
+        /* --- ESTILOS MÓVILES (Vertical Flow) --- */
+        @media (max-width: 1023px) {
+            .branches {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+                position: relative;
+                padding-left: 20px; /* Espacio para la línea lateral */
+            }
+
+            .branches::before {
+                content: '';
+                position: absolute;
+                top: -20px;
+                bottom: 50px;
+                left: 20px; /* Línea vertical principal */
+                width: 2px;
+                background-color: #cbd5e1;
+                z-index: 0;
+            }
+
+            .branch-node {
+                position: relative;
+                padding-left: 20px;
+            }
+
+            /* Conector horizontal pequeño hacia la tarjeta */
+            .branch-node::before {
+                content: '';
+                position: absolute;
+                top: 2rem;
+                left: 0;
+                width: 20px;
+                height: 2px;
+                background-color: #cbd5e1;
+            }
         }
-        th {
-            background-color: #2c3e50;
-            color: white;
-            text-transform: uppercase;
-            font-size: 14px;
+
+        /* Estilos de las cajas */
+        .node-box {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
         }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
+
+        .node-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #94a3b8;
         }
-        tr:hover {
-            background-color: #e6f7ff;
-        }
-        .base-tag {
-            display: inline-block;
-            background-color: #eee;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-        .example {
-            font-family: 'Courier New', monospace;
-            background-color: #f4f4f4;
-            padding: 4px;
-            border-radius: 3px;
+
+        /* Colores de borde superior para categorías */
+        .border-top-emerald { border-top: 5px solid #10b981; }
+        .border-top-blue { border-top: 5px solid #3b82f6; }
+        .border-top-orange { border-top: 5px solid #f97316; }
+        .border-top-purple { border-top: 5px solid #a855f7; }
+        
+        .sub-node {
+            background-color: #f8fafc;
+            border-left: 3px solid #cbd5e1;
+            padding: 8px 12px;
+            margin-top: 8px;
+            border-radius: 0 4px 4px 0;
         }
     </style>
 </head>
-<body>
+<body class="p-4 min-h-screen">
 
-    <h1>Cuadro Comparativo: Sistemas Numéricos</h1>
+    <div class="max-w-[1400px] mx-auto mb-20">
+        
+        <!-- ================= NODO CENTRAL ================= -->
+        <div class="tree-container relative mb-8 lg:mb-0">
+            <div class="relative z-20">
+                <div class="bg-slate-800 text-white p-6 rounded-2xl shadow-xl text-center max-w-lg mx-auto border-4 border-slate-600 relative">
+                    <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-slate-900 p-2 rounded-full border-4 border-slate-600">
+                        <i data-lucide="network" class="w-8 h-8 text-blue-400"></i>
+                    </div>
+                    <h1 class="text-xl md:text-2xl font-bold mt-4 uppercase tracking-wide">Fases de la Administración de Proyectos</h1>
+                    <!-- Conector inferior del nodo central (Solo Desktop) -->
+                    <div class="hidden lg:block root-connector"></div>
+                </div>
+            </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 15%;">Sistema</th>
-                <th style="width: 10%;">Base</th>
-                <th style="width: 20%;">Símbolos Utilizados</th>
-                <th style="width: 35%;">Características Principales</th>
-                <th style="width: 20%;">Ejemplo de Conversión<br><small>(Número 25 decimal)</small></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Decimal</strong></td>
-                <td><span class="base-tag">10</span></td>
-                <td>0, 1, 2, 3, 4, 5, 6, 7, 8, 9</td>
-                <td>Es el sistema de uso cotidiano. Es posicional, lo que significa que el valor de cada dígito depende de su posición (unidades, decenas, centenas).</td>
-                <td>
-                    <span class="example">25<sub>10</sub></span>
-                </td>
-            </tr>
-            <tr>
-                <td><strong>Binario</strong></td>
-                <td><span class="base-tag">2</span></td>
-                <td>0, 1</td>
-                <td>Lenguaje base de las computadoras. Utiliza dos niveles de voltaje (encendido/apagado). Cada dígito se llama "bit".</td>
-                <td>
-                    <span class="example">11001<sub>2</sub></span><br>
-                    <small>(16 + 8 + 1 = 25)</small>
-                </td>
-            </tr>
-            <tr>
-                <td><strong>Octal</strong></td>
-                <td><span class="base-tag">8</span></td>
-                <td>0, 1, 2, 3, 4, 5, 6, 7</td>
-                <td>Utilizado para abreviar cadenas binarias, ya que cada dígito octal representa exactamente 3 bits. No utiliza los dígitos 8 ni 9.</td>
-                <td>
-                    <span class="example">31<sub>8</sub></span><br>
-                    <small>(3×8 + 1 = 25)</small>
-                </td>
-            </tr>
-            <tr>
-                <td><strong>Hexadecimal</strong></td>
-                <td><span class="base-tag">16</span></td>
-                <td>0-9 y A, B, C, D, E, F</td>
-                <td>Permite representar valores binarios grandes de forma compacta (1 dígito hex = 4 bits). Muy usado en códigos de colores y direcciones de memoria.</td>
-                <td>
-                    <span class="example">19<sub>16</sub></span><br>
-                    <small>(1×16 + 9 = 25)</small>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+            <!-- ================= RAMAS ================= -->
+            <div class="branches w-full">
+                
+                <!-- RAMA 1 -->
+                <article class="branch-node">
+                    <div class="node-box border-top-emerald h-full">
+                        <div class="bg-emerald-50/50 p-4 border-b border-emerald-100 rounded-t-lg">
+                            <span class="text-xs font-bold text-emerald-600 tracking-wider uppercase bg-emerald-100 px-2 py-1 rounded">Etapa I</span>
+                            <h2 class="text-lg font-bold text-slate-800 mt-1">DEFINICIÓN</h2>
+                        </div>
+                        <div class="p-4 space-y-4">
+                            <!-- Concepto -->
+                            <div class="text-sm">
+                                <strong class="block text-emerald-700 mb-1 flex items-center gap-1"><i data-lucide="search" class="w-3 h-3"></i> Actividad Principal</strong>
+                                <p class="text-slate-600">Evaluación del Proyecto.</p>
+                            </div>
+                            <!-- Concepto -->
+                            <div class="sub-node border-emerald-300 bg-emerald-50/30">
+                                <strong class="block text-emerald-800 text-xs uppercase mb-1">Propósito</strong>
+                                <p class="text-xs text-slate-600">
+                                    Establecer el <strong>Objetivo</strong> (cualitativo) y la <strong>Meta</strong> (cuantitativa).
+                                </p>
+                            </div>
+                            <!-- Concepto -->
+                            <div class="text-sm">
+                                <strong class="block text-emerald-700 mb-1 flex items-center gap-1"><i data-lucide="lightbulb" class="w-3 h-3"></i> Origen</strong>
+                                <p class="text-slate-600 text-xs">Problemas a resolver u oportunidades de negocio.</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
 
+                <!-- RAMA 2 -->
+                <article class="branch-node">
+                    <div class="node-box border-top-blue h-full">
+                        <div class="bg-blue-50/50 p-4 border-b border-blue-100 rounded-t-lg">
+                            <span class="text-xs font-bold text-blue-600 tracking-wider uppercase bg-blue-100 px-2 py-1 rounded">Etapa II</span>
+                            <h2 class="text-lg font-bold text-slate-800 mt-1">PLANIFICACIÓN</h2>
+                        </div>
+                        <div class="p-4 space-y-4">
+                             <div class="text-sm">
+                                <strong class="block text-blue-700 mb-1 flex items-center gap-1"><i data-lucide="hammer" class="w-3 h-3"></i> Acción Clave</strong>
+                                <p class="text-slate-600">Determinación de la fragmentación del trabajo.</p>
+                            </div>
+
+                            <!-- Lista Anidada Visual -->
+                            <div class="bg-blue-50 rounded p-3 border border-blue-100">
+                                <strong class="text-xs text-blue-800 block mb-2 border-b border-blue-200 pb-1">Restricciones a Planificar</strong>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start gap-2 text-xs text-slate-600">
+                                        <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5 shrink-0"></span>
+                                        <span><strong>Calidad:</strong> Especif. técnicas</span>
+                                    </li>
+                                    <li class="flex items-start gap-2 text-xs text-slate-600">
+                                        <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5 shrink-0"></span>
+                                        <span><strong>Tiempo:</strong> Cronograma</span>
+                                    </li>
+                                    <li class="flex items-start gap-2 text-xs text-slate-600">
+                                        <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5 shrink-0"></span>
+                                        <span><strong>Costo:</strong> Presupuesto</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="sub-node border-blue-300">
+                                <strong class="block text-blue-800 text-xs mb-1">Técnicas Gráficas</strong>
+                                <div class="flex flex-wrap gap-1">
+                                    <span class="text-[10px] bg-white border border-slate-200 px-1 rounded text-slate-500">Gantt</span>
+                                    <span class="text-[10px] bg-white border border-slate-200 px-1 rounded text-slate-500">PERT</span>
+                                    <span class="text-[10px] bg-white border border-slate-200 px-1 rounded text-slate-500">CPM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- RAMA 3 -->
+                <article class="branch-node">
+                    <div class="node-box border-top-orange h-full">
+                        <div class="bg-orange-50/50 p-4 border-b border-orange-100 rounded-t-lg">
+                            <span class="text-xs font-bold text-orange-600 tracking-wider uppercase bg-orange-100 px-2 py-1 rounded">Etapa III</span>
+                            <h2 class="text-lg font-bold text-slate-800 mt-1">PUESTA EN MARCHA</h2>
+                        </div>
+                        <div class="p-4 space-y-4">
+                            <!-- Ciclo -->
+                            <div class="relative pl-3 border-l-2 border-orange-200">
+                                <strong class="block text-orange-700 text-sm mb-1">Ciclo de Control</strong>
+                                <p class="text-xs text-slate-500 italic mb-2">Estándar → Ejecución → Corrección → Feedback</p>
+                            </div>
+
+                            <div class="sub-node border-orange-300 bg-orange-50/30">
+                                <strong class="block text-orange-800 text-xs mb-1 flex items-center gap-1"><i data-lucide="shopping-cart" class="w-3 h-3"></i> Adquisiciones</strong>
+                                <p class="text-xs text-slate-600">Materiales y servicios.</p>
+                            </div>
+
+                            <div class="sub-node border-orange-300 bg-orange-50/30">
+                                <strong class="block text-orange-800 text-xs mb-1 flex items-center gap-1"><i data-lucide="users" class="w-3 h-3"></i> Conflictos</strong>
+                                <p class="text-xs text-slate-600">Negociar: Demandar, Ceder o Pactar.</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- RAMA 4 -->
+                <article class="branch-node">
+                    <div class="node-box border-top-purple h-full">
+                        <div class="bg-purple-50/50 p-4 border-b border-purple-100 rounded-t-lg">
+                            <span class="text-xs font-bold text-purple-600 tracking-wider uppercase bg-purple-100 px-2 py-1 rounded">Etapa IV</span>
+                            <h2 class="text-lg font-bold text-slate-800 mt-1">CONCLUSIÓN</h2>
+                        </div>
+                        <div class="p-4 space-y-4">
+                            
+                            <!-- Lista doble -->
+                            <div class="grid grid-cols-1 gap-2">
+                                <div class="bg-purple-50 p-2 rounded border border-purple-100">
+                                    <strong class="text-xs text-purple-800 block mb-1">Cierre Operativo</strong>
+                                    <ul class="list-disc list-inside text-[10px] text-slate-600">
+                                        <li>Manuales</li>
+                                        <li>Capacitación</li>
+                                        <li>Sobrantes</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-purple-50 p-2 rounded border border-purple-100">
+                                    <strong class="text-xs text-purple-800 block mb-1">Cierre Admin</strong>
+                                    <ul class="list-disc list-inside text-[10px] text-slate-600">
+                                        <li>Auditoría</li>
+                                        <li>Informe Final</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="mt-2 text-center border-t border-slate-100 pt-2">
+                                <span class="bg-purple-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ESTADO FINAL</span>
+                                <p class="text-xs text-slate-700 font-semibold mt-1">"Proyecto Terminado"</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+        
+        <div class="text-center text-slate-400 text-xs mt-10">
+            Vista optimizada: Horizontal (PC) / Vertical (Móvil)
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
-
